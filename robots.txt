@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /cache/
+Disallow: /extensions/
+Disallow: /include/
+Disallow: /lang/
+Disallow: /style/
