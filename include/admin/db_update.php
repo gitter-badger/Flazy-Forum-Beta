@@ -130,16 +130,15 @@ if (!isset($base_url))
 	$base_url = $forum_config['o_base_url'];
 
 // There's no $forum_user, but we need the style element
-// We default to Flazy_Cold if the default style is invalid.
 if (file_exists(FORUM_ROOT.'style/'.$forum_config['o_default_style'].'/'.$forum_config['o_default_style'].'.php'))
 	$forum_user['style'] = $forum_config['o_default_style'];
 else
 {
-	$forum_user['style'] = 'Flazy_Cold';
+	$forum_user['style'] = 'default';
 
 	$query = array(
 		'UPDATE'	=> 'config',
-		'SET'		=> 'conf_value=\'Flazy_Cold\'',
+		'SET'		=> 'conf_value=\'default\'',
 		'WHERE'		=> 'conf_name=\'o_default_style\''
 	);
 
