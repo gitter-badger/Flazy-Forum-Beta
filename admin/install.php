@@ -1734,7 +1734,7 @@ else
 			'style'			=> array(
 				'datatype'		=> 'VARCHAR(25)',
 				'allow_null'	=> false,
-				'default'		=> '\'Flazy_Cold\''
+				'default'		=> '\'default\''
 			),
 			'num_posts'		=> array(
 				'datatype'		=> 'INT(10) UNSIGNED',
@@ -2023,7 +2023,7 @@ else
 		'o_make_links'			=> "'1'",
 		'o_post_edit'			=> "'0'",
 		'o_default_lang'		=> "'".$forum_db->escape($default_lang)."'",
-		'o_default_style'		=> "'Flazy_Cold'",
+		'o_default_style'		=> "'default'",
 		'o_user_style'			=> "'1'",
 		'o_default_user_group'	=> "'3'",
 		'o_topic_review'		=> "'15'",
