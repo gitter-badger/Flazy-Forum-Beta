@@ -2,19 +2,19 @@
 	 Flazy Readme
 	==================
 
-Спасибо что скачали Flazy.
-
-	 Быстрая установка
+		Thank you for downloading Flazy forum software!
+		
+	 Installation 
 	---------------
- 1. Скачать последнюю версию Flazy со страницы страницы загрузки. Распаровать архив с Flazy.
- 2. Скопировать / загрузить все содержимое папки в каталог, где вы хотите запустить ваш форум (пример: /home/user/www/flazy/).
- 3. Запустить install.php в браузере (например: http://example.com/flazy/admin/install.php). Следуйте инструкциям на экране.
+ 1. Firtsly download the latest version of  Flazy.
+ 2. Upload / copy all the files in the directory where you want to run your forum (example: /home/user/www/flazy/).
+ 3. Open the file install.php with your browser (example: http://example.com/flazy/admin/install.php). And follow the instructions.
 
-	 Требования
+	 Requirements to run Flazy
 	--------------
- - Веб-сервер (предпочтительно Apache)
- - PHP 4.3.0 или более поздние версии (PHP 5 включительно).
- - База данных: MySQL 4.1.2 или более поздние версии, PostgreSQL 7.0 или более поздние версии или SQLite 2 (SQLite 3 не поддерживается).
+ - Web-server (предпочтительно Apache)
+ - PHP 4.3.0 and newer versions  (PHP 5 compatible).
+ - Database: MySQL 4.1.2 and newer versions, PostgreSQL 7.0 and newer versions or SQLite 2 (SQLite 3 still dosn't work properly).
 
 	 Установка дополнений
 	------------------------
@@ -30,14 +30,13 @@
  - Убедитесь, что PHP имеет поддержку Zlib и вы можете включить GZIP сжатие. Это значительно сокращает размер получаемого xHTML кода.
  - Зайдите в интерфейс администрирования и отключите все возможности форума, которые вы считаете ненужными.
 
-	 Ссылки
+	 Links
 	-------
- - Документация: http://flazy.ru/flazy/wiki/
- - Интернационализация: - http://flazy.ru/webforum/languages/
- - Стили: - http://flazy.ru/style/
- - Расширения: - http://flazy.ru/webforum/extensions/
- - Форум поддержки: http://flazy.ru/forum/
- - Разработка: http://gitorious.org/flazy
+ - Документация: http://flazy.us/flazy/wiki/
+ - Интернационализация: - http://flazy.us/webforum/languages/
+ - Стили: - http://flazy.us/style/
+ - Расширения: - http://flazy.us/webforum/extensions/
+ - Forum suport: http://flazy.us/forum/
 
 	Авторское право 
 	--------------------------
