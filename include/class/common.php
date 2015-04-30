@@ -11,9 +11,9 @@
 
 $js = array(
 	'jquery'		=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js',
-	'tooltip'		=> $base_url.'/style/'.$forum_user['style'].'js/jquery.tooltip.js',
-	'pstrength'		=> $base_url.'/style/'.$forum_user['style'].'js/jquery.pstrength.js',
-	'cookies'		=> $base_url.'/style/'.$forum_user['style'].'js/jquery.cookie.js',
+	'tooltip'		=> $base_url.'/style/default/js/jquery.tooltip.js',
+	'pstrength'		=> $base_url.'/style/default/js/jquery.pstrength.js',
+	'cookies'		=> $base_url.'/style/default/js/jquery.cookie.js',
 );
 
 ($hook = get_hook('cls_fl_pre_class_js_helper')) ? eval($hook) : null;

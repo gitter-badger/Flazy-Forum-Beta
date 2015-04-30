@@ -1826,15 +1826,15 @@ function generate_crumbs($reverse)
 	if ($reverse)
 	{
 		for ($i = ($num_crumbs - 1); $i >= 0; --$i)
-			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? $lang_common['Title separator'] : '');
+			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? '': '');
 	}
 	else
 		for ($i = 0; $i < $num_crumbs; ++$i)
 		{
 			if ($i < ($num_crumbs - 1))
-				$crumbs .= '<span class="crumb'.(($i == 0) ? ' crumbfirst' : '').'">'.(($i >= 1) ? '' : '').(is_array($forum_page['crumbs'][$i]) ? '<a temtype="http://data-vocabulary.org/Breadcrumb" itemscope="" href="'.$forum_page['crumbs'][$i][1].'">'.forum_htmlencode($forum_page['crumbs'][$i][0]).'</a>' : forum_htmlencode($forum_page['crumbs'][$i])).'</span> ';
+				$crumbs .= '<span class="crumb">'.(($i >= 1) ? '' : '').(is_array($forum_page['crumbs'][$i]) ? '<a temtype="http://data-vocabulary.org/Breadcrumb" itemscope="" href="'.$forum_page['crumbs'][$i][1].'">'.forum_htmlencode($forum_page['crumbs'][$i][0]).'</a>' : forum_htmlencode($forum_page['crumbs'][$i])).'</span> ';
 			else
-				$crumbs .= '<span class="crumb'.(($i == 0) ? ' crumbfirst' : '').'">'.(($i >= 1) ? '' : '').(is_array($forum_page['crumbs'][$i]) ? '<a temtype="http://data-vocabulary.org/Breadcrumb" itemscope="" href="'.$forum_page['crumbs'][$i][1].'">'.forum_htmlencode($forum_page['crumbs'][$i][0]).'</a>' : forum_htmlencode($forum_page['crumbs'][$i])).'</span> ';
+				$crumbs .= '<span class="crumb">'.(($i >= 1) ? '' : '').(is_array($forum_page['crumbs'][$i]) ? '<a temtype="http://data-vocabulary.org/Breadcrumb" itemscope="" href="'.$forum_page['crumbs'][$i][1].'">'.forum_htmlencode($forum_page['crumbs'][$i][0]).'</a>' : forum_htmlencode($forum_page['crumbs'][$i])).'</span> ';
 		}
 
 	($hook = get_hook('fn_generate_crumbs_end')) ? eval($hook) : null;
