@@ -88,11 +88,10 @@
 <div id="wrap-footer">
 	<div id="site-footer">
 		<div class="chunk">
-			<forum_about>
+			<forum_about><forum_debug>
 		</div>
 	</div>
 </div>
 <forum_html_bottom>
-<forum_debug>
 </body>
 </html>
