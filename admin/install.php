@@ -68,7 +68,7 @@ if (!file_exists(FORUM_ROOT.'lang/'.$language.'/install.php'))
 
 // Load the language files
 require FORUM_ROOT.'lang/'.$language.'/install.php';
-$default_style = 'Flazy_Cold';
+$default_style = 'default';
 
 if (isset($_POST['generate_config']))
 {
