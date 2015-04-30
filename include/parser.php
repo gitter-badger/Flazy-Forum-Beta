@@ -823,7 +823,7 @@ function do_bbcode($text, $is_signature = false)
 		return $return;
 
 	// This thing takes a while! :)
-	$text = preg_replace($pattern, $replace, $text);
+	$text = preg_replace_callback($pattern, $replace, $text);
 
 	$return = ($hook = get_hook('ps_do_bbcode_end')) ? eval($hook) : null;
 	if ($return != null)
