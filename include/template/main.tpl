@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml" <forum_local>>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,7 +7,7 @@
 <forum_js>
 </head>
 
-<body id="flazy" class="notouch section-index ltr hasjs">
+<body id="flazy" class="notouch section-index ltr hasjs ">
 <forum_html_top>
 
 <div id="overall-wrap">
@@ -20,10 +21,7 @@
 				<div id="site-header">
 					<div class="chunk">
 						<div id="site-logo">
-							<a class="site-logo" href="./index.php?style=2" title="Board index"></a>
-							<p class="skiplink">
-								<a href="#start_here">Skip to content</a>
-							</p>
+							<forum_logo>
 						</div>
 
 							<forum_navlinks>
@@ -56,7 +54,7 @@
 <div id="wrap-subhead">
 	<div class="chunk">
 		<div id="subhead-title">
-			<forum_main_title>
+			<forum_title>
 		</div>
 		<ul id="breadcrumbs" role="menubar">
 			<li class="breadcrumbs rightside">
