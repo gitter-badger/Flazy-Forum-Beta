@@ -42,7 +42,7 @@
 			<div id="wrap-body">
 	<div class="chunk">
 <div id="brd-wrap" class="brd">
-<div <forum_page>>
+<div <forum_page>
 
 <div class="hr"><hr /></div>
 <div id="wrap-subhead">
