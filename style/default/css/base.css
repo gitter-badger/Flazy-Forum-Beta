@@ -2716,8 +2716,8 @@ span.imageset {
 .site-logo {
   background-image: url("../images/logo.png") ;
   background-repeat: no-repeat;
-  height: 50px;
-  width: 45px;
+  height: 78px;
+  width: 180px;
 }
 .imageset.forum_link {
   background-image: url("../images/forum_link.svg");
@@ -3410,7 +3410,7 @@ dd.pm_foe_colour {
 }
 #site-logo {
   float: left;
-  margin: 0 30px 0 0;
+  margin: 10px 30px 0px 0;
 }
 .site-logo {
   display: inline-block;
