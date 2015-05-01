@@ -87,9 +87,8 @@
 		</div>
 	</div>
 </div>
-
+</div>
 <forum_ga>
 <forum_html_bottom>
-
 </body>
 </html>
