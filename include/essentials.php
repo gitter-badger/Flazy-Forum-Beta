@@ -131,7 +131,7 @@ if (!defined('FORUM_HOOKS_LOADED'))
 }
 
 if (!defined('FORUM_AVATAR_DIR'))
-	define('FORUM_AVATAR_DIR', 'style/avatars/');
+	define('FORUM_AVATAR_DIR', 'resources/avatars');
 
 // If the request_uri is invalid try fix it
 if (!defined('FORUM_IGNORE_REQUEST_URI'))

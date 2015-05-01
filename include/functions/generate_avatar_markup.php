@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright Copyright (C) 2008 PunBB, partially based on code copyright (C) 2008 FluxBB.org
- * @modified Copyright (C) 2008 Flazy.ru
+ * @modified Copyright (C) 2015 Flazy.us
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  * @package Flazy
  */
@@ -33,9 +33,9 @@ function generate_avatar_markup($user_id, $filetypes, $user_email)
 	else
 	{
 		if ($forum_config['o_gravatar'])
-			$avatar_markup = '<a href="" class="avatar"><img src="http://www.gravatar.com/avatar.php?gravatar_id='.md5($user_email).'&amp;d='.$base_url.'/img/style/avatar.gif'.'&amp;rating='.$forum_config['o_gravatar'].'&amp;s='.$forum_config['o_avatars_width'].'" height="'.$forum_config['o_avatars_height'].'" width="'.$forum_config['o_avatars_width'].'" alt="" /></a>';
+			$avatar_markup = '<a href="" class="avatar"><img src="http://www.gravatar.com/avatar.php?gravatar_id='.md5($user_email).'&amp;d='.$base_url.'/resources/avatars/avatar.png'.'&amp;rating='.$forum_config['o_gravatar'].'&amp;s='.$forum_config['o_avatars_width'].'" height="'.$forum_config['o_avatars_height'].'" width="'.$forum_config['o_avatars_width'].'" alt="" /></a>';
 		else
-			$avatar_markup = '<a href="" class="avatar"><img src="'.$base_url.'/img/style/avatar.gif" alt="" /></a>';
+			$avatar_markup = '<a href="" class="avatar"><img src="'.$base_url.'/resources/avatars/avatar.png" alt="" /></a>';
 	}
 
 	($hook = get_hook('fn_generate_avatar_markup_end')) ? eval($hook) : null;
