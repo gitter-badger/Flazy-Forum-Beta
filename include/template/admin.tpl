@@ -70,6 +70,11 @@
 </div>	
 	</div>
 </div>
+
+
+</div>
+</div>
+</div>
 <div id="wrap-footer">
 	<div id="site-footer">
 		<div class="chunk">
