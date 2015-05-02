@@ -51,7 +51,7 @@ $query = array(
 
 ($hook = get_hook('dl_qr_get_post_info')) ? eval($hook) : null;
 $result = $forum_db->query_build($query) or error(__FILE__, __LINE__);
-if (!$forum_db->num_rows($result))
+if (!$cur_post)
 	message($lang_common['Bad request']);
 
 $cur_post = $forum_db->fetch_assoc($result);
