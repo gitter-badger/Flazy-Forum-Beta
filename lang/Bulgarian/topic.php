@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые в viewtopic.php */
+/** Езиковият пакет се използва в viewtopic.php */
 $lang_topic = array(
 
 'End of vote'			=>	'Вие не можете да гласувате, защото анкетата е приключилa.',
@@ -47,8 +47,8 @@ $lang_topic = array(
 'E-mail'				=>	'E-mail',
 'PM'					=>	'ЛС',
 'Send PM'				=>	'Изпрати лично съобщение',
-'Online'				=>	'Online',
-'Offline'				=>	'Offline',
+'Online'				=>	'Оналйн',
+'Offline'				=>	'Офлайн',
 'Last edited'			=>	'Последно редактирано от %1$s (%2$s)',
 'Report'				=>	'Съобщи за нередност',
 'Already reported'		=>	'(Вече сте докладвали)',
@@ -60,9 +60,9 @@ $lang_topic = array(
 'Unsubscribe'			=>	'Премахни абонамент',
 'Subscribe'				=>	'Абонирай се',
 'Subscribe info'		=>	'Получаване на e-mail уведомления за нови мнения.',
-'Users online'			=>	'Темата разглеждат:',
+'Users online'			=>	'Темата се разглежа от:',
 'Print'					=>	'Версия за печат',
-'RSS topic feed'		=>	'RSS темы',
+'RSS topic feed'		=>	'RSS тема',
 'Quick post'			=>	'Бърз отговор на тази тема',
 'Post'					=>	'Мнение',
 'Permalink post'		=>	'Линк към това мнение',

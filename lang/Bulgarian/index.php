@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкии используемые в index.php */
+/** Езиковият пакет се използва в  index.php */
 $lang_index = array(
 'Moderated by'				=>	'Модератори: %s',
 'Link to'					=>	'Линк към %s',

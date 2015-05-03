@@ -1,15 +1,15 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкии используемые в login.php */
+/** Езиковият пакет се използва в  login.php */
 $lang_login = array(
 
 // Разное
 'Login'						=>	'Вход',
-'Login info'				=>	'Вход за %s',
+'Login info'				=>	'Вход',
 'Username'					=>	'Имe или e-mail',
 'Password'					=>	'Паролa',
 'Remember me'				=>	'Запомни ме',

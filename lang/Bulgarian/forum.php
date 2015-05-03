@@ -1,6 +1,10 @@
 <?php
+/**
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
+ */
 
-/** Языковые конструкии используемые в viewforum.php */
+/** Езиковият пакет се използва в  viewforum.php */
 $lang_forum = array(
 
 'Forum subtitle'			=>	'%1$s в този форум с подробности за %2$s.',
@@ -9,17 +13,17 @@ $lang_forum = array(
 'Replies'					=>	'Отговори',
 'Forum'						=>	'Форум',
 'Reply'						=>	'Отговор',
-'Views'						=>	'Преглед',
+'Views'						=>	'Преглеждания',
 'Last post'					=>	'Последно мнение',
 'Select topic'				=>	'Избери тема: %s.',
 'by poster'					=>	' от %s',
 'Item status'				=>	'%s:',
-'Topic starter'				=>	'Автор %s',
+'Topic starter'				=>	'Автор: %s',
 'New posts'					=>	'Нови мнения',
 'Topic navigation'			=>	'( %s )',
 'Location'					=>	'Намерено във форум: %s',
 'Pages'						=>	'Страници',
-'Users online'				=>	'Форума разглеждат:',
+'Users online'				=>	'Форума се разглежда от:',
 'Post topic'				=>	'Публикувай нова тема',
 'Login to post'				=>	'Трябва да %1$s или %2$s за да публикувате нова тема',
 'No permission'				=>	'Не е разрешено публикуването на нови теми',

@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые в viewpoll.php */
+/** Езиковият пакет се използва в  viewpoll.php */
 $lang_poll = array(
 
 'Deleted redirect'		=>	'Гласуването бе изтрито. Пренасочване…',

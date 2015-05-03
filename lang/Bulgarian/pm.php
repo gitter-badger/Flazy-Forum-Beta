@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые в pm.php */
+/** Езиковият пакет се използва в  pm.php */
 $lang_pm = array(
 
 'New message'				=>	'Ново съобщение',

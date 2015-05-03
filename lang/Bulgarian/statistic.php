@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые в statistic.php */
+/** Езиковият пакет се използва в statistic.php */
 $lang_stat = array(
 
 'About stat'			=>	'Пълна статистика',

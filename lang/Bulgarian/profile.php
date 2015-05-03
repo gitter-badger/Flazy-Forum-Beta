@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые в profile.php и register.php */
+/** Езиковият пакет се използва в  profile.php и register.php */
 $lang_profile = array(
 
 // Navigation and sections

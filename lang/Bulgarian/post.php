@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые  в post.php и edit.php */
+/** Езиковият пакет се използва в  post.php и edit.php */
 $lang_post = array(
 
 // Post validation stuff (many are similar to those in edit.php)

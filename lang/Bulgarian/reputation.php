@@ -1,10 +1,11 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкции используемые в reputaion.php */
+/** Езиковият пакет се използва в reputaion.php */
+
 $lang_reputation = array(
 'reputation'			=>	'Репутация',
 'positive'				=>	'Позитивна',

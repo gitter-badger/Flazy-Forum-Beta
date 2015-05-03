@@ -1,10 +1,10 @@
 <?php
 /**
- * Русский языковой пакет.
- * @package Flazy_Russian
+ * Български езиков пакет.
+ * @package Flazy_Bulgarian
  */
 
-/** Языковые конструкии используемые в delete.php */
+/** Езиковият пакет се използва в  delete.php */
 $lang_delete = array(
 
 'Delete post'			=>	'Изтрий мнение',
