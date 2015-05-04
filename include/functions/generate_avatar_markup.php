@@ -26,7 +26,7 @@ function generate_avatar_markup($user_id, $filetypes, $user_email)
 
 	if ($filetypes)
 	{
-		$path = FORUM_ROOT.FORUM_AVATAR_DIR.$user_id.'.'.$filetypes;
+		$path = FORUM_ROOT.FORUM_AVATAR_DIR.'/'.$user_id.'.'.$filetypes;
 		$img_size = getimagesize($path);
 		$avatar_markup = '<a href="" class="avatar"><img src="'.$base_url.'/'.$path.'?m='.filemtime($path).'" '.$img_size[3].' alt="" /></a>';
 	}
