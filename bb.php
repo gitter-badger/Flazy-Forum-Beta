@@ -68,7 +68,7 @@ if ($forum_config['p_enable_bb_panel'] && $forum_user['show_bb_panel'])
 	// Ограничим количество смайлов
 	$smiley_groups = array_slice($smiley_groups, 0, $forum_config['p_bb_panel_smilies']);
 	foreach ($smiley_groups as $smiley_img => $smiley_texts)
-		$forum_page['bb_smiley'][] = '<img onclick="smile(\''.$smiley_texts['0'].'\')" src="'.$base_url.'/resources/old_editor/images/'.$smiley_img.'" alt="'.$smiley_texts['0'].'" title="'.$smiley_texts['0'].'"/>';
+		$forum_page['bb_smiley'][] = '<img onclick="smile(\''.$smiley_texts['0'].'\')" src="'.$base_url.'/resources/old_editor/images/smilies/'.$smiley_img.'" alt="'.$smiley_texts['0'].'" title="'.$smiley_texts['0'].'"/>';
 
 	($hook = get_hook('bb_fl_pre_bb_list')) ? eval($hook) : null;
 

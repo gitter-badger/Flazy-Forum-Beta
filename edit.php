@@ -521,7 +521,7 @@ if (isset($forum_page['errors']))
 		<div id="req-msg" class="req-warn ct-box error-box">
 			<p><?php printf($lang_common['Required warn'], '<em>'.$lang_common['Required'].'</em>') ?></p>
 		</div>
-		<form id="afocus" class="frm-form" name="post" method="post" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>"<?php if (!empty($forum_page['form_attributes'])) echo ' '.implode(' ', $forum_page['form_attributes']) ?>>
+		<form onsubmit="return submitForm(this)" id="afocus" class="frm-form" name="post" method="post" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>"<?php if (!empty($forum_page['form_attributes'])) echo ' '.implode(' ', $forum_page['form_attributes']) ?>>
 			<div class="hidden">
 				<?php echo implode("\n\t\t\t\t", $forum_page['hidden_fields'])."\n" ?>
 			</div>

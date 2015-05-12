@@ -843,34 +843,34 @@ foreach ($posts_info as $cur_post)
 					if ($forum_config['o_censoring'])
 						$cur_post['location'] = censor_words($cur_post['location']);
 
-					$forum_page['author_info']['from'] = '<li><span>'.$lang_topic['From'].' <strong> '.forum_htmlencode($cur_post['location']).'</strong></span></li>';
+					$forum_page['author_info']['from'] = '<span>'.$lang_topic['From'].' <strong> '.forum_htmlencode($cur_post['location']).'</strong></span>';
 				}
 
-				$forum_page['author_info']['registered'] = '<li><span>'.$lang_topic['Registered'].' <strong> '.format_time($cur_post['registered'], 1).'</strong></span></li>';
+				$forum_page['author_info']['registered'] = '<span>'.$lang_topic['Registered'].' <strong> '.format_time($cur_post['registered'], 1).'</strong></span><br>';
 
 				// Разница во времени
 				$time_dif = $forum_user['timezone'] - $cur_post['timezone'];
 				if ($time_dif != 0 && $forum_user['id'] > 1)
-					$forum_page['author_info']['timezone'] = '<li><span><strong>'.$lang_topic['Timezone'].' </strong>'.$time_dif.' '.$lang_topic['From yours'].'</span></li>';
+					$forum_page['author_info']['timezone'] = '<span><strong>'.$lang_topic['Timezone'].' </strong>'.$time_dif.' '.$lang_topic['From yours'].'</span>';
 			}
 
 			if ($forum_config['o_show_post_count'] || $forum_user['is_admmod'])
-				$forum_page['author_info']['posts'] = '<li><span>'.$lang_topic['Posts info'].' <strong><a href="'.forum_link($forum_url['search_user_posts'], $cur_post['poster_id']).'">'.forum_number_format($cur_post['num_posts']).'</a></strong></span></li>';
+				$forum_page['author_info']['posts'] = '<span>'.$lang_topic['Posts info'].' <strong><a href="'.forum_link($forum_url['search_user_posts'], $cur_post['poster_id']).'">'.forum_number_format($cur_post['num_posts']).'</a></strong></span><br>';
 				
 			if ($forum_config['o_rep_enabled'] && $forum_user['rep_enable'] && $forum_user['rep_enable_adm'] && $forum_user['g_rep_enable'] && $cur_post['rep_enable'] && $cur_post['poster_id'] != 1)
 			{
 				if (!$forum_user['is_guest'] && $forum_user['username'] != $cur_post['username'])
-					$vote = '<a href="'.forum_link($forum_url['reputation_change'], array($cur_post['poster_id'], $cur_post['id'], 'positive')).'"><img src="'.$base_url.'/img/style/plus.gif" alt="+" /></a>  <strong>'.forum_number_format($cur_post['reputation_plus'] - $cur_post['reputation_minus']).'</strong>  <a href="'.forum_link($forum_url['reputation_change'], array($cur_post['poster_id'], $cur_post['id'], 'negative')).'"><img src="'.$base_url.'/img/style/minus.gif" alt="-" /></a>';
+					$vote = '<a href="'.forum_link($forum_url['reputation_change'], array($cur_post['poster_id'], $cur_post['id'], 'positive')).'"><i class="fa fa-thumbs-up"></i></a>  <strong>'.forum_number_format($cur_post['reputation_plus'] - $cur_post['reputation_minus']).'</strong>  <a href="'.forum_link($forum_url['reputation_change'], array($cur_post['poster_id'], $cur_post['id'], 'negative')).'"><i class="fa fa-thumbs-down"></i></a><br>';
 				else
 					$vote = '<strong>'.forum_number_format($cur_post['reputation_plus'] - $cur_post['reputation_minus']).'</strong>';
 
-				$forum_page['author_info']['reputation'] = '<li><span><a href="'.forum_link($forum_url['reputation'], array($cur_post['poster_id'], 'reputation', )).'">'.$lang_topic['Reputation'].'</a>: '.$vote.'</span></li>';
+				$forum_page['author_info']['reputation'] = '<span><a href="'.forum_link($forum_url['reputation'], array($cur_post['poster_id'], 'reputation', )).'">'.$lang_topic['Reputation'].'</a>: '.$vote.'</span><br>';
 			}
 
 			if ($forum_user['is_admmod'])
 			{
 				if ($cur_post['admin_note'] != '')
-					$forum_page['author_info']['note'] = '<li><span>'.$lang_topic['Note'].' <strong> '.forum_htmlencode($cur_post['admin_note']).'</strong></span></li>';
+					$forum_page['author_info']['note'] = '<span>'.$lang_topic['Note'].' <strong> '.forum_htmlencode($cur_post['admin_note']).'</strong></span>';
 			}
 		}
 	}
@@ -878,7 +878,7 @@ foreach ($posts_info as $cur_post)
 	
 	// Создание инфорции об IP для модераторов/администраторов
 	if ($forum_user['is_admmod'])
-		$forum_page['author_info']['ip'] = '<li><span>'.$lang_topic['IP'].' <a href="'.forum_link($forum_url['get_host'], forum_htmlencode($cur_post['id'])).'">'.forum_htmlencode($cur_post['poster_ip']).'</a> <a href="'.forum_link('click.php').'?http://www.ripe.net/whois?form_type=simple&amp;full_query_string=&amp;searchtext='.forum_htmlencode($cur_post['poster_ip']).'&amp;do_search=Search" onclick="window.open(this.href); return false">Whois</a></span></li>';
+		$forum_page['author_info']['ip'] = '<span>'.$lang_topic['IP'].' <a href="'.forum_link($forum_url['get_host'], forum_htmlencode($cur_post['id'])).'">'.forum_htmlencode($cur_post['poster_ip']).'</a> <a href="'.forum_link('click.php').'?http://www.ripe.net/whois?form_type=simple&amp;full_query_string=&amp;searchtext='.forum_htmlencode($cur_post['poster_ip']).'&amp;do_search=Search" onclick="window.open(this.href); return false">Whois</a></span>';
 
 	// Создать контактную информацию об авторе
 	if ($forum_config['o_show_user_info'])
@@ -1190,7 +1190,7 @@ if ($forum_config['o_smilies'])
 	<div id="req-msg" class="req-warn ct-box error-box">
 		<p class="important"><?php echo $lang_topic['Required warn'] ?></p>
 	</div>
-	<form class="frm-form" name="post" method="post" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>"<?php if (!empty($forum_page['form_attributes'])) echo ' '.implode(' ', $forum_page['form_attributes']) ?>>
+	<form onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}" class="frm-form" name="post" method="post" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>"<?php if (!empty($forum_page['form_attributes'])) echo ' '.implode(' ', $forum_page['form_attributes']) ?>>
 		<div class="hidden">
 			<?php echo implode("\n\t\t\t", $forum_page['hidden_fields'])."\n" ?>
 		</div>
@@ -1207,6 +1207,7 @@ if ($forum_config['o_smilies'])
 					</dd>
 				</dl>
 				<div id="message-box">
+					<?php require FORUM_ROOT.'bb.php'; ?>
 					<textarea style="height: 9em;" name="req_message"  rows="7" cols="76" tabindex="3" class="inputbox"></textarea>
 				</div>
 				
