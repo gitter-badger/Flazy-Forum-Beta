@@ -1710,6 +1710,10 @@ fieldset.polls dd div {
   display: block;
   float: left;
   max-width: 100%;
+  border: #DBDBDB;
+  border-width: 0.1em;
+  border-style: solid;
+
 }
 .postprofile .avatar img {
   display: block;
@@ -1726,6 +1730,7 @@ dd.profile-contact {
   overflow: visible;
   float: left;
 }
+
 .online {
   position: relative;
 }
@@ -2296,6 +2301,184 @@ textarea#message {
 }
 #smiley-box img {
   margin: 3px;
+}
+#bbcode {
+    height: 20px;
+    margin: 0;
+    padding: 0 1em;
+}
+
+#bbcode li {
+    background-repeat: no-repeat;
+    cursor: pointer !important;
+    float: left;
+    line-height: 0;
+    list-style-type: none;
+    margin-left: 1em;
+}
+
+.bbm {
+    background: #F3F5F6;
+    border: 1px solid #DBE1E4;
+    z-index: 2;
+}
+
+#font-area, #size-area, #color-area {
+    width: auto;
+    padding: .5em;
+}
+
+#color-area * {
+    border: none;
+}
+
+#color-area table, #color-area td img {
+    width: 256px;
+    height: 14px;
+    padding: 0;
+    margin: 0;
+}
+
+#color-area td {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+}
+
+#smilies-area {
+    width: 450px;
+    padding: .5em;
+}
+
+#font-area, #size-area {
+    width: 200px;
+}
+
+#font-area, #size-area, #color-area, #smilies-area {
+    position: absolute;
+    right: 2%;
+    top: 42px;
+}
+
+#font-area div, #size-area div, #color-area div, #smilies-area div, #smilies-area img {
+    cursor: pointer !important;
+}
+
+#font-area span, #font-area img, #size-area span, #size-area img {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#font-area span, #font-area img {
+    height: 15px;
+}
+
+#size-area span, #size-area img {
+    height: 22px;
+}
+
+#font-area span, #size-area span {
+    padding: .1em 0;
+}
+
+#font-area img {
+    margin-top: -15px;
+    width: 100%;
+}
+
+#size-area img {
+    margin-top: -24px;
+    width: 100%;
+}
+
+#bbcode span {
+    background: url(../img/style/b_bb.png);
+}
+
+#bbcode li img {
+    height: 16px;
+}
+
+#bt-font span {
+    background-position: 0 0;
+}
+
+#bt-size span {
+    background-position: -16px 0;
+}
+
+#bt-bold span {
+    background-position: -32px 0;
+}
+
+#bt-italic span {
+    background-position: -48px 0;
+}
+
+#bt-underline span {
+    background-position: -62px 0;
+}
+
+#bt-strike span {
+    background-position: -78px 0;
+}
+
+#bt-left span {
+    background-position: -95px 0;
+}
+
+#bt-center span {
+    background-position: -110px 0;
+}
+
+#bt-right span {
+    background-position: -126px 0;
+}
+
+#bt-list span {
+    background-position: -142px 0;
+}
+
+#bt-link span {
+    background-position: -158px 0;
+}
+
+#bt-email span {
+    background-position: -174px 0;
+}
+
+#bt-image span {
+    background-position: -190px 0;
+}
+
+#bt-video span {
+    background-position: -206px 0;
+}
+
+#bt-hide span {
+    background-position: -222px 0;
+}
+
+#bt-quote span {
+    background-position: -238px 0;
+}
+
+#bt-code span {
+    background-position: -254px 0;
+}
+
+#bt-color span {
+    background-position: -270px 0;
+}
+
+#bt-smile span {
+    background-position: -286px 0
+}
+
+#bt-speller span {
+    background-position: -302px 0;
 }
 /* Input field styles
 ---------------------------------------- */

@@ -12,7 +12,7 @@
 if (!defined('FORUM_ROOT'))
 {
 	header('Content-type: text/html; charset=utf-8');
-	die('Константа FORUM_ROOT должны быть определена и ссылаться на действующий корневой каталог Flazy.');
+	die('Constant FORUM_ROOT need to be пределена и ссылаться на действующий корневой каталог Flazy.');
 }
 if (!defined('FORUM_ESSENTIALS_LOADED'))
 	require FORUM_ROOT.'include/essentials.php';

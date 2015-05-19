@@ -416,6 +416,58 @@ function declination($number, $words)
  * Создаёт "Меню", которое отображается в верхней части каждой страницы.
  * @return string Список ссылок.
  */
+function generate_navlinks_admins()
+{
+	global $forum_config, $lang_common, $forum_url, $forum_url_admin, $forum_user;
+	$return = ($hook = get_hook('fn_generate_navlinks_start')) ? eval($hook) : null;
+	if ($return != null)
+		return $return;
+	// Index should always be displayed
+	$links['index'] = '<li id="navindex" class="nav'.((FORUM_PAGE == 'index') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['index']).'"><span>'.$lang_common['Index'].'</span></a></li>';
+	if ($forum_user['g_read_board'] && $forum_user['g_view_users'])
+		$links['userlist'] = '<li id="navuserlist" class="nav'.((FORUM_PAGE == 'userlist') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['users']).'"><span>'.$lang_common['User list'].'</span></a></li>';
+	if ($forum_config['o_rules'] && (!$forum_user['is_guest'] || $forum_user['g_read_board'] || $forum_config['o_regs_allow']))
+		$links['rules'] = '<li id="navrules" class="nav'.((FORUM_PAGE == 'rules') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['rules']).'"><span>'.$lang_common['Rules'].'</span></a></li>';
+	if ($forum_user['is_guest'])
+	{
+		if ($forum_user['g_read_board'] && $forum_user['g_search'])
+			$links['search'] = '<li id="navsearch" class="nav'.((FORUM_PAGE == 'search') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['search']).'"><span>'.$lang_common['Search'].'</span></a></li>';
+		$links['register'] = '<li id="navregister" class="nav'.((FORUM_PAGE == 'register') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['register']).'"><span>'.$lang_common['Register'].'</span></a></li>';
+		$links['login'] = '<li id="navlogin" class="nav'.((FORUM_PAGE == 'login') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['login']).'"><span>'.$lang_common['Login'].'</span></a></li>';
+	}
+	else
+	{
+		if (!$forum_user['is_admmod'])
+		{
+			if ($forum_user['g_read_board'] && $forum_user['g_search'])
+				$links['search'] = '<li id="navsearch" class="nav'.((FORUM_PAGE == 'search') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['search']).'"><span>'.$lang_common['Search'].'</span></a></li>';
+			$links['profile'] = '<li id="navprofile" class="nav'.((substr(FORUM_PAGE, 0, 7) == 'profile') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'"><span>'.$lang_common['Profile'].'</span></a></li>';
+			if ($forum_config['o_pm_show_global_link'])
+				$links['pm'] = '<li id="navpm" class="nav'.((FORUM_PAGE == 'profile-pm') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['pm'], 'inbox').'"><span>'.$lang_common['Private messages'].'</span></a></li>';
+			$links['logout'] = '<li id="navlogout" class="nav"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'"><span>'.$lang_common['Logout'].'</span></a></li>';
+		}
+		else
+		{
+			$links['search'] = '<li id="navsearch" class="nav'.((FORUM_PAGE == 'search') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['search']).'"><span>'.$lang_common['Search'].'</span></a></li>';
+			$links['profile'] = '<li id="navprofile" class="nav'.((substr(FORUM_PAGE, 0, 7) == 'profile') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'"><span>'.$lang_common['Profile'].'</span></a></li>';
+			if ($forum_config['o_pm_show_global_link'])
+				$links['pm'] = '<li id="navpm" class="nav'.((FORUM_PAGE == 'profile-pm') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['pm'], 'inbox').'"><span>'.$lang_common['Private messages'].'</span></a></li>';
+			$links['logout'] = '<li id="navlogout" class="nav"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'"><span>'.$lang_common['Logout'].'</span></a></li>';
+			$links['admin'] = '<li id="navadmin" class="nav'.((substr(FORUM_PAGE, 0, 5) == 'admin') ? ' isactive' : '').'"><a href="'.forum_link('admin/admin.php').'"><span>'.$lang_common['Admin'].'</span></a></li>';
+		}
+	}
+	// Are there any additional navlinks we should insert into the array before imploding it?
+	if ($forum_config['o_additional_navlinks'] != '' && preg_match_all('#([0-9]+)\s*=\s*(.*?)\n#s', $forum_config['o_additional_navlinks']."\n", $extra_links))
+	{
+		// Insert any additional links into the $links array (at the correct index)
+		$num_links = count($extra_links[1]);
+		for ($i = 0; $i < $num_links; ++$i)
+			array_insert($links, (int)$extra_links[1][$i], '<li id="navextra'.($i + 1).'">'.$extra_links[2][$i].'</li>');
+	}
+	($hook = get_hook('fn_generate_navlinks_end')) ? eval($hook) : null;
+	return implode("\n\t\t", $links);
+}
+
  function generate_topnavlinks()
 {
 	global $forum_config, $lang_common, $forum_url, $forum_url_admin, $forum_user;
@@ -461,6 +513,7 @@ if ($forum_user['is_guest'])
 
 	return implode("\n\t\t", $links);
 }
+
 
 function generate_navlinks()
 {

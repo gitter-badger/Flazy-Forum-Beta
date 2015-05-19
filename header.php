@@ -129,6 +129,76 @@ $tpl_main = str_replace('<forum_head>', implode("\n", $forum_head), $tpl_main);
 unset($forum_head, $head_temp);
 // END SUBST - <forum_head>
 
+// START SUBST - <forum_head_admin>
+// Is this a page that we want search index spiders to index?
+if (!defined('FORUM_ALLOW_INDEX'))
+	$forum_head_admin['robots'] = '<meta name="ROBOTS" content="NOINDEX, FOLLOW" />';
+else
+	$forum_head_admin['descriptions'] = '<meta name="description" content="' . generate_crumbs(true) . '" />';
+
+// Should we output a MicroID? http://microid.org/
+if (strpos(FORUM_PAGE, 'profile') === 0)
+	$forum_head_admin['microid'] = '<meta name="microid" content="mailto+http:sha1:' . sha1(sha1('mailto:' . $user['email']) . sha1(forum_link($forum_url['user'], $id))) . '" />';
+
+$forum_head_admin['compatible'] = '<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">';
+
+$forum_head_admin['title'] = '<title>' . generate_crumbs(true) . '</title>';
+$forum_head_admin['favicon'] = '<link rel="shortcut icon" type="image/x-icon" href="' . $base_url . '/style/' . $forum_user['style'] . '/favicon.ico" />';
+
+// Should we output feed links?
+if (FORUM_PAGE == 'index') {
+	$forum_head_admin['rss'] = '<link rel="alternate" type="application/rss+xml" href="' . forum_link($forum_url['feed_index'], 'rss') . '" title="RSS" />';
+	$forum_head_admin['atom'] = '<link rel="alternate" type="application/atom+xml" href="' . forum_link($forum_url['feed_index'], 'atom') . '" title="ATOM" />';
+} else if (FORUM_PAGE == 'viewforum') {
+	$forum_head_admin['rss'] = '<link rel="alternate" type="application/rss+xml" href="' . forum_link($forum_url['feed_forum_topics'], array($id, $cur_forum['sort_by'] == '1' ? 'posted' : 'last_post', 'rss')) . '" title="RSS" />';
+	$forum_head_admin['atom'] = '<link rel="alternate" type="application/atom+xml" href="' . forum_link($forum_url['feed_forum_topics'], array($id, $cur_forum['sort_by'] == '1' ? 'posted' : 'last_post', 'atom')) . '" title="ATOM" />';
+} else if (FORUM_PAGE == 'viewtopic') {
+	$forum_head_admin['rss'] = '<link rel="alternate" type="application/rss+xml" href="' . forum_link($forum_url['feed_topic'], array('rss', $id)) . '" title="RSS" />';
+	$forum_head_admin['atom'] = '<link rel="alternate" type="application/atom+xml" href="' . forum_link($forum_url['feed_topic'], array('atom', $id)) . '" title="ATOM" />';
+}
+
+// If there are more than two breadcrumbs, add the "up" link (second last)
+if (count($forum_page['crumbs']) > 2)
+	$forum_head_admin['up'] = '<link rel="up" href="' . $forum_page['crumbs'][count($forum_page['crumbs']) - 2][1] . '" title="' . forum_htmlencode($forum_page['crumbs'][count($forum_page['crumbs']) - 2][0]) . '" />';
+
+// If there are other page navigation links (first, next, prev and last)
+if (!empty($forum_page['nav']))
+	$forum_head_admin['nav'] = implode("\n", $forum_page['nav']);
+
+$forum_head_admin['search'] = '<link rel="search" href="' . forum_link($forum_url['search']) . '" title="' . $lang_common['Search'] . '" />';
+$forum_head_admin['author'] = '<link rel="author" href="' . forum_link($forum_url['users']) . '" title="' . $lang_common['User list'] . '" />';
+
+if (FORUM_PAGE == 'profile-about') {
+	if ($user['url'] != '')
+		$forum_head_admin['rss'] = '<link rel="me" href="' . $user['url'] . '" />';
+}
+
+ob_start();
+
+// Include stylesheets
+if (defined('FORUM_PRINT'))
+	$forum_head_admin['style_print'] = '<link rel="stylesheet" type="text/css" media="print,screen" href="' . $base_url . '/style/' . $forum_user['style'] . '/css/print.css" />';
+else {
+	$forum_head_admin['style_base'] = '<link rel="stylesheet" type="text/css" href="' . $base_url . '/resources/admin/dist/css/AdminLTE.min.css"/>';
+	require FORUM_ROOT . 'admin/style.php';
+}
+
+$head_temp = forum_trim(ob_get_contents());
+$num_temp = 0;
+
+foreach (explode("\n", $head_temp) as $style_temp)
+	$forum_head_admin['style' . $num_temp++] = $style_temp;
+
+ob_end_clean();
+
+$forum_head_admin['commonjs'] = '<script type="text/javascript" src="' . $base_url . '/style/' . $forum_user['style'] . '/js/common.js"></script>';
+
+($hook = get_hook('hd_head')) ? eval($hook) : null;
+
+$tpl_main = str_replace('<forum_head_admin>', implode("\n", $forum_head_admin), $tpl_main);
+unset($forum_head_admin, $head_temp);
+// END SUBST - <forum_head_admin>
+
 // START SUBST OF COMMON ELEMENTS
 // Setup array of general elements
 $gen_elements = array();
@@ -161,6 +231,10 @@ $gen_elements['<forum_desc>'] = ($forum_config['o_board_desc'] != '') ? '<p id="
 
 // Main Top Navigation
 $gen_elements['<forum_topnavlinks>'] = '<ul class="site-nav" role="menubar">' . "\n\t\t" . generate_topnavlinks() . "\n\t" . '</ul>';
+
+// Admin Navigation
+$gen_elements['<forum_navlinks_admins>'] = '<ul class="sidebar-menu" role="menubar">' . "\n\t\t" . generate_topnavlinks() . "\n\t" . '</ul>';
+
 
 // Main Navigation
 $gen_elements['<forum_navlinks>'] = '<ul id="site-menu">' . "\n\t\t" . generate_navlinks() . "\n\t" . '</ul>';
@@ -305,10 +379,10 @@ $main_elements['<forum_main_menu>'] = (!empty($forum_page['main_menu'])) ? '<div
 
 // Main section menu e.g. profile menu
 if (substr(FORUM_PAGE, 0, 5) == 'admin' && FORUM_PAGE_TYPE != 'paged') {
-	$main_elements['<forum_admin_menu>'] = '<div class="admin-menu gen-content">' . "\n\t" . '<ul>' . "\n\t\t" . generate_admin_menu(false) . "\n\t" . '</ul>' . "\n" . '</div>';
+	$main_elements['<forum_admin_menu>'] = '<ul class="sidebar-menu">' . "\n\t\t" . generate_admin_menu(false) . "\n\t" . '</ul>';
 
 	$forum_page['admin_sub'] = generate_admin_menu(true);
-	$main_elements['<forum_admin_submenu>'] = ($forum_page['admin_sub'] != '') ? '<div class="admin-submenu gen-content">' . "\n\t" . '<ul>' . "\n\t\t" . $forum_page['admin_sub'] . "\n\t" . '</ul>' . "\n" . '</div>' : '';
+	$main_elements['<forum_admin_submenu>'] = ($forum_page['admin_sub'] != '') ? '<ul class="sidebar-menu">' . "\n\t\t" . $forum_page['admin_sub'] . "\n\t" . '</ul>' : '';
 }
 
 // Section users online in forum\topic

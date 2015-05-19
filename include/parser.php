@@ -45,15 +45,16 @@ function preparse_bbcode($text, &$errors, $is_signature = false)
 	}
 
 	// Tidy up lists
-	$pattern = array('%\[list(?:=([1a*]))?+\]((?:(?>.*?(?=\[list(?:=[1a*])?+\]|\[/list\]))|(?R))*)\[/list\]%ise');
-	$replace = array('preparse_list_tag(\'$2\', \'$1\', $errors)');
-	$text = preg_replace($pattern, $replace, $text);
+		$pattern = array('%\[list(?:=([1a*]))?+\]((?:(?>.*?(?=\[list(?:=[1a*])?+\]|\[/list\]))|(?R))*)\[/list\]%ise');
+		$replace = array('preparse_list_tag(\'$2\', \'$1\', $errors)');
+		$text = preg_replace_callback($pattern, $replace, $text);
 
-	$text = str_replace('*'."\0".']', '*]', $text);
+		$text = str_replace('*'."\0".']', '*]', $text);
 
-	if ($forum_config['o_make_links'])
-		$text = do_clickable($text);
-
+		if ($forum_config['o_make_links'] == '1')
+		{
+			$text = do_clickable($text, defined('FORUM_SUPPORT_PCRE_UNICODE'));
+		}
 	// If we split up the message before we have to concatenate it together again (code tags)
 	if (isset($inside))
 	{
