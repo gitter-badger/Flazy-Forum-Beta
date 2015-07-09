@@ -233,7 +233,7 @@ $gen_elements['<forum_desc>'] = ($forum_config['o_board_desc'] != '') ? '<p id="
 $gen_elements['<forum_topnavlinks>'] = '<ul class="site-nav" role="menubar">' . "\n\t\t" . generate_topnavlinks() . "\n\t" . '</ul>';
 
 // Admin Navigation
-$gen_elements['<forum_navlinks_admins>'] = '<ul class="sidebar-menu" role="menubar">' . "\n\t\t" . generate_topnavlinks() . "\n\t" . '</ul>';
+$gen_elements['<forum_navlinks_admins>'] =  generate_topnavlinks();
 
 
 // Main Navigation
@@ -382,7 +382,7 @@ if (substr(FORUM_PAGE, 0, 5) == 'admin' && FORUM_PAGE_TYPE != 'paged') {
 	$main_elements['<forum_admin_menu>'] = '<ul class="sidebar-menu">' . "\n\t\t" . generate_admin_menu(false) . "\n\t" . '</ul>';
 
 	$forum_page['admin_sub'] = generate_admin_menu(true);
-	$main_elements['<forum_admin_submenu>'] = ($forum_page['admin_sub'] != '') ? '<ul class="sidebar-menu">' . "\n\t\t" . $forum_page['admin_sub'] . "\n\t" . '</ul>' : '';
+	$main_elements['<forum_admin_submenu>'] = ($forum_page['admin_sub'] != '') ? '<ul class="treeview-menu">' . "\n\t\t" . $forum_page['admin_sub'] . "\n\t" . '</ul>' : '';
 }
 
 // Section users online in forum\topic
