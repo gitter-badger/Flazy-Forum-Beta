@@ -1,0 +1,9 @@
+0.4
+* First release
+
+0.5
+* Add forums hierarchy into navigation block
+* Disable forum category selection when parent forum selected
+
+0.6
+* Correct work with categories: if parent forum move to some category, subforum also move to it

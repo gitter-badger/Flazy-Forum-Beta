@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE extension SYSTEM "ext-1.0.dtd">
+
+
+<extension engine="1.0">
+	<flazy>yes</flazy>
+	<id>flazy_geshi</id>
+	<title>Подсветка синтаксиса (GeSHi)</title>
+	<version>1.0</version>
+	<description>Включает подсветку синтаксиса через библиотеку GeSHi highlighter (1.0.8.6).</description>
+	<author>Flazy Development Team</author>
+	<minversion>0.0.1</minversion>
+	<maxtestedon>0.0.1</maxtestedon>
+
+	<hooks>
+		<hook id="ps_start"><![CDATA[
+require_once $ext_info['path'].'/function.php';
+		]]></hook>
+
+		<hook id="ps_preparse_bbcode_start"><![CDATA[
+$text = preg_replace('#\[code=([a-zA-Z0-9]+)\]#s', '[code]%$1%', $text);
+		]]></hook>
+
+		<hook id="ps_preparse_bbcode_end"><![CDATA[
+$text = preg_replace('#\[code\]%([a-zA-Z0-9]+)%#s', '[code=$1]', $text);
+		]]></hook>
+
+		<hook id="ps_parse_message_pre_split"><![CDATA[
+$text = preg_replace_callback('#\[code=([a-zA-Z0-9]+)\](.*?)\[/code\]#s', 'geshi', $text);
+		]]></hook>
+	</hooks>
+</extension>

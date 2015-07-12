@@ -207,9 +207,7 @@ ob_start();
 ($hook = get_hook('ain_main_output_start')) ? eval($hook) : null;
 
 ?>
-	<div class="main-subhead">
-		<h2 class="hn"><span><?php echo $lang_admin_index['Information head'] ?></span></h2>
-	</div>
+
 	<div class="main-content main-frm">
 <?php if (!empty($forum_page['alert'])): ?>
 		<div id="admin-alerts" class="ct-set warn-set">
@@ -221,49 +219,64 @@ ob_start();
 <?php endif; ?>
 		<div class="ct-group">
 <?php ($hook = get_hook('ain_pre_version')) ? eval($hook) : null; ?>
-			<div class="ct-set group-item<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_admin_index['Flazy version'] ?></span></h3>
-					<ul class="data-list">
-						<li><span>Flazy <?php echo $forum_config['o_cur_version'] ?></span></li>
-						<li><span><?php echo $lang_admin_index['Copyright message'] ?></span></li>
-<?php if (isset($updates)): ?>
-						<li><span><?php echo $updates ?></span></li>
-<?php endif; ?>
-					</ul>
-				</div>
-			</div>
+          <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?php echo $lang_admin_index['Flazy version'] ?></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              Flazy -<?php echo $forum_config['o_cur_version'] ?>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->	
 <?php ($hook = get_hook('ain_pre_server_load')) ? eval($hook) : null; ?>
-			<div class="ct-set group-item<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_admin_index['Server load'] ?></span></h3>
-					<p><span><?php echo $server_load ?> (<?php echo $num_online.' '.$lang_admin_index['users online']?>)</span></p>
-				</div>
-			</div>
+          <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?php echo $lang_admin_index['Server load'] ?></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+             <?php echo $server_load ?> (<?php echo $num_online.' '.$lang_admin_index['users online']?>)
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->	
 <?php ($hook = get_hook('ain_pre_environment')) ? eval($hook) : null; if ($forum_user['g_id'] == FORUM_ADMIN): ?>
-			<div class="ct-set group-item<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_admin_index['Environment'] ?></span></h3>
-					<ul class="data-list">
-						<li><span><?php echo $lang_admin_index['Operating system'] ?>: <?php echo PHP_OS ?></span></li>
-						<li><span>PHP: <?php echo PHP_VERSION ?> — <a href="<?php echo forum_link('admin/admin.php') ?>?action=phpinfo"><?php echo $lang_admin_index['Show info'] ?></a></span></li>
-						<li><span><?php echo $lang_admin_index['Accelerator'] ?>: <?php echo $php_accelerator ?></span></li>
-					</ul>
-				</div>
-			</div>
+          <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?php echo $lang_admin_index['Environment'] ?></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+             <h5><?php echo $lang_admin_index['Operating system'] ?>: <small><?php echo PHP_OS ?></small></h5>
+			 <h5>PHP: <small><?php echo PHP_VERSION ?></small> — <a href="<?php echo forum_link('admin/admin.php') ?>?action=phpinfo"><?php echo $lang_admin_index['Show info'] ?></a></h5>
+			 <h5><?php echo $lang_admin_index['Accelerator'] ?>: <small><?php echo $php_accelerator ?></small></h5>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->	
 <?php ($hook = get_hook('ain_pre_database')) ? eval($hook) : null; ?>
-			<div class="ct-set group-item<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_admin_index['Database'] ?></span></h3>
-					<ul class="data-list">
-						<li><span><?php echo implode(' ', $forum_db->get_version()) ?></span></li>
+          <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
+            <div class="box-header with-border">
+              <h3 class="box-title"><?php echo $lang_admin_index['Database'] ?></h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+            	
+             	<h5><?php echo implode(' ', $forum_db->get_version()) ?></h5>
 <?php if (isset($total_records) && isset($total_size)): ?>
-						<li><span><?php echo $lang_admin_index['Rows'] ?>: <?php echo forum_number_format($total_records) ?></span></li>
-						<li><span><?php echo $lang_admin_index['Size'] ?>: <?php echo $total_size ?></span></li>
+						<h5><?php echo $lang_admin_index['Rows'] ?>: <small><?php echo forum_number_format($total_records) ?></small></h5>
+						<h5><?php echo $lang_admin_index['Size'] ?>: <small><?php echo $total_size ?></small></h5>
 <?php endif; ?>
- 					</ul>
-				</div>
-			</div>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->	
 <?php endif; ($hook = get_hook('ain_items_end')) ? eval($hook) : null; ?>
 		</div>
 	</div>
@@ -276,4 +289,4 @@ $tpl_main = str_replace('<forum_main>', $tpl_temp, $tpl_main);
 ob_end_clean();
 // END SUBST - <forum_main>
 
-require FORUM_ROOT.'footer.php';
+require FORUM_ROOT.'footer_adm.php';

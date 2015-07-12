@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<extension engine="1.0">
+  <id>ekarma</id>
+  <title>eKarma</title>
+  <version>0.9</version>
+  <description>Adds karma for users, including custom karma, based on code by Caleb Champlin [Mediator] (cmediator@gmail.com).</description>
+  <author>Rich Pedley</author>
+  <minversion>1.3 Beta</minversion>
+  <maxtestedon>1.3 Beta</maxtestedon>
+  <install><![CDATA[
+	// Install code here
+	if (!array_key_exists('o_karma_enable', $forum_config)){
+		$forum_db->add_field('users','karma','INT(10)',false,0);
+		$forum_db->add_field('users', 'karmacustom', 'VARCHAR(255)', '');
+		$forum_db->add_field('posts','karma','INT(10)',false,0);
+		$sql = 'CREATE TABLE '.$forum_db->prefix."karma (
+			`id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+			`post_id` INT(10) NOT NULL DEFAULT 0,
+			`user_id` INT(10) NOT NULL DEFAULT 0,
+			`changer_id` INT(10) NOT NULL DEFAULT 0,
+			`time` INT(10) NOT NULL DEFAULT 0,
+			`action` TINYINT(1) NOT NULL DEFAULT 0,
+			PRIMARY KEY(`id`)
+		) ENGINE = MyISAM CHARACTER SET utf8";
+		$forum_db->query($sql) or error(__FILE__, __LINE__);
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_enable\',\'0\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_guests\',\'0\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_admods_only\',\'0\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_word\',\'Karma\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_word_plus\',\'Позитивна карма +\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_word_minus\',\'Неутрална карма -\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_post_word\',\'Usefulness\')');
+		$forum_db->query('INSERT INTO '.$forum_db->prefix.'config (conf_name,conf_value) VALUES (\'o_karma_time_limit\',\'24\')');
+	}
+	// Regenerate the config cache
+	require_once FORUM_ROOT.'include/cache.php';
+	generate_config_cache();
+  ]]></install>
+
+  <uninstall><![CDATA[
+	// Uninstall code here
+	$forum_db->drop_field('posts','karma');
+	$forum_db->drop_field('users','karma');
+	$forum_db->drop_field('users','karmacustom');
+	$forum_db->query('DROP TABLE '.$forum_db->prefix.'karma');
+	$forum_db->query('DELETE FROM '.$forum_db->prefix.'config WHERE conf_name=\'o_karma_enable\' OR conf_name=\'o_karma_guests\' OR conf_name=\'o_karma_admods_only\' OR conf_name=\'o_karma_word\' OR conf_name=\'o_karma_word_plus\' OR conf_name=\'o_karma_word_minus\' OR conf_name=\'o_karma_post_word\' OR conf_name=\'o_karma_time_limit\'');
+	// Regenerate the config cache
+	require_once FORUM_ROOT.'include/cache.php';
+	generate_config_cache();
+  ]]></uninstall>
+
+	<hooks>
+	<hook id="re_rewrite_rules"><![CDATA[
+		$forum_rewrite_rules['/^(add-karma|remove-karma)[\/_-]?([0-9]+)(\.html?|\/)?$/i'] = 'misc.php?action=$1&uid=$2';
+		$forum_rewrite_rules['/^(add-post-karma|remove-post-karma)[\/_-]?([0-9]+)(\.html?|\/)?$/i'] = 'misc.php?action=$1&pid=$2';
+		]]></hook>
+		<hook id="co_common"><![CDATA[
+		if ($forum_config['o_sef'] == "File_based"){
+			$forum_url['addkarma'] = 'add-karma$1.html';
+			$forum_url['remkarma'] = 'remove-karma$1.html';
+			$forum_url['addpostkarma'] = 'add-post-karma$1.html';
+			$forum_url['rempostkarma'] = 'remove-post-karma$1.html';
+		}elseif ($forum_config['o_sef'] == "File_based_(fancy)"){
+			$forum_url['addkarma'] = 'add-karma$1.html';
+			$forum_url['remkarma'] = 'remove-karma$1.html';
+			$forum_url['addpostkarma'] = 'add-post-karma$1.html';
+			$forum_url['rempostkarma'] = 'remove-post-karma$1.html';
+		}elseif ($forum_config['o_sef'] == "Folder_based"){
+			$forum_url['addkarma'] = 'add-karma/$1/';
+			$forum_url['remkarma'] = 'remove-karma/$1/';
+			$forum_url['addpostkarma'] = 'add-post-karma/$1/';
+			$forum_url['rempostkarma'] = 'remove-post-karma/$1/';
+		}elseif ($forum_config['o_sef'] == "Folder_based_(fancy)"){
+			$forum_url['addkarma'] = 'add-karma/$1/';
+			$forum_url['remkarma'] = 'remove-karma/$1/';
+			$forum_url['addpostkarma'] = 'add-post-karma/$1/';
+			$forum_url['rempostkarma'] = 'remove-post-karma/$1/';
+		}else{
+			$forum_url['addkarma'] = 'misc.php?action=add-karma&amp;uid=$1';
+			$forum_url['remkarma'] = 'misc.php?action=remove-karma&amp;uid=$1';
+			$forum_url['addpostkarma'] = 'misc.php?action=add-post-karma&amp;pid=$1';
+			$forum_url['rempostkarma'] = 'misc.php?action=remove-post-karma&amp;pid=$1';
+		}
+		($hook = get_hook('co_ext_ek_urlparsing')) ? eval($hook) : null;
+    ]]></hook>
+    <hook id="vt_qr_get_posts"><![CDATA[
+		$query['SELECT'] .= ',u.karma,u.karmacustom,k.id as karma_id';
+		$query['JOINS'][] = array(
+				'LEFT JOIN'		=> 'karma AS k',
+				'ON'			=> '(k.user_id=u.id AND k.changer_id='.intval($forum_user['id']).' AND k.time-'.time().'<'.($forum_config['o_karma_time_limit'] * 3600).')'
+			);
+		$query['GROUP BY'] = 'p.id';
+	]]></hook>
+	<hook id="pf_qr_get_user_info"><![CDATA[
+		$query['SELECT'] .= ',k.id as karma_id';
+		$query['JOINS'][] = array(
+				'LEFT JOIN'		=> 'karma AS k',
+				'ON'			=> '(k.user_id=u.id AND k.changer_id='.intval($forum_user['id']).' AND k.time-'.time().'<'.($forum_config['o_karma_time_limit'] * 3600).')'
+			);
+		$query['GROUP BY'] = 'u.id';
+    ]]></hook>
+    <hook id="vt_row_pre_post_actions_merge"><![CDATA[
+		if ($cur_post['poster_id'] > 1 && $forum_config['o_karma_enable'] == '1' && ($forum_config['o_karma_admods_only'] == '0' || ($forum_user['g_moderator'] == '1' || $forum_user['g_id'] == FORUM_ADMIN))){
+			if($cur_post['karmacustom']=='')
+				$forum_page['author_info']['karma'] = '<li class="userkarma"><span><strong>' . forum_htmlencode($forum_config['o_karma_word']) . '</strong>: ' . $cur_post['karma'] . '</span></li>';
+			else
+				$forum_page['author_info']['karma'] = '<li class="userkarma"><span><strong>' . forum_htmlencode($forum_config['o_karma_word']) . '</strong>: ' . forum_htmlencode($cur_post['karmacustom']) . '</span></li>';
+
+		//	if (intval($cur_post['karma_id']) > 1){
+				if (($cur_post['poster_id']!= intval($forum_user['id'])) && ($forum_config['o_karma_guests'] == '1' || !$forum_user['is_guest']) && ($cur_post['karmacustom']=='')){
+					$forum_page['author_info']['karma_change'] = '<li class="modkarma"><span><a href="'.forum_link($forum_url['addkarma'],$cur_post['poster_id']).'">' . forum_htmlencode($forum_config['o_karma_word_plus']) . '</a> <a href="'.forum_link($forum_url['remkarma'],$cur_post['poster_id']).'">' . forum_htmlencode($forum_config['o_karma_word_minus']) . '</a></span></li>'; 
+				}
+		//	}
+		}
+    ]]></hook>
+    <hook id="pf_change_details_about_pre_header_load"><![CDATA[
+	if ($forum_config['o_karma_enable'] == '1' && ($forum_config['o_karma_admods_only'] == '0' || ($forum_user['g_moderator'] == '1' || $forum_user['g_id'] == FORUM_ADMIN))){
+		if($user['karmacustom']=='')
+			$forum_page['user_info']['karma'] = '<li class="userkarma"><span><strong>' . forum_htmlencode($forum_config['o_karma_word']) . '</strong>: ' . $user['karma'] . '</span></li>';
+		else
+			$forum_page['user_info']['karma'] = '<li class="userkarma"><span><strong>' . forum_htmlencode($forum_config['o_karma_word']) . '</strong>: ' . forum_htmlencode($user['karmacustom']) . '</span></li>';
+
+		//if (intval($user['karma_id']) < 1){
+			if (($user['id'] != intval($forum_user['id'])) && ($forum_config['o_karma_guests'] == '1' || !$forum_user['is_guest']) && ($user['karmacustom']=='')){
+				$forum_page['user_info']['karma_change'] = '<li class="modkarma"><span><a href="'.forum_link($forum_url['addkarma'],$user['id']).'">' . forum_htmlencode($forum_config['o_karma_word_plus']) . '</a> <a href="'.forum_link($forum_url['remkarma'],$user['id']).'">' . forum_htmlencode($forum_config['o_karma_word_minus']) . '</a></span></li>'; 
+			}
+		//}
+	}
+    ]]></hook>
+ 	<hook id="mi_new_action"><![CDATA[
+    	// Hook code here
+	if ($action == 'add-karma'){
+		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'.php'))
+			require $ext_info['path'].'/lang/'.$forum_user['language'].'.php';
+		else
+			require $ext_info['path'].'/lang/English.php';
+
+		if ($forum_config['o_karma_enable'] == '0' || ($forum_config['o_karma_admods_only'] == '1' && ($forum_user['g_moderator'] != '1' && $forum_user['g_id'] != FORUM_ADMIN)))
+			message($lang_common['Bad request']);
+		
+		if ($forum_config['o_karma_guests'] == '0' && $forum_user['is_guest'])
+			message($lang_common['Bad request']);
+
+		$ext_karma_uid = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
+		if ($ext_karma_uid < 2)
+			message($lang_common['Bad request']);
+
+		if ($ext_karma_uid== intval($forum_user['id']))
+			message($lang_common['Bad request']);
+			
+		$ext_karma_query = array(
+			'SELECT'	=> 'u.username, k.time, k.id as karma_id',
+			'FROM'		=> 'users as u',
+			'JOINS'		=> array(
+				array(
+				'LEFT JOIN'		=> 'karma AS k',
+				'ON'			=> '(k.user_id=u.id AND k.changer_id='.intval($forum_user['id']).')'
+				),
+			),
+			'GROUP BY' => 'u.id',
+			'WHERE'		=> 'u.id='.$ext_karma_uid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_add_get_user_info')) ? eval($hook) : null;
+		$ext_karma_result = $forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		if (!$forum_db->num_rows($ext_karma_result))
+			message($lang_common['Bad request']);
+		list($ext_karma_username,$ext_karma_time,$ext_karma_old_id) = $forum_db->fetch_row($ext_karma_result);
+
+		$ext_karma_timeleft = ((time() - $ext_karma_time) / 3600);
+		$ext_karma_timeleft = ceil((intval($forum_config['o_karma_time_limit']) - $ext_karma_timeleft));
+		if($forum_user['g_id'] != FORUM_ADMIN){
+			if (intval($ext_karma_timeleft) > 0)
+				message(sprintf($lang_karma['Cannot modify karma'],forum_htmlencode($forum_config['o_karma_word']),$ext_karma_timeleft));
+		}
+		$ext_karma_query = array(
+			'UPDATE'	=> 'users',
+			'SET'		=> 'karma = karma + 1',
+			'WHERE'		=> 'id='.$ext_karma_uid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_user_add_karma_count')) ? eval($hook) : null;
+		$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+
+    	if (!$forum_user['is_admmod']){
+			$ext_karma_query = array(
+				'INSERT'	=> 'user_id, changer_id, time, action',
+				'INTO'		=> 'karma',
+				'VALUES'	=> $ext_karma_uid.', '.$forum_user['id'].', '.time().', 1'
+			);
+
+			($hook = get_hook('mi_ext_ek_qr_user_add_karma')) ? eval($hook) : null;
+			$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		}
+
+		if (intval($ext_karma_old_id) > 0){
+			$ext_del_karma_query = array(
+				'DELETE'	=> 'karma',
+				'WHERE'		=> 'id='.$ext_karma_old_id
+			);
+			$forum_db->query_build($ext_del_karma_query) or error(__FILE__, __LINE__);
+		}
+		redirect($forum_user['prev_url'], sprintf($lang_karma['Modified karma'],forum_htmlencode($forum_config['o_karma_word']),forum_htmlencode($ext_karma_username)));
+	}
+	if ($action == 'remove-karma'){
+		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'.php'))
+			require $ext_info['path'].'/lang/'.$forum_user['language'].'.php';
+		else
+			require $ext_info['path'].'/lang/English.php';
+
+		if ($forum_config['o_karma_enable'] == '0' || ($forum_config['o_karma_admods_only'] == '1' && ($forum_user['g_moderator'] != '1' && $forum_user['g_id'] != FORUM_ADMIN)))
+			message($lang_common['Bad request']);
+		
+		if ($forum_config['o_karma_guests'] == '0' && $forum_user['is_guest'])
+			message($lang_common['Bad request']);
+
+		$ext_karma_uid = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
+		if ($ext_karma_uid < 2)
+			message($lang_common['Bad request']);
+
+		if ($ext_karma_uid == intval($forum_user['id']))
+			message($lang_common['Bad request']);
+
+		$ext_karma_query = array(
+			'SELECT'	=> 'u.username, k.time, k.id as karma_id',
+			'FROM'		=> 'users as u',
+			'JOINS'		=> array(
+				array(
+				'LEFT JOIN'		=> 'karma AS k',
+				'ON'			=> '(k.user_id=u.id AND k.changer_id='.intval($forum_user['id']).')'
+				),
+			),
+			'GROUP BY' => 'u.id',
+			'WHERE'		=> 'u.id='.$ext_karma_uid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_rem_get_user_info')) ? eval($hook) : null;
+		$ext_karma_result = $forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		if (!$forum_db->num_rows($ext_karma_result))
+			message($lang_common['Bad request']);
+		list($ext_karma_username,$ext_karma_time,$ext_karma_old_id) = $forum_db->fetch_row($ext_karma_result);
+
+		$ext_karma_timeleft = ((time() - $ext_karma_time) / 3600);
+		$ext_karma_timeleft = ceil((intval($forum_config['o_karma_time_limit']) - $ext_karma_timeleft));
+
+		if (intval($ext_karma_timeleft) > 0)
+			message(sprintf($lang_karma['Cannot modify karma'],forum_htmlencode($forum_config['o_karma_word']),$ext_karma_timeleft));
+
+		$ext_karma_query = array(
+			'UPDATE'	=> 'users',
+			'SET'		=> 'karma = karma - 1',
+			'WHERE'		=> 'id='.$ext_karma_uid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_user_rem_karma_count')) ? eval($hook) : null;
+		$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+
+    	if (!$forum_user['is_admmod']){
+			$ext_karma_query = array(
+				'INSERT'	=> 'user_id, changer_id, time, action',
+				'INTO'		=> 'karma',
+				'VALUES'	=> $ext_karma_uid.', '.$forum_user['id'].', '.time().', 0'
+			);
+
+			($hook = get_hook('mi_ext_ek_qr_user_rem_karma')) ? eval($hook) : null;
+			$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		}
+		if (intval($ext_karma_old_id) > 0){
+			$ext_del_karma_query = array(
+				'DELETE'	=> 'karma',
+				'WHERE'=> 'id='.intval($ext_karma_old_id)
+			);
+			$forum_db->query_build($ext_del_karma_query) or error(__FILE__, __LINE__);
+		}
+		redirect($forum_user['prev_url'], sprintf($lang_karma['Modified karma'],forum_htmlencode($forum_config['o_karma_word']),forum_htmlencode($ext_karma_username)));
+	}
+
+	if ($action == 'add-post-karma'){
+		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'.php'))
+			require $ext_info['path'].'/lang/'.$forum_user['language'].'.php';
+		else
+			require $ext_info['path'].'/lang/English.php';
+
+		if ($forum_config['o_karma_enable'] == '0' || ($forum_config['o_karma_admods_only'] == '1' && ($forum_user['g_moderator'] != '1' && $forum_user['g_id'] != FORUM_ADMIN)))
+			message($lang_common['Bad request']);
+		
+		if ($forum_config['o_karma_guests'] == '0' && $forum_user['is_guest'])
+			message($lang_common['Bad request']);
+
+		$ext_karma_pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
+		if ($ext_karma_pid < 1 )
+			message($lang_common['Bad request']);
+
+		if ($ext_karma_pid == intval($forum_user['id']))
+			message($lang_common['Bad request']);
+
+		$ext_karma_query = array(
+			'SELECT'	=> 'k.time,k.id as karma_id',
+			'FROM'		=> 'posts as p',
+			'JOINS'		=> array(
+				array(
+				'LEFT JOIN'		=> 'karma AS k',
+				'ON'			=> '(k.post_id=p.id AND k.changer_id='.intval($forum_user['id']).')'
+				),
+			),
+			'GROUP BY' => 'p.id',
+			'WHERE'		=> 'p.id='.$ext_karma_pid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_add_get_post_info')) ? eval($hook) : null;
+		$ext_karma_result = $forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		if (!$forum_db->num_rows($ext_karma_result))
+			message($lang_common['Bad request']);
+		list($ext_karma_time,$ext_karma_old_id) = $forum_db->fetch_row($ext_karma_result);
+		
+		$ext_karma_timeleft = ((time() - $ext_karma_time) / 3600);
+		$ext_karma_timeleft = ceil((intval($forum_config['o_karma_time_limit']) - $ext_karma_timeleft));
+		
+		if (intval($ext_karma_timeleft) > 0)
+			message(sprintf($lang_karma['Cannot modify post karma'],forum_htmlencode($forum_config['o_karma_post_word']),$ext_karma_timeleft));
+		
+		$ext_karma_query = array(
+			'UPDATE'	=> 'posts',
+			'SET'		=> 'karma = karma + 1',
+			'WHERE'		=> 'id='.$ext_karma_pid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_post_add_karma_count')) ? eval($hook) : null;
+		$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		
+
+    	if (!$forum_user['is_admmod']){
+			$ext_karma_query = array(
+				'INSERT'	=> 'post_id, changer_id, time, action',
+				'INTO'		=> 'karma',
+				'VALUES'	=> $ext_karma_pid.', '.$forum_user['id'].', '.time().', 1'
+			);
+
+			($hook = get_hook('mi_ext_ek_qr_post_add_karma')) ? eval($hook) : null;
+			$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		}
+		if (intval($ext_karma_old_id) > 0){
+			$ext_del_karma_query = array(
+				'DELETE'	=> 'karma',
+				'WHERE'=> 'id='.intval($ext_karma_old_id)
+			);
+			$forum_db->query_build($ext_del_karma_query) or error(__FILE__, __LINE__);
+		}
+		redirect($forum_user['prev_url'], sprintf($lang_karma['Modified post karma'],forum_htmlencode($forum_config['o_karma_post_word'])));
+	}
+
+	if ($action == 'remove-post-karma'){
+		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'.php'))
+			require $ext_info['path'].'/lang/'.$forum_user['language'].'.php';
+		else
+			require $ext_info['path'].'/lang/English.php';
+
+		if ($forum_config['o_karma_enable'] == '0' || ($forum_config['o_karma_admods_only'] == '1' && ($forum_user['g_moderator'] != '1' && $forum_user['g_id'] != FORUM_ADMIN)))
+			message($lang_common['Bad request']);
+		
+		if ($forum_config['o_karma_guests'] == '0' && $forum_user['is_guest'])
+			message($lang_common['Bad request']);
+
+		$ext_karma_pid = isset($_GET['pid']) ? intval($_GET['pid']) : 0;
+		if ($ext_karma_pid < 1 )
+			message($lang_common['Bad request']);
+
+		if ($ext_karma_pid == intval($forum_user['id']))
+			message($lang_common['Bad request']);
+
+		$ext_karma_query = array(
+			'SELECT'	=> 'k.time,k.id as karma_id',
+			'FROM'		=> 'posts as p',
+			'JOINS'		=> array(
+				array(
+				'LEFT JOIN'		=> 'karma AS k',
+				'ON'			=> '(k.post_id=p.id AND k.changer_id='.intval($forum_user['id']).')'
+				),
+			),
+			'GROUP BY' => 'p.id',
+			'WHERE'		=> 'p.id='.$ext_karma_pid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_rem_get_post_info')) ? eval($hook) : null;
+		$ext_karma_result = $forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		if (!$forum_db->num_rows($ext_karma_result))
+			message($lang_common['Bad request']);
+		list($ext_karma_time,$ext_karma_old_id) = $forum_db->fetch_row($ext_karma_result);
+		
+		$ext_karma_timeleft = ((time() - $ext_karma_time) / 3600);
+		$ext_karma_timeleft = ceil((intval($forum_config['o_karma_time_limit']) - $ext_karma_timeleft));
+		
+		if (intval($ext_karma_timeleft) > 0)
+			message(sprintf($lang_karma['Cannot modify post karma'],forum_htmlencode($forum_config['o_karma_post_word']),$ext_karma_timeleft));
+		
+		$ext_karma_query = array(
+			'UPDATE'	=> 'posts',
+			'SET'		=> 'karma = karma - 1',
+			'WHERE'		=> 'id='.$ext_karma_pid
+		);
+
+		($hook = get_hook('mi_ext_ek_qr_post_rem_karma_count')) ? eval($hook) : null;
+		$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+
+    	if (!$forum_user['is_admmod']){
+			$query = array(
+				'INSERT'	=> 'post_id, changer_id, time, action',
+				'INTO'		=> 'karma',
+				'VALUES'	=> $ext_karma_pid.', '.$forum_user['id'].', '.time().', 0'
+			);
+
+			($hook = get_hook('mi_ext_ek_qr_rem_add_karma')) ? eval($hook) : null;
+			$forum_db->query_build($ext_karma_query) or error(__FILE__, __LINE__);
+		}
+		if (intval($ext_karma_old_id) > 0){
+			$ext_del_karma_query = array(
+				'DELETE'	=> 'karma',
+				'WHERE'=> 'id='.intval($ext_karma_old_id)
+			);
+			$forum_db->query_build($ext_del_karma_query) or error(__FILE__, __LINE__);
+		}
+		redirect($forum_user['prev_url'], sprintf($lang_karma['Modified post karma'],forum_htmlencode($forum_config['o_karma_post_word'])));
+	}
+    ]]></hook>
+    <hook id="aop_start"><![CDATA[
+		if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'.php'))
+			require $ext_info['path'].'/lang/'.$forum_user['language'].'.php';
+		else
+			require $ext_info['path'].'/lang/English.php';
+    ]]></hook>
+    <hook id="aop_features_validation"><![CDATA[
+		if (!isset($form['karma_enable']) || $form['karma_enable'] != '1') $form['karma_enable'] = '0';
+		if (!isset($form['karma_admods_only']) || $form['karma_admods_only'] != '1') $form['karma_admods_only'] = '0';
+		$form['karma_time_limit'] = intval($form['karma_time_limit']);
+		$form['karma_word'] = trim($form['karma_word']);
+		$form['karma_word_plus'] = trim($form['karma_word_plus']);
+		$form['karma_word_minus'] = trim($form['karma_word_minus']);
+    ]]></hook>
+    <hook id="aop_features_posting_fieldset_end"><![CDATA[
+			?><div class="content-head">
+				<h2 class="hn"><span><?php echo $lang_karma['Karma part head']; ?></span></h2>
+			</div>
+			<fieldset class="frm-group group<?php echo ++$forum_page['group_count'] ?>">
+				<legend class="group-legend"><span><?php echo $lang_admin_settings['Features posting legend'] ?></span></legend>	
+				<div class="sf-set set<?php echo ++$forum_page['item_count'] ?>">
+					<div class="sf-box checkbox">
+						<span class="fld-input"><input type="checkbox" id="fld<?php echo ++$forum_page['fld_count'] ?>" name="form[karma_enable]" value="1"<?php if ($forum_config['o_karma_enable'] == '1') echo ' checked="checked"' ?> /></span>
+						<label for="fld<?php echo $forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Karma enable'] ?></span> <?php echo $lang_karma['Karma enable info'] ?></label> 
+					</div>
+					<div class="sf-box checkbox">
+						<span class="fld-input"><input type="checkbox" id="fld<?php echo ++$forum_page['fld_count'] ?>" name="form[karma_admods_only]" value="1"<?php if ($forum_config['o_karma_admods_only'] == '1') echo ' checked="checked"' ?> /></span>
+						<label for="fld<?php echo $forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Karma admods only'] ?></span>  <?php echo $lang_karma['Karma admods only info'] ?></label> 
+					</div>
+					<div class="sf-box text">
+						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Word'] ?></span> <small><?php echo $lang_karma['Word info'] ?></small></label><br />
+						<span class="fld-input"><input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[karma_word]" size="15" maxlength="30" value="<?php echo forum_htmlencode($forum_config['o_karma_word']) ?>" /></span>
+					</div>
+					<div class="sf-box text">
+						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Word Plus'] ?></span> <small><?php echo $lang_karma['Word info plus'] ?></small></label><br />
+						<span class="fld-input"><input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[karma_word_plus]" size="15" maxlength="30" value="<?php echo forum_htmlencode($forum_config['o_karma_word_plus']) ?>" /></span>
+					</div>
+					<div class="sf-box text">
+						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Word Minus'] ?></span> <small><?php echo $lang_karma['Word info minus'] ?></small></label><br />
+						<span class="fld-input"><input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[karma_word_minus]" size="15" maxlength="30" value="<?php echo forum_htmlencode($forum_config['o_karma_word_minus']) ?>" /></span>
+					</div>
+					<div class="sf-box text">
+						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Time limit'] ?></span> <small><?php echo $lang_karma['Time limit info'] ?></small></label><br />
+						<span class="fld-input"><input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[karma_time_limit]" size="6" maxlength="12" value="<?php echo $forum_config['o_karma_time_limit'] ?>" /></span>
+					</div>
+				</div>
+			</fieldset>
+		<?php
+	]]></hook>
+	<hook id="pf_change_details_settings_validation"><![CDATA[
+		if ($forum_config['o_karma_enable'] == '1' && $forum_user['is_admmod']){
+			$form['karmacustom'] = $forum_db->escape(trim($_POST['form']['karmacustom']));
+			if(isset($_POST['form']['karma']))
+				$form['karma']=intval($_POST['form']['karma']);
+		}
+	]]></hook>
+	<hook id="pf_change_details_settings_email_fieldset_end"><![CDATA[
+		if ($forum_config['o_karma_enable'] == '1' && $forum_user['is_admmod']){
+			if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'.php'))
+				include $ext_info['path'].'/lang/'.$forum_user['language'].'.php';
+			else
+				include $ext_info['path'].'/lang/English.php';
+
+			$forum_page['item_count'] = 0;
+			?>
+			<fieldset class="frm-group group<?php echo ++$forum_page['group_count'] ?>">
+				<div class="sf-set set<?php echo ++$forum_page['item_count'] ?>">
+					<div class="sf-box text">
+						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Custom']; ?></span> <small><?php echo $lang_karma['Custom info']; ?></small></label><br />
+						<span class="fld-input"><input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[karmacustom]" size="15" value="<?php echo forum_htmlencode($user['karmacustom']) ?>" /></span>
+					</div>
+				</div>
+				<div class="sf-set set<?php echo ++$forum_page['item_count'] ?>">
+					<div class="sf-box text">
+						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span class="fld-label"><?php echo $lang_karma['Karma']; ?></span> <small><?php echo $lang_karma['Karma profile info']; ?></small></label><br />
+						<span class="fld-input"><input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[karma]" size="15" value="<?php echo forum_htmlencode($user['karma']) ?>" /></span>
+					</div>
+				</div>
+			</fieldset>
+			<?php
+		}
+	]]></hook>
+  	</hooks>
+</extension>

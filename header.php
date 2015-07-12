@@ -179,7 +179,7 @@ ob_start();
 if (defined('FORUM_PRINT'))
 	$forum_head_admin['style_print'] = '<link rel="stylesheet" type="text/css" media="print,screen" href="' . $base_url . '/style/' . $forum_user['style'] . '/css/print.css" />';
 else {
-	$forum_head_admin['style_base'] = '<link rel="stylesheet" type="text/css" href="' . $base_url . '/resources/admin/dist/css/AdminLTE.min.css"/>';
+	$forum_head_admin['style_base'] = '<link rel="stylesheet" type="text/css" href="' . $base_url . '/resources/admin/bootstrap/css/bootstrap.min.css"/>';
 	require FORUM_ROOT . 'admin/style.php';
 }
 
@@ -222,6 +222,7 @@ if (!defined('FORUM_PAGE_TYPE')) {
 
 // Forum Title
 $gen_elements['<forum_title>'] = '<h2 class="solo">'.forum_htmlencode($forum_config['o_board_title']).'</h2>';
+$gen_elements['<forum_title_admin>'] = forum_htmlencode($forum_config['o_board_title']);
 
 // Forum Logo
 $gen_elements['<forum_logo>'] = '<a class="site-logo" href="' . forum_link($forum_url['index']) . '"></a>';
@@ -361,6 +362,7 @@ $main_elements = array();
 
 // Top breadcrumbs
 $main_elements['<forum_crumbs_top>'] = (FORUM_PAGE != 'index') ? generate_crumbs(false) : '';
+$main_elements['<forum_crumbs_top_admin>'] = (FORUM_PAGE != 'index') ? '<ol class="breadcrumb">'.generate_crumbs_admin(false) : '</ol>';
 
 // Bottom breadcrumbs
 $main_elements['<forum_crumbs_end>'] = (FORUM_PAGE != 'index') ? generate_crumbs(false) : '';

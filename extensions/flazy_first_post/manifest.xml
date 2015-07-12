@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE extension SYSTEM "ext-1.0.dtd">
+
+<!--
+/**
+ * flazy_first_post extension main file
+ *
+ * @copyright Copyright (C) 2008 Flazy.ru
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ * @package flazy_first_post
+ */
+-->
+
+<extension engine="1.0">
+	<flazy>yes</flazy>
+	<id>flazy_first_post</id>
+	<title>Закрепить первое сообщение</title>
+	<version>1.0</version>
+	<description>Позволяет закрепить первое сообщение темы.</description>
+	<author>Flazy Development Team</author>
+	<minversion>0.0.1</minversion>
+	<maxtestedon>0.0.1</maxtestedon>
+
+	<install><![CDATA[
+if (!$forum_db->field_exists('topics', 'attach_first'))
+	$forum_db->add_field('topics', 'attach_first', 'TINYINT(1)', false, '0');
+	]]></install>
+
+	<uninstall><![CDATA[
+$forum_db->drop_field('topics', 'attach_first');
+	]]></uninstall>
+	
+	<hooks>
+		<hook id="vt_qr_get_topic_info"><![CDATA[
+$query['SELECT'] .= ', t.attach_first';
+		]]></hook>
+		
+		<hook id="vt_fl_qr_pre_get_posts"><![CDATA[
+if ($cur_topic['attach_first'])
+{
+	$posts_id[] = $cur_topic['first_post_id'];
+	sort($posts_id);
+}
+		]]></hook>
+
+		<hook id="po_pre_add_topic"><![CDATA[
+$post_info['first_post'] = (isset($_POST['first_post']))? 1 : 0;
+		]]></hook>
+
+		<hook id="fn_add_topic_qr_add_topic"><![CDATA[
+$query['INSERT'] .= ', attach_first';
+$query['VALUES'] .= ', '.$post_info['first_post'];
+		]]></hook>
+
+		<hook id="po_pre_optional_fieldset"><![CDATA[
+if ($forum_user['is_admmod'] && $fid)
+{
+	if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/'.$ext_info['id'].'.php'))
+		require $ext_info['path'].'/lang/'.$forum_user['language'].'/'.$ext_info['id'].'.php';
+	else
+		require $ext_info['path'].'/lang/Russian/'.$ext_info['id'].'.php';
+
+	$forum_page['checkboxes']['first_post'] = '<div class="mf-item"><span class="fld-input"><input type="checkbox" id="fld'.(++$forum_page['fld_count']).'" name="first_post" value="1"'.(isset($_POST['first_post']) ? ' checked="checked"' : '').' /></span> <label for="fld'.$forum_page['fld_count'].'">'.$lang_first_post['Attach first'].'</label></div>';
+}
+		]]></hook>
+
+		<hook id="ed_qr_get_post_info"><![CDATA[
+$query['SELECT'] .= ', t.attach_first';
+		]]></hook>
+
+		<hook id="ed_qr_update_subject"><![CDATA[
+$first_post = isset($_POST['first_post']) ? 1 : 0;
+$query['SET'] .= ', attach_first=\''.$first_post.'\'';
+		]]></hook>
+
+		<hook id="ed_pre_checkbox_display"><![CDATA[
+if ($forum_user['is_admmod'] && $can_edit_subject)
+{
+	if (file_exists($ext_info['path'].'/lang/'.$forum_user['language'].'/'.$ext_info['id'].'.php'))
+		require $ext_info['path'].'/lang/'.$forum_user['language'].'/'.$ext_info['id'].'.php';
+	else
+		require $ext_info['path'].'/lang/Russian/'.$ext_info['id'].'.php';
+
+	$forum_page['checkboxes']['first_post'] = '<div class="mf-item"><span class="fld-input"><input type="checkbox" id="fld'.(++$forum_page['fld_count']).'" name="first_post" value="1"'.($cur_post['attach_first'] ? ' checked="checked"' : '').' /></span> <label for="fld'.$forum_page['fld_count'].'">'.$lang_first_post['Attach first'].'</label></div>';
+}
+		]]></hook>
+	</hooks>
+</extension>

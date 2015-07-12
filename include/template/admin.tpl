@@ -5,135 +5,56 @@
 <forum_head_admin>
 <forum_js>
 </head>
-<body class="skin-blue sidebar-mini">
+<body class="skin-blue layout-boxed sidebar-mini">
 	<div class="wrapper">
-		<header class="main-header">
+<header class="main-header">
         	<!-- Logo -->
        		 <a href="index2.html" class="logo">
           	<!-- mini logo for sidebar mini 50x50 pixels -->
-          		<span class="logo-mini"><forum_title></span>
+          		<span class="logo-mini"><forum_title_admin></span>
           	<!-- logo for regular state and mobile devices -->
-          		<span class="logo-lg"><forum_title></span>
+          		<span class="logo-lg"><forum_title_admin></span>
        		 </a>
 			<!-- Logo END -->
-			<nav class="navbar navbar-static-top" role="navigation">
-          <!-- Sidebar toggle button-->
-          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-          </a>
-          <!-- Navbar Right Menu -->
-          <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-              <forum_navlinks_admins>
-            </ul>
-          </div>
-
-        </nav>
-      	</header>
-
- 		<aside class="main-sidebar">
-        	<!-- sidebar -->
-        		<section class="sidebar">
-          	<!-- search form -->
-         	 <form action="#" method="get" class="sidebar-form">
-         	   <div class="input-group">
-         	     <input type="text" name="q" class="form-control" placeholder="Search..."/>
-          	    <span class="input-group-btn">
-             	   <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-            	  </span>
-            	</div>
-         	 </form>
-         	 <!-- /.search form -->
-          <!-- sidebar menu: : style can be found in sidebar.less -->
-			<forum_admin_menu>
-			<forum_admin_submenu>
-        </section>
-        <!-- /.sidebar -->
-      </aside>
-	<div class="content-wrapper">
-        <section class="content-header">
-          <h1>
-            Dashboard
-            <small>Version 2.0</small>
-          </h1>
-          <forum_crumbs_top>
-        </section>
-        <section class="content">
-        <div class="row">
-            <div class="col-xs-12">
-              <!-- jQuery Knob -->
-              <div class="box box-solid">
-                <div class="box-header">
-                  <i class="fa fa-bar-chart-o"></i>
-                  <h3 class="box-title">jQuery Knob</h3>
-                  <div class="box-tools pull-right">
-                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-default btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
-                  </div>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="row">
-                    <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                      <div style="display: inline; width: 90px; height: 90px;"><canvas width="90" height="90"></canvas><input type="text" class="knob" value="30" data-width="90" data-height="90" data-fgcolor="#3c8dbc" style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(60, 141, 188); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                      <div class="knob-label">New Visitors</div>
-                    </div><!-- ./col -->
-                    <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                      <div style="display: inline; width: 90px; height: 90px;"><canvas width="90" height="90"></canvas><input type="text" class="knob" value="70" data-width="90" data-height="90" data-fgcolor="#f56954" style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(245, 105, 84); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                      <div class="knob-label">Bounce Rate</div>
-                    </div><!-- ./col -->
-                    <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                      <div style="display: inline; width: 90px; height: 90px;"><canvas width="90" height="90"></canvas><input type="text" class="knob" value="-80" data-min="-150" data-max="150" data-width="90" data-height="90" data-fgcolor="#00a65a" style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 166, 90); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                      <div class="knob-label">Server Load</div>
-                    </div><!-- ./col -->
-                    <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-                      <div style="display: inline; width: 90px; height: 90px;"><canvas width="90" height="90"></canvas><input type="text" class="knob" value="40" data-width="90" data-height="90" data-fgcolor="#00c0ef" style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(0, 192, 239); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                      <div class="knob-label">Disk Space</div>
-                    </div><!-- ./col -->
-                  </div><!-- /.row -->
-
-                  <div class="row">
-                    <div class="col-xs-6 text-center">
-                      <div style="display: inline; width: 90px; height: 90px;"><canvas width="90" height="90"></canvas><input type="text" class="knob" value="90" data-width="90" data-height="90" data-fgcolor="#932ab6" style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(147, 42, 182); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                      <div class="knob-label">Bandwidth</div>
-                    </div><!-- ./col -->
-                    <div class="col-xs-6 text-center">
-                      <div style="display: inline; width: 90px; height: 90px;"><canvas width="90" height="90"></canvas><input type="text" class="knob" value="50" data-width="90" data-height="90" data-fgcolor="#39CCCC" style="width: 49px; height: 30px; position: absolute; vertical-align: middle; margin-top: 30px; margin-left: -69px; border: 0px; font-weight: bold; font-style: normal; font-variant: normal; font-stretch: normal; font-size: 18px; line-height: normal; font-family: Arial; text-align: center; color: rgb(57, 204, 204); padding: 0px; -webkit-appearance: none; background: none;"></div>
-                      <div class="knob-label">CPU</div>
-                    </div><!-- ./col -->
-                  </div><!-- /.row -->
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-          </div>
-        </section>
-
-<div id="brd-visit" class="gen-content">
-	<forum_welcome>
-	<forum_visit>
-</div>
-
-<div class="hr"><hr /></div>
-
-<div id="brd-main">
-	<forum_crumbs_top>
+	<nav class="navbar navbar-static-top" role="navigation">
+		<!-- Sidebar toggle button-->
+		<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+		<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav">
+				<li>
+					<forum_navlinks_admins>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>
+<aside class="main-sidebar">
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar" style="height: auto;">
+		<!-- sidebar menu: : style can be found in sidebar.less -->
+				<forum_admin_menu>
+				<forum_admin_submenu>
+	</section>
+	<!-- /.sidebar -->
+</aside>
+<div class="content-wrapper">
+	<section class="content-header">
+		<forum_crumbs_top_admin>
+	</section>
+	<hr>
+	<section class="content">
 	<forum_main_pagepost_top>
 	<forum_main>
-	<forum_main_pagepost_end>
-	<forum_crumbs_end>
+	<forum_main_pagepost_end>	
 </div>
-
-<div class="hr"><hr /></div>
-
-<div id="brd-about" class="gen-content">
-	<forum_about>
-</div>
-
-<forum_ga>
+<footer class="main-footer">
+<forum_about>
 <forum_debug>
+<forum_ga>
+</footer>
 
-		</div>
 	</div>
-	    <script type="text/javascript">
+	<script type="text/javascript">
       $(function () {
         /* jQueryKnob */
 

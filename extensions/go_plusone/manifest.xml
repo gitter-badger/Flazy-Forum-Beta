@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE extension SYSTEM "ext-1.0.dtd">
+
+<extension engine="1.0">
+  <id>go_plusone</id>
+  <title>Google +1</title>
+  <version>1.0</version>
+  <description>Добавляет к каждому сообщению кнопку +1. Теперь каждый человек имеющий учетную запись в "Google", может оценить сообщение.</description>
+  <author>Seiko</author>
+  <minversion>1.3.0</minversion>
+  <maxtestedon>1.4.0</maxtestedon>
+  <hooks>
+
+    <hook id="hd_head"><![CDATA[
+	$forum_head['js_googleplus'] = '<script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: \'bg\'}</script>';
+    ]]></hook>
+
+    <hook id="vt_row_pre_display"><![CDATA[
+	$forum_page['post_ident']['googleplus_button'] = '<span class="post-num"><g:plusone size="small"></g:plusone></span>';
+    ]]></hook>
+
+  </hooks>
+</extension>

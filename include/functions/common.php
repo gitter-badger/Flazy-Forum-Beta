@@ -1894,6 +1894,39 @@ function generate_crumbs($reverse)
 
 	return $crumbs;
 }
+// Generate breadcrumb navigation
+function generate_crumbs_admin($reverse)
+{
+	global $lang_common, $forum_url, $forum_config, $forum_page;
+
+	$return = ($hook = get_hook('fn_generate_crumbs_start')) ? eval($hook) : null;
+	if ($return != null)
+		return $return;
+
+	if (empty($forum_page['crumbs']))
+		$forum_page['crumbs'][0] = forum_htmlencode($forum_config['o_board_title']).$lang_common['Title separator'].forum_htmlencode($forum_config['o_board_desc']);
+
+	$crumbs = '';
+	$num_crumbs = count($forum_page['crumbs']);
+
+	if ($reverse)
+	{
+		for ($i = ($num_crumbs - 1); $i >= 0; --$i)
+			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? '': '');
+	}
+	else
+		for ($i = 0; $i < $num_crumbs; ++$i)
+		{
+			if ($i < ($num_crumbs - 1))
+				$crumbs .= '<li>'.(($i >= 1) ? '' : '').(is_array($forum_page['crumbs'][$i]) ? '<a temtype="http://data-vocabulary.org/Breadcrumb" itemscope="" href="'.$forum_page['crumbs'][$i][1].'">'.forum_htmlencode($forum_page['crumbs'][$i][0]).'</a></li>' : forum_htmlencode($forum_page['crumbs'][$i])).' ';
+			else
+				$crumbs .= '<li class="active">'.(($i >= 1) ? '' : '').(is_array($forum_page['crumbs'][$i]) ? '<a temtype="http://data-vocabulary.org/Breadcrumb" itemscope="" href="'.$forum_page['crumbs'][$i][1].'">'.forum_htmlencode($forum_page['crumbs'][$i][0]).'</a></li>' : forum_htmlencode($forum_page['crumbs'][$i])).' ';
+		}
+
+	($hook = get_hook('fn_generate_crumbs_end')) ? eval($hook) : null;
+
+	return $crumbs;
+}
 
 
 // Locate and delete any orphaned redirect topics
