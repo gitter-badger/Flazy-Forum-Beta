@@ -238,7 +238,7 @@ if (isset($_GET['install']) || isset($_GET['install_hotfix']))
 		<h2 class="hn"><span><?php echo end($forum_page['crumbs']) ?> "<?php echo forum_htmlencode($ext_data['extension']['title']) ?>"</span></h2>
 	</div>
 	<div class="main-content main-frm">
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['Extension installed info'] ?></p>
 			<ol>
 <?php
@@ -479,7 +479,7 @@ else if (isset($_GET['uninstall']))
 		<h2 class="hn"><span><?php echo end($forum_page['crumbs']) ?> "<?php echo forum_htmlencode($ext_data['title']) ?>"</span></h2>
 	</div>
 	<div class="main-content main-frm">
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['Extension uninstalled info'] ?></p>
 			<ul class="info-list">
 <?php
@@ -762,7 +762,7 @@ if ($section == 'hotfixes')
 	{
 
 ?>
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['No available hotfixes'] ?></p>
 		</div>
 <?php
@@ -820,7 +820,7 @@ if ($section == 'hotfixes')
 	{
 
 ?>
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['No installed hotfixes'] ?></p>
 		</div>
 <?php
@@ -932,7 +932,7 @@ else if ($section == 'manage')
 	{
 
 ?>
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['No available extensions'] ?></p>
 		</div>
 <?php
@@ -1087,7 +1087,7 @@ else if ($section == 'repository')
 	{
 
 ?>
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['No available extensions'] ?></p>
 		</div>
 <?php
@@ -1139,7 +1139,7 @@ else if ($section == 'repository')
 	{
 
 ?>
-		<div class="ct-box info-box">
+		<div class="box-body">
 			<p><?php echo $lang_admin_ext['No installed extensions'] ?></p>
 		</div>
 <?php

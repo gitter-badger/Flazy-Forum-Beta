@@ -3,9 +3,9 @@
 // Языковые конструкии используемые в viewpoll.php
 $lang_poll = array(
 
-'Deleted redirect'		=>	'Голоса удалены. Перенаправление…',
-'Delete'				=>	'Удалить',
-'Are you sure'			=>	'Вы уверены?',
-'No votes'				=>	'В этом опросе никто не учавствовал. Вы не можете отредактировать его результаты.',
+'Deleted redirect'		=>	'Votes is deleted. Redirecting…',
+'Delete'				=>	'Delete',
+'Are you sure'			=>	'Are you sure?',
+'No votes'				=>	'In this poll no one has participated. You can not edit the results.',
 
 );

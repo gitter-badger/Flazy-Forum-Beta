@@ -4,24 +4,24 @@
 $lang_error = array(
 
 // Заголовок
-'title 400'		=>	'400 - Неправильный запрос',
-'title 401'		=>	'401 - Требуется авторизация',
-'title 403'		=>	'403 - Доступ запрещён',
-'title 404'		=>	'404 - Страница не найдена',
-'title 500'		=>	'500 - Внутренняя ошибка сервера',
+'title 400'		=>	'400 - Bad Request',
+'title 401'		=>	'401 - Unauthorized',
+'title 403'		=>	'403 - Forbidden',
+'title 404'		=>	'404 - Not Found',
+'title 500'		=>	'500 - Internal Server Error',
 // Описание
-'desc 400'		=>	'Запрос не может быть принят',
-'desc 401'		=>	'Требуется авторизация',
-'desc 403'		=>	'У Вас нет прав для доступа к этой странице',
-'desc 404'		=>	'Запрашиваемая страница отсутствует на сервере',
-'desc 500'		=>	'Ошибка сервера. Невозможно выполнить запрос',
+'desc 400'		=>	'The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing)',
+'desc 401'		=>	'Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided.',
+'desc 403'		=>	'The request was a valid request, but the server is refusing to respond to it. Unlike a 401 Unauthorized response, authenticating will make no difference.',
+'desc 404'		=>	'The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.',
+'desc 500'		=>	'A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.',
 
 // Код ошибки (eng)
-'kod 400'		=>	'400 Bad Request (Неверный запрос)',
-'kod 401'		=>	'401 Unauthorized (Неизвестен)',
-'kod 403'		=>	'403 Forbidden (Запретный)',
-'kod 404'		=>	'404 Not Found (Не найден)',
-'kod 500'		=>	'500 Internal Server Error (Внутренняя ошибка сервера)',
+'kod 400'		=>	'400 Bad Request ',
+'kod 401'		=>	'401 Unauthorized ',
+'kod 403'		=>	'403 Forbidden ',
+'kod 404'		=>	'404 Not Found ',
+'kod 500'		=>	'500 Internal Server Error ',
 
 // Совет
 'board 400'		=>	'Запрос содержит синтаксическую ошибку и не может быть принят сервером',
@@ -31,6 +31,6 @@ $lang_error = array(
 'board 500'		=>	'Сервер столкнулся с непредвиденными обстоятельствами, которые не позволяют ему выполнить запрос',
 
 'Search'		=>	'Чтобы найти интересующую Вас информацию, воспользуйтесь <a href="%s">поиском</a> или перейдите на <a href="%s">главную страницу</a>',
-'Redirect'		=>	'Вы будите автоматически перенаправлены на главную страницу, через%sсекунд(ы)'
+'Redirect'		=>	'You will be automatically redirected to the home page, after %s sec(s)'
 
 );

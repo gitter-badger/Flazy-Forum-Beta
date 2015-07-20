@@ -5,7 +5,7 @@ $lang_install = array(
 
 // Install Form
 'Install Flazy'				=>	'Install Flazy %s',
-/*RUS*/'Install Flazy decs'		=>	'Три шага на пути в общение.',
+'Install Flazy decs'		=>	'Три шага на пути в общение.',
 'Install intro'				=>	'In order to install Flazy you must complete the form set out below. Please read the instructions provided before completing the form. If you encounter any difficulties with the installation, please refer to the documentation supplied as part of Flazy\'s download package.',
 'Choose language'			=>	'Change installer language',
 'Choose language help'		=>	'You can change the language of this install script if you find it easier to follow the instructions in your own language. Just choose your language from the list of installed ones below.',
@@ -85,7 +85,7 @@ $lang_install = array(
 // Used in the install
 'Default announce heading'	=>	'Sample announcement',
 'Default announce message'	=>	'<p>Enter your announcement here.</p>',
-/*RUS*/'Default HTML message'		=>	'Введите (x)HMTL код',
+/*RUS*/'Default HTML message'		=>	'Enter (x)HMTL code',
 /*RUS*/'Default Adbox message'		=>	'<p>Введите здесь текст. Это сообщение увидят все посетители</p>',
 /*RUS*/'Default Guestbox message'	=>	'<p>Если вы хотите получить доступ к всем разделам форума, необходимо <a href="login.php">войти</a> или <a href="register.php">зарегистрироваться</a></p>',
 'Default maint message'		=>	"The forums are temporarily down for maintenance. Please try again in a few minutes.<br />\\n<br />\\n/Administrator",

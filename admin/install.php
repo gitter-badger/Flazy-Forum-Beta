@@ -26,7 +26,7 @@ define('FORUM_SEARCH_MAX_WORD', 20);
 header('Content-Type: text/html; charset=utf-8');
 
 if (file_exists(FORUM_ROOT.'include/config.php'))
-	die('Файл \'config.php\' уже есть. Это значит что Flazy уже установлен. Перейдите на <a href="'.FORUM_ROOT.'index.php">главную страницу</a>.');
+	die('File \'config.php\' already exists. This means that Flazy already installed. Go to the <a href="'.FORUM_ROOT.'index.php">main page</a>.');
 
 // Make sure we are running at least MIN_PHP_VERSION
 if (!function_exists('version_compare') || version_compare(PHP_VERSION, MIN_PHP_VERSION, '<'))
@@ -60,10 +60,10 @@ function generate_config_file()
 	return '<?php'."\n\n".'$db_type = \''.$db_type."';\n".'$db_host = \''.$db_host."';\n".'$db_name = \''.addslashes($db_name)."';\n".'$db_username = \''.addslashes($db_username)."';\n".'$db_password = \''.addslashes($db_password)."';\n".'$db_prefix = \''.addslashes($db_prefix)."';\n".'$p_connect = false;'."\n\n".'$base_url = \''.$base_url.'\';'."\n\n".'$cookie_name = '."'".$cookie_name."';\n".'$cookie_domain = '."'';\n".'$cookie_path = '."'/';\n".'$cookie_secure = 0;'."\n\ndefine('FORUM', 1);";
 }
 
-$language = isset($_GET['lang']) ? $_GET['lang'] : (isset($_POST['req_language']) ? forum_trim($_POST['req_language']) : 'Bulgarian');
+$language = isset($_GET['lang']) ? $_GET['lang'] : (isset($_POST['req_language']) ? forum_trim($_POST['req_language']) : 'English');
 $language = preg_replace('#[\.\\\/]#', '', $language);
 if (!file_exists(FORUM_ROOT.'lang/'.$language.'/install.php'))
-	die('Выбраный языковой пакет не существует или повреждён. Проверьте и попробуйте еще раз.');
+	die('The selected language pack does not exist or is damaged. Check and try again.');
 
 
 // Load the language files
@@ -96,13 +96,13 @@ if (!isset($_POST['form_sent']))
 	$mysql_innodb = false;
 	if (function_exists('mysqli_connect'))
 	{
-		$db_extensions[] = array('mysqli', 'MySQL Улучшенная');
+		$db_extensions[] = array('mysqli', 'MySQL');
 		$db_extensions[] = array('mysqli_innodb', 'MySQL Улучшенная (InnoDB)');
 		$mysql_innodb = true;
 	}
 	if (function_exists('mysql_connect'))
 	{
-		$db_extensions[] = array('mysql', 'MySQL Стандартная');
+		$db_extensions[] = array('mysql', 'MySQLi');
 		$db_extensions[] = array('mysql_innodb', 'MySQL Стандартная (InnoDB)');
 		$mysql_innodb = true;
 
@@ -117,242 +117,400 @@ if (!isset($_POST['form_sent']))
 	if (empty($db_extensions))
 		error($lang_install['No database support']);
 
-	// Make an educated guess regarding base_url
-	$base_url_guess = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://').preg_replace('/:80$/', '', $_SERVER['HTTP_HOST']).substr(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), 0, -6);
-	if (substr($base_url_guess, -1) == '/')
-		$base_url_guess = substr($base_url_guess, 0, -1);
+function url_origin($s, $use_forwarded_host=false)
+{
+    $ssl = (!empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? true:false;
+    $sp = strtolower($s['SERVER_PROTOCOL']);
+    $protocol = substr($sp, 0, strpos($sp, '/')) . (($ssl) ? 's' : '');
+    $port = $s['SERVER_PORT'];
+    $port = ((!$ssl && $port=='80') || ($ssl && $port=='443')) ? '' : ':'.$port;
+    $host = ($use_forwarded_host && isset($s['HTTP_X_FORWARDED_HOST'])) ? $s['HTTP_X_FORWARDED_HOST'] : (isset($s['HTTP_HOST']) ? $s['HTTP_HOST'] : null);
+    $host = isset($host) ? $host : $s['SERVER_NAME'] . $port;
+    return $protocol . '://' . $host;
+}
+function full_url($s, $use_forwarded_host=false)
+{
+    return url_origin($s, $use_forwarded_host) .dirname($_SERVER['PHP_SELF']);
+}
+$absolute_url = full_url($_SERVER);
+
 
 	// Check for available language packs
 	$languages = get_language_packs();
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Установка Flazy</title>
-<link rel="stylesheet" type="text/css" href="<?php echo FORUM_ROOT ?>style/base.css" />
+<title>Flazy Instalation</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" type="text/css" href="<?php echo FORUM_ROOT ?>resources/admin/bootstrap/css/bootstrap.min.css" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+ <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 <?php
 
-echo '<link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'style/base.css" />'."\n";
-echo '<link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'style/'.$default_style.'/'.$default_style.'.css" />'."\n";
-echo '<link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'style/'.$default_style.'/'.$default_style.'_cs.css" />'."\n";
-echo '<!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'style/'.$default_style.'/'.$default_style.'_ie6.css" /><![endif]-->'."\n";
-echo '<!--[if IE 7]]><link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'style/'.$default_style.'/'.$default_style.'_ie7.css" /><![endif]-->'."\n";
-
+echo '<link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'resources/admin/dist/css/AdminLTE.min.css" />'."\n";
+echo '<link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'resources/admin/dist/css/skins/_all-skins.min.css" />'."\n";
 ?>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- jQuery 2.1.4 -->
+    <script src="<?php echo FORUM_ROOT ?>resources/admin/plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="<?php echo FORUM_ROOT ?>resources/admin/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- SlimScroll -->
+    <script src="<?php echo FORUM_ROOT ?>resources/admin/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- FastClick -->
+    <script src="<?php echo FORUM_ROOT ?>resources/admin/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo FORUM_ROOT ?>resources/admin/dist/js/app.min.js" type="text/javascript"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="<?php echo FORUM_ROOT ?>resources/admin/dist/js/demo.js" type="text/javascript"></script>
 </head>
-<body>
+<body class="layout-boxed sidebar-mini skin-red">
+	<!-- Site wrapper -->
+	<div class="wrapper">
 
-<div id="brd-install" class="brd-page">
-<div id="brd-wrap" class="brd">
+		<header class="main-header">
+			<!-- Logo -->
+			<a href="../../index2.html" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels --> 
+				<span class="logo-mini"><b>Flazy</b></span> <!-- logo for regular state and mobile devices --> 
+				<span class="logo-lg"><b>Flazy</b></span> </a>
+			<!-- Header Navbar: style can be found in header.less -->
+			<nav class="navbar navbar-static-top" role="navigation">
+				<!-- Sidebar toggle button-->
+				<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a>
 
-<div id="brd-head" class="gen-content">
-	<p id="brd-title"><strong><?php printf($lang_install['Install Flazy'], FORUM_VERSION) ?></strong></p>
-	<p id="brd-desc"><?php echo $lang_install['Install Flazy decs'] ?></p>
-</div>
+			</nav>
+		</header>
 
-<div id="brd-announcement" class="gen-content">
-	<h1 class="hn"><span><?php printf($lang_install['Install Flazy'], FORUM_VERSION) ?></span></h1>
-	<div class="content"><?php echo $lang_install['Install intro'] ?></div>
-</div>
+		<!-- =============================================== -->
 
-<div class="main-head">
-	<h1 class="hn"><span><?php printf($lang_install['Install Flazy'], FORUM_VERSION) ?></span></h1>
-</div>
+		<!-- Left side column. contains the sidebar -->
+		<aside class="main-sidebar">
+			<!-- sidebar: style can be found in sidebar.less -->
+			<section class="sidebar" style="height: auto;">
 
-<div id="brd-main" class="main">
+				<ul class="sidebar-menu">
+					<li class="header">
+						MAIN NAVIGATION
+					</li>
+
+					<li class="active">
+						<a href="#selectlanguage"> <i class="fa fa-th"></i> <span>Select Language</span> </a>
+					</li>
+					<li>
+						<a href="#dbsetups"> <i class="fa fa-th"></i> <span>Database Setup</span> </a>
+					</li>
+					<li >
+						<a href="#adminusersetup"> <i class="fa fa-th"></i> <span>Admin user Setup</span> </a>
+					</li>
+					<li >
+						<a href="#websitesetup"> <i class="fa fa-th"></i> <span>Website Setup</span> </a>
+					</li>
+					
+				</ul>
+			</section>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- =============================================== -->
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" style="min-height: 976px;">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<h1> <?php printf($lang_install['Install Flazy'], FORUM_VERSION) ?><small> <?php echo $lang_install['Install Flazy decs'] ?></small></h1>
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+
+				<!-- Default box -->
+				<div class="box" id="selectlanguage">
+					<div class="box-header with-border">
+						<h3 class="box-title"><?php printf($lang_install['Install Flazy'], FORUM_VERSION) ?><small><?php echo $lang_install['Choose language'] ?></small></h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
 <?php
 	
 	if (count($languages) > 1)
 	{
 
 ?>
-	<form class="frm-form" method="get" accept-charset="utf-8" action="install.php">
-	<div class="main-subhead">
-		<h2 class="hn"><span><?php echo $lang_install['Choose language'] ?></span></h2>
-	</div>
-	<div class="main-content main-frm">
-		<fieldset class="frm-group group1">
-			<legend class="group-legend"><strong><?php echo $lang_install['Choose language legend'] ?></strong></legend>
-			<div class="sf-set set1">
-				<div class="sf-box text">
-					<label for="fld0"><span><?php echo $lang_install['Installer language'] ?></span> <small><?php echo $lang_install['Choose language help'] ?></small></label><br />
-					<span class="fld-input"><select id="fld0" name="lang">
+<form class="form-horizontal"  method="get" accept-charset="utf-8" action="install.php">
+<fieldset>
+
+<!-- Form Name -->
+<legend><?php echo $lang_install['Choose language legend'] ?></legend>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic"><?php echo $lang_install['Installer language'] ?></label>
+  <div class="col-md-4">
+    <select id="fld0" name="lang" class="form-control">
 <?php
 
-		foreach ($languages as $temp)
-			echo "\t\t\t\t\t".'<option value="'.$temp.'"'.($language == $temp ? ' selected="selected"' : '').'>'.$temp.'</option>'."\n";
-
+foreach ($languages as $temp)
+	echo "\t\t\t\t\t" . '<option value="' . $temp . '"' . ($language == $temp ? ' selected="selected"' : '') . '>' . $temp . '</option>' . "\n";
 ?>
-					</select></span>
-				</div>
-			</div>
-		</fieldset>
-		<div class="frm-buttons">
-			<span class="submit"><input type="submit" name="changelang" value="<?php echo $lang_install['Choose language'] ?>" /></span>
-		</div>
-	</div>
-	</form>
+    </select>
+    <span class="help-block"><?php echo $lang_install['Choose language help'] ?></span> 
+  </div>
+</div>
+
+
+					</div><!-- /.box-body -->
+					<div class="box-footer">
+<!-- Button -->
+<div class="form-group">
+  <div class="col-md-4">
+    <button type="submit"  name="changelang" class="btn btn-primary"><?php echo $lang_install['Choose language'] ?></button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
 <?php
 
 	}
 
 ?>
-	<form class="frm-form" method="post" accept-charset="utf-8" action="install.php">
+					</div><!-- /.box-footer-->
+				</div><!-- /.box -->
+				
+								<div class="box" id="dbsetups">
+					<div class="box-header with-border">
+						<h3 class="box-title"><?php echo $lang_install['Part1'] ?></h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body" id="adminusersetup">
+<form class="form-horizontal" method="post" accept-charset="utf-8" action="install.php">
 	<div class="hidden">
 		<input type="hidden" name="form_sent" value="1" />
 	</div>
-	<div class="main-subhead">
-		<h2 class="hn"><span><?php echo $lang_install['Part1'] ?></span></h2>
-	</div>
-	<div class="main-content main-frm">
-		<div class="ct-box">
-			<p><?php echo $lang_install['Part1 intro'] ?></p>
-			<ul class="spaced">
-				<li><span><strong><?php echo $lang_install['Database type'] ?></strong>: <?php echo $lang_install['Database type info']; if ($dual_mysql) echo ' '.$lang_install['Mysql type info']; if ($mysql_innodb) echo ' '.$lang_install['Mysql InnoDB info'] ?></span></li>
+<div class="alert alert-info alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-info"></i> Tips!</h4>
+    <ol>
+    					<li><span><strong><?php echo $lang_install['Database type'] ?></strong>: <?php echo $lang_install['Database type info']; if ($dual_mysql) echo ' '.$lang_install['Mysql type info']; if ($mysql_innodb) echo ' '.$lang_install['Mysql InnoDB info'] ?></span></li>
 				<li><span><strong><?php echo $lang_install['Database server'] ?></strong>: <?php echo $lang_install['Database server info'] ?></span></li>
 				<li><span><strong><?php echo $lang_install['Database name'] ?></strong>: <?php echo $lang_install['Database name info'] ?></span></li>
 				<li><span><strong><?php echo $lang_install['Database user pass'] ?></strong>: <?php echo $lang_install['Database username info'] ?></span></li>
 				<li><span><strong><?php echo $lang_install['Table prefix'] ?></strong>: <?php echo $lang_install['Table prefix info'] ?></span></li>
-			</ul>
-		</div>
-		<div id="req-msg" class="req-warn ct-box error-box">
-			<p class="important"><?php printf($lang_install['Required warn'], '<em>'.$lang_install['Required'].'</em>') ?></p>
-		</div>
-		<fieldset class="frm-group group1">
-			<legend class="group-legend"><strong><?php echo $lang_install['Part1 legend'] ?></strong></legend>
-			<div class="sf-set set1">
-				<div class="sf-box select required">
-					<label for="fld1"><span><?php echo $lang_install['Database type'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Database type help'] ?></small></label><br />
-					<span class="fld-input"><select id="fld1" name="req_db_type">
+    </ol>
+</div>
+<div class="alert alert-warning alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+	<h4><i class="icon fa fa-info">Warning!</i></h4>
+	<p class="important"><?php printf($lang_install['Required warn'], '<em>'.$lang_install['Required'].'</em>') ?></p>
+</div>
+	<fieldset>
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="selectbasic"><?php echo $lang_install['Database type'] ?> <em><?php echo $lang_install['Required'] ?></em></label>
+			<div class="col-md-4">
+				<select id="fld1" name="req_db_type" class="form-control">
 <?php
-
 	foreach ($db_extensions as $db_type)
 		echo "\t\t\t\t\t".'<option value="'.$db_type[0].'">'.$db_type[1].'</option>'."\n";
-
 ?>
-					</select></span>
-				</div>
+				</select>
+				<span class="help-block"><?php echo $lang_install['Database type help'] ?></span>
 			</div>
-			<div class="sf-set set1">
-				<div class="sf-box text required">
-					<label for="fld2"><span><?php echo $lang_install['Database server'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Database server help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld2" type="text" name="req_db_host" value="localhost" size="35" maxlength="100" /></span>
-				</div>
-			</div>
-			<div class="sf-set set2">
-				<div class="sf-box text required">
-					<label for="fld3"><span><?php echo $lang_install['Database name'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Database name help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld3" type="text" name="req_db_name" size="35" maxlength="50" /></span>
-				</div>
-			</div>
-			<div class="sf-set set3">
-				<div class="sf-box text">
-					<label for="fld4"><span><?php echo $lang_install['Database username'] ?></span> <small><?php echo $lang_install['Database username help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld4" type="text" name="db_username" size="35" maxlength="50" /></span>
-				</div>
-			</div>
-			<div class="sf-set set4">
-				<div class="sf-box text">
-					<label for="fld5"><span><?php echo $lang_install['Database password'] ?></span> <small><?php echo $lang_install['Database password help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld5" type="password" name="db_password" size="35" /></span>
-				</div>
-			</div>
-			<div class="sf-set set5">
-				<div class="sf-box text">
-					<label for="fld6"><span><?php echo $lang_install['Table prefix'] ?></span> <small><?php echo $lang_install['Table prefix help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld6" type="text" name="db_prefix" size="20" maxlength="30" /></span>
-				</div>
-			</div>
-		</fieldset>
-	</div>
+		</div>
 
-	<div class="main-subhead">
-		<h2 class="hn"><span><?php echo $lang_install['Part2'] ?></span></h2>
-	</div>
-	<div class="main-content main-frm">
-		<div class="ct-box">
-			<p><?php echo $lang_install['Part2 intro'] ?></p>
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Database server'] ?> <em><?php echo $lang_install['Required'] ?></em></label>
+			<div class="col-md-4">
+				<input id="fld2" type="text" name="req_db_host" value="localhost" size="35" maxlength="100" class="form-control input-md">
+				<span class="help-block"><?php echo $lang_install['Database server help'] ?></span>
+			</div>
 		</div>
-		<fieldset class="frm-group group1">
-			<legend class="group-legend"><strong><?php echo $lang_install['Part2 legend'] ?></strong></legend>
-			<div class="sf-set set1">
-				<div class="sf-box text required">
-					<label for="fld7"><span><?php echo $lang_install['Admin username'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Username help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld7" type="text" name="req_username" size="35" maxlength="25" /></span>
-				</div>
+
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Database name'] ?> <em><?php echo $lang_install['Required'] ?></label>
+			<div class="col-md-4">
+				<input id="fld3" type="text" name="req_db_name" size="35" maxlength="50" class="form-control input-md">
+				<span class="help-block"><?php echo $lang_install['Database name help'] ?></span>
 			</div>
-			<div class="sf-set set2">
-				<div class="sf-box text required">
-					<label for="fld8"><span><?php echo $lang_install['Admin password'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Password help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld8" type="password" name="req_password1" size="35" /></span>
-				</div>
-			</div>
-			<div class="sf-set set3">
-				<div class="sf-box text required">
-					<label for="fld9"><span><?php echo $lang_install['Admin confirm password'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Confirm password help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld9" type="password" name="req_password2" size="35" /></span>
-				</div>
-			</div>
-			<div class="sf-set set4">
-				<div class="sf-box text required">
-					<label for="fld10"><span><?php echo $lang_install['Admin e-mail'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['E-mail address help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld10" type="text" name="req_email" size="35" maxlength="80" /></span>
-				</div>
-			</div>
-		</fieldset>
-	</div>
-	<div class="main-subhead">
-		<h2 class="hn"><span><?php echo $lang_install['Part3'] ?></span></h2>
-	</div>
-	<div class="main-content main-frm">
-		<div class="ct-box">
-			<p><?php echo $lang_install['Part3 intro'] ?></p>
-			<ul class="spaced">
-				<li><span><strong><?php echo $lang_install['Board title and desc'] ?></strong> <?php echo $lang_install['Board title info'] ?></span></li>
-				<li><span><strong><?php echo $lang_install['Base URL'] ?></strong> <?php echo $lang_install['Base URL info'] ?></span></li>
-			</ul>
 		</div>
-		<fieldset class="frm-group group1">
-			<legend class="group-legend"><strong><?php echo $lang_install['Part3 legend'] ?></strong></legend>
-			<div class="sf-set set1">
-				<div class="sf-box text">
-					<label for="fld11"><span><?php echo $lang_install['Board title'] ?></span></label><br />
-					<span class="fld-input"><input id="fld11" type="text" name="board_title" size="35" maxlength="255" /></span>
-				</div>
+		
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Database username'] ?></label>
+			<div class="col-md-4">
+				<input id="fld4" type="text" name="db_username" size="35" maxlength="50" class="form-control input-md">
+				<span class="help-block"><?php echo $lang_install['Database username help'] ?></span>
 			</div>
-			<div class="sf-set set2">
-				<div class="sf-box text">
-					<label for="fld12"><span><?php echo $lang_install['Board description'] ?></span></label><br />
-					<span class="fld-input"><input id="fld12" type="text" name="board_descrip" size="35" maxlength="255" /></span>
-				</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Database password'] ?></label>
+			<div class="col-md-4">
+				<input id="fld5" type="password" name="db_password" size="35" class="form-control input-md">
+				<span class="help-block"><?php echo $lang_install['Database password help'] ?></span>
 			</div>
-			<div class="sf-set set3">
-				<div class="sf-box text required">
-					<label for="fld13"><span><?php echo $lang_install['Base URL'] ?> <em><?php echo $lang_install['Required'] ?></em></span> <small><?php echo $lang_install['Base URL help'] ?></small></label><br />
-					<span class="fld-input"><input id="fld13" type="text" name="req_base_url" value="<?php echo $base_url_guess ?>" size="35" maxlength="100" /></span>
-				</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Table prefix'] ?></label>
+			<div class="col-md-2">
+				<input id="fld6" type="text" name="db_prefix" size="20" maxlength="30" class="form-control input-md">
+				<span class="help-block"><?php echo $lang_install['Table prefix help'] ?></span>
 			</div>
+		</div>
+	</div><!-- /.box-body -->
+	<div class="box-footer">
+		<div class="form-group">
+			<div class="col-md-4">
+				<button id="#websitesetup" name="singlebutton" class="btn btn-primary">
+					Next
+				</button>
+			</div>
+		</div>
+
+</fieldset>
+	</div><!-- /.box-footer-->
+</div><!-- /.box -->
+				
+				<div class="box" id="adminusersetup">
+					<div class="box-header with-border">
+						<h3 class="box-title"><?php echo $lang_install['Part2'] ?></h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+<fieldset class="form-horizontal">
+
+<legend><?php echo $lang_install['Part2 legend'] ?></legend>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Admin username'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input id="fld7" type="text" name="req_username" size="35" maxlength="25" class="form-control input-md">
+  <span class="help-block"><?php echo $lang_install['Username help'] ?></span>  
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Admin password'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input id="fld8" type="password" name="req_password1" size="35" class="form-control input-md">
+  <span class="help-block"><?php echo $lang_install['Password help'] ?></span>  
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Admin confirm password'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input id="fld9" type="password" name="req_password2" size="35" class="form-control input-md">
+  <span class="help-block"><?php echo $lang_install['Confirm password help'] ?></span>  
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Admin e-mail'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input id="fld10" type="text" name="req_email" size="35" maxlength="80" class="form-control input-md">
+  <span class="help-block"><?php echo $lang_install['E-mail address help'] ?></span>  
+  </div>
+</div>
+
+</fieldset>
+					</div><!-- /.box-body -->
+					<div class="box-footer">
+		<div class="form-group">
+			<div class="col-md-4">
+				<button id="#websitesetup" name="singlebutton" class="btn btn-primary">
+					Next
+				</button>
+			</div>
+		</div>
+					</div><!-- /.box-footer-->
+				</div><!-- /.box -->
+				<div class="box" id="websitesetup">
+					<div class="box-header with-border">
+						<h3 class="box-title"><?php echo $lang_install['Part3'] ?></h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+<fieldset class="form-horizontal">
+
+<legend><?php echo $lang_install['Part3 legend'] ?></legend>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Board title'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input <input id="fld11" type="text" name="board_title" size="35" maxlength="255" class="form-control input-md"> 
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Board description'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input <input id="fld12" type="text" name="board_description" size="35" maxlength="255" class="form-control input-md">
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Base URL'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input id="fld13" type="text" name="req_base_url" value="<?php echo $absolute_url ?>" size="35" maxlength="100" class="form-control input-md">
+  <span class="help-block"><?php echo $lang_install['Base URL help'] ?></span>  
+  </div>
+</div>
 <?php
 	
 	if (count($languages) > 1)
 	{
 ?>
-			<div class="sf-set set4">
-				<div class="sf-box text">
-					<label for="fld14"><span><?php echo $lang_install['Default language'] ?></span> <small><?php echo $lang_install['Default language help'] ?></small></label><br />
-					<span class="fld-input"><select id="fld14" name="req_language">
-<?php
 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="selectbasic"><?php echo $lang_install['Default language'] ?></label>
+  <div class="col-md-4">
+    <select id="fld14" name="req_language" class="form-control">
+<?php
 		foreach ($languages as $temp)
 			echo "\t\t\t\t\t".'<option value="'.$temp.'"'.($language == $temp ? ' selected="selected"' : '').'>'.$temp.'</option>'."\n";
-
 ?>
-					</select></span>
-				</div>
-			</div>
+	</select>
+    <span class="help-block"><?php echo $lang_install['Default language help'] ?></span>
+  </div>
+</div>
 <?php
 
 	}
@@ -367,16 +525,26 @@ echo '<!--[if IE 7]]><link rel="stylesheet" type="text/css" href="'.FORUM_ROOT.'
 	}
 
 ?>
-		</fieldset>
+</fieldset>
+					</div><!-- /.box-body -->
+	<div class="box-footer">
 		<div class="frm-buttons">
-			<span class="submit"><input type="submit" name="start" value="<?php echo $lang_install['Start install'] ?>" /></span>
+			<span class="submit"><input type="submit" name="start" class="btn btn-primary" value="<?php echo $lang_install['Start install'] ?>" /></span>
 		</div>
-	</div>
+	</div><!-- /.box-footer-->
+				</div><!-- /.box -->
 	</form>
-</div>
+			</section><!-- /.content -->
+		</div><!-- /.content-wrapper -->
 
-</div>
-</div>
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs">
+				<b>Version</b> <?php echo FORUM_VERSION ?>
+			</div>
+			<strong>Copyright © 2014-2015 <a href="https://flazy.us">flazy</a>.</strong> All rights reserved.
+		</footer>
+
+	</div><!-- ./wrapper -->
 </body>
 </html>
 <?php
@@ -439,9 +607,9 @@ else
 
 	// Make sure board title and description aren't left blank
 	if ($board_title == '')
-		$board_title = 'Мой Flazy форум';
+		$board_title = 'Flazy installation complete';
 	if ($board_descrip == '')
-		$board_descrip = 'К сожалению, никому нельзя объяснить, что такое Flazy — тебе надо увидеть всё самому.';
+		$board_descrip = 'Flazys.';
 
 	if (utf8_strlen($base_url) == 0)
 		error($lang_install['Missing base url']);
@@ -1914,7 +2082,7 @@ else
 	$query = array(
 		'INSERT'	=> 'g_title, g_user_title, g_moderator, g_mod_edit_users, g_mod_rename_users, g_mod_change_passwords, g_mod_ban_users, g_read_board, g_view_users, g_post_replies, g_post_topics, g_edit_posts, g_delete_posts, g_delete_topics, g_set_title, g_search, g_search_users, g_send_email, g_post_flood, g_search_flood, g_email_flood',
 		'INTO'		=> 'groups',
-		'VALUES'	=> '\'Администраторы\', \'Администратор\', 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0'
+		'VALUES'	=> '\'Administrators\', \'Admin\', 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0'
 	);
 
 	if ($db_type != 'pgsql')
@@ -1928,7 +2096,7 @@ else
 	$query = array(
 		'INSERT'	=> 'g_title, g_user_title, g_moderator, g_mod_edit_users, g_mod_rename_users, g_mod_change_passwords, g_mod_ban_users, g_read_board, g_view_users, g_post_replies, g_post_topics, g_edit_posts, g_delete_posts, g_delete_topics, g_set_title, g_search, g_search_users, g_send_email, g_post_flood, g_search_flood, g_email_flood',
 		'INTO'		=> 'groups',
-		'VALUES'	=> '\'Гость\', NULL, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 60, 30, 0'
+		'VALUES'	=> '\'Guest\', NULL, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 60, 30, 0'
 	);
 
 	if ($db_type != 'pgsql')
@@ -1942,7 +2110,7 @@ else
 	$query = array(
 		'INSERT'	=> 'g_title, g_user_title, g_moderator, g_mod_edit_users, g_mod_rename_users, g_mod_change_passwords, g_mod_ban_users, g_read_board, g_view_users, g_post_replies, g_post_topics, g_edit_posts, g_delete_posts, g_delete_topics, g_set_title, g_search, g_search_users, g_send_email, g_post_flood, g_search_flood, g_email_flood',
 		'INTO'		=> 'groups',
-		'VALUES'	=> '\'Участники\', NULL, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 60, 30, 60'
+		'VALUES'	=> '\'Member\', NULL, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 60, 30, 60'
 	);
 
 	if ($db_type != 'pgsql')
@@ -1956,7 +2124,7 @@ else
 	$query = array(
 		'INSERT'	=> 'g_title, g_user_title, g_moderator, g_mod_edit_users, g_mod_rename_users, g_mod_change_passwords, g_mod_ban_users, g_read_board, g_view_users, g_post_replies, g_post_topics, g_edit_posts, g_delete_posts, g_delete_topics, g_set_title, g_search, g_search_users, g_send_email, g_post_flood, g_search_flood, g_email_flood',
 		'INTO'		=> 'groups',
-		'VALUES'	=> '\'Модераторы\', \'Модератор\', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0'
+		'VALUES'	=> '\'Moderators\', \'Moderator\', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0'
 	);
 
 	if ($db_type != 'pgsql')
@@ -1971,7 +2139,7 @@ else
 	$query = array(
 		'INSERT'	=> 'group_id, username, password, email',
 		'INTO'		=> 'users',
-		'VALUES'	=> '2, \'Гость\', \'Гость\', \'Гость\''
+		'VALUES'	=> '2, \'Guest\', \'Guest\', \'Guest\''
 	);
 
 	if ($db_type != 'pgsql')

@@ -29,15 +29,15 @@ $lang_forum = array(
 'Topic navigation'			=>	'( %s )',
 'Location'					=>	'Found in forum: %s',
 'Pages'						=>	'Pages',
-/*RUS*/'Users on'					=>	'Форум просматривают:',
+'Users on'					=>	'Forum is seen by:',
 'Post topic'				=>	'Post new topic',
 'Login to post'				=>	'You must %1$s or %2$s to post a new topic',
 'No permission'				=>	'Sorry! no permission to post new topics',
 'Moved'						=>	'Moved',
 'Sticky'					=>	'Sticky',
 'Closed'					=>	'Closed',
-/*RUS*/'Poll'						=>	'Опрос',
-/*RUS*/'Description'				=>	'Описание',
+'Poll'						=>	'Poll',
+'Description'				=>	'Description',
 'Empty forum'				=>	'Empty forum',
 'No topics'					=>	'No topics have been posted',
 'First topic nag'			=>	'Be the first to post a topic in this forum.',
@@ -47,7 +47,7 @@ $lang_forum = array(
 'Moderate forum'			=>	'Moderate forum',
 'Mark forum read'			=>	'Mark forum as read',
 'RSS forum feed'			=>	'RSS forum feed',
-/*RUS*/'ATOM forum feed'			=>	'ATOM форума',
+'ATOM forum feed'			=>	'ATOM feed',
 'New posts info'			=>	'Go to the first new post since your last visit.'
 
 );

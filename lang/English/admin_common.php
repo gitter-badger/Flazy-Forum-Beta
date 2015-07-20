@@ -27,7 +27,7 @@ $lang_admin_common = array(
 
 // Main Admin Menu Items and Title
 'Forum administration'			=>	'Administration',
-'Start'							=>	'Start',
+'Start'							=>	'Dashboard',
 'Settings'						=>	'Settings',
 'Users'							=>	'Users',
 'Options'						=>	'Options',
@@ -59,7 +59,7 @@ $lang_admin_common = array(
 'Prune topics'					=>	'Prune topics',
 'Maintenance mode'				=>	'Maintenance mode',
 'Rebuild index'					=>	'Rebuild index',
-/*RUS*/'Cache'					=>	'Кэш и синхронизация',
+'Cache'							=>	'Cache and Syns',
 
 // Extensions Submenu
 'Manage extensions'				=>	'Manage extensions',

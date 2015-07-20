@@ -93,7 +93,7 @@ $lang_misc = array(
 'Confirm topic split'		=>	'Confirm splitting of all selected posts into a new topic',
 'Delete posts redirect'		=>	'Posts deleted. Redirecting…',
 'Split posts redirect'		=>	'Posts split into a new topic. Redirecting…',
-'No posts selected'			=>	'You must select at least one post.'
+'No posts selected'			=>	'You must select at least one post.',
 
 // Change database engine
 /*RUS*/'Change database engine'	=>	'Изменить подсистему низкого уровня MySQL',

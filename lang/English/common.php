@@ -1,17 +1,21 @@
 <?php
+/**
+ * Русский языковой пакет.
+ * @package Flazy_Russian
+ */
 
-// Language definitions for frequently used strings
+/** Языковые конструкции часто используемых строк */
 $lang_common = array(
 
-// Text orientation and encoding
-'lang_direction'			=>	'ltr',	// ltr (Left-To-Right) or rtl (Right-To-Left)
+// Ориентировка текста и кодировки
+'lang_direction'			=>	'ltr', // ltr (слева направо) or rtl (справа налево)
 'lang_identifier'			=>	'en',
 
-// Number formatting
+// Количество форматирования
 'lang_decimal_point'		=>	'.',
 'lang_thousands_sep'		=>	',',
 
-// Notices
+// Уведомления
 'Bad request'				=>	'Bad request. The link you followed is incorrect or outdated.',
 'No view'					=>	'You do not have permission to view these forums.',
 'No permission'				=>	'You do not have permission to access this page.',
@@ -32,27 +36,45 @@ $lang_common = array(
 'Never'						=>	'Never',
 'Today'						=>	'Today',
 'Yesterday'					=>	'Yesterday',
-/*RUS*/'Back'						=>	'Back',
-/*RUS*/'After'						=>	'After',
+'Back'						=>	'back',
+/*BGN*/'After'						=>	'по-късно',
+/*BGN*/'Years'						=>	'няколко години',
+/*BGN*/'More year'					=>	'повече от една година',
+/*BGN*/'Week'						=>	'седмица',
+/*BGN*/'Weeks'						=>	'седмица',
+/*BGN*/'Weeks2'					=>	'седмица',
+/*BGN*/'Day'						=>	'ден',
+/*BGN*/'Days'						=>	'ден',
+/*BGN*/'Days2'						=>	'дни',
+/*BGN*/'Hour'						=>	'час',
+/*BGN*/'Hours'						=>	'часа',
+/*BGN*/'Hours2'					=>	'часа',
+/*BGN*/'Hours2'					=>	'часа',
+/*BGN*/'Minute'					=>	'минута',
+/*BGN*/'Minutes'					=>	'минути',
+/*BGN*/'Minutes2'					=>	'минути',
+/*BGN*/'Second'					=>	'секунда',
+/*BGN*/'Seconds'					=>	'секунди',
+/*BGN*/'Seconds2'					=>	'секунди',
 'Forum message'				=>	'Forum message',
 'Maintenance warning'		=>	'<strong>WARNING! %s Enabled.</strong> DO NOT LOGOUT as you will be unable to login again.',
 'Maintenance mode'			=>	'Maintenance Mode',
-'Redirecting'				=>	'Redirecting',
+'Redirecting'				=>	' Redirecting…', // With space!
 'Forwarding info'			=>	'You should automatically be forwarded to a new page in %s %s.',
 'second'					=>	'second',	// singular
 'seconds'					=>	'seconds',	// plural
 'Click redirect'			=>	'Click here if you do not want to wait any longer (or if your browser does not automatically forward you)',
-'Invalid e-mail'			=>	'The e-mail address you entered is invalid.',
+'Invalid e-mail'			=>	'The email address you entered is invalid.',
 'New posts'					=>	'New posts',	// the link that leads to the first new post
 'New posts title'			=>	'Find topics containing posts made since your last visit.',	// the popup text for new posts links
 'Active topics'				=>	'Active topics',
 'Active topics title'		=>	'Find topics which contain recent posts.',
 'Unanswered topics'			=>	'Unanswered topics',
 'Unanswered topics title'	=>	'Find topics which have not been replied to.',
-/*RUS*/'My posts'					=>	'Мои сообщения',
-/*RUS*/'My posts title'			=>	'Найти все мои сообщения.',
-/*RUS*/'New link active'			=>	'Письмо (%d)',
-/*RUS*/'New link full'				=>	'Ящик переполнен (!)',
+'My posts'					=>	'My posts',
+'My posts title'			=>	'Find topics containing posts made since your last visit',
+'PM new'					=>	'New PM (%d)',
+/*BGN*/'PM full'					=>	'Пощата е пълна(!)',
 'Username'					=>	'Username',
 'Registered'				=>	'Registered',
 'Write message'				=>	'Write message:',
@@ -60,12 +82,12 @@ $lang_common = array(
 'Posts'						=>	'Posts',
 'Pages'						=>	'Pages',
 'Page'						=>	'Page',
-'BBCode'					=>	'BBCode',	// You probably shouldn't change this
+'BBCode'					=>	'BBCode', // You probably shouldn't change this
 'Smilies'					=>	'Smilies',
-'Images'					=>	'Images',
+'Images'					=>	'Image',
 'You may use'				=>	'You may use: %s',
-'and'						=>	'and',
-'Description'				=>	'Description',
+'and'						=>	' and ',
+'Description'				=>	'Description', // для изображения
 'Image link'				=>	'image',	// This is displayed (i.e. <image>) instead of images when "Show images" is disabled in the profile
 'wrote'						=>	'wrote',	// For [quote]'s (e.g., User wrote:)
 'Code'						=>	'Code',		// For [code]'s
@@ -73,20 +95,20 @@ $lang_common = array(
 'Write message legend'		=>	'Compose your post',
 'Required information'		=>	'Required information',
 'Reqmark'					=>	'*',
-'Required'					=>	'(Required)',
-'Required warn'				=>	'All fields labelled %s must be completed before the form is submitted.',
-'Crumb separator'			=>	' »&#160;', // The character or text that separates links in breadcrumbs
-'Title separator'			=>	' - ',
+'Required'					=>	'(*)',
+'Required warn'				=>	'All fields with bold label must be completed before the form is submitted.',
+'Crumb separator'			=>	' &rarr;&#160;', // The character or text that separates links in breadcrumbs
+'Title separator'			=>	' — ',
 'Page separator'			=>	'&#160;', //The character or text that separates page numbers
 'Spacer'					=>	'…', // Ellipsis for paginate
 'Paging separator'			=>	' ', //The character or text that separates page numbers for page navigation generally
 'Previous'					=>	'Previous',
 'Next'						=>	'Next',
-'Guests none'				=>	'Guest',
-'Guests single'				=>	'Guest',
-'Guests plural'				=>	'Guests',
-'Cancel redirect'			=>	'Operation cancelled. Redirecting…',
-'No confirm redirect'		=>	'No confirmation provided. Operation cancelled. Redirecting…',
+/*BGN*/'Guests none'				=>	'гост',
+/*BGN*/'Guests single'				=>	'гост',
+/*BGN*/'Guests plural'				=>	'гости',
+'Cancel redirect'			=>	'Operation cancelled.',
+'No confirm redirect'		=>	'No confirmation provided. Operation cancelled.',
 'Please confirm'			=>	'Please confirm:',
 'Help page'					=>	'Help with: %s',
 'Re'						=>	'Re:',
@@ -94,14 +116,14 @@ $lang_common = array(
 'Item info single'			=>	'%s [ %s ]',
 'Item info plural'			=>	'%s [ %s to %s of %s ]', // e.g. Topics [ 10 to 20 of 30 ]
 'Info separator'			=>	' ', // e.g. 1 Page | 10 Topics
-'Powered by'				=>	'Powered by <strong>%s</strong>, supported by <strong>%s</strong>.',
+'Powered by'				=>	'Powered by <strong>%s</strong>',
 
-// CSRF confirmation form
+// Формы CSRF
 'Confirm'					=>	'Confirm',	// Button
 'Confirm action'			=>	'Confirm action',
 'Confirm action head'		=>	'Please confirm or cancel your last action',
 
-// Title
+// Статус
 'Title'						=>	'Title',
 'Member'					=>	'Member',	// Default title
 'Moderator'					=>	'Moderator',
@@ -109,7 +131,7 @@ $lang_common = array(
 'Banned'					=>	'Banned',
 'Guest'						=>	'Guest',
 
-// Stuff for include/parser.php
+// Конструкции для for include/parser.php
 'BBCode error 1'			=>	'[/%1$s] was found without a matching [%1$s]',
 'BBCode error 2'			=>	'[%s] tag is empty',
 'BBCode error 3'			=>	'[%1$s] was opened within [%2$s], this is not allowed',
@@ -118,12 +140,12 @@ $lang_common = array(
 'BBCode error 6'			=>	'[%s] tag had an empty attribute section',
 'BBCode nested list'		=>	'[list] tags cannot be nested',
 'BBCode code problem'		=>	'There is a problem with your [code] tags',
-/*RUS*/'Hidden text guest'			=>	'Вы должны %1$s или %2$s чтобы видеть этот текст.',
-/*RUS*/'Hidden show text'			=>	'Показать скрытый текст',
-/*RUS*/'Hidden text'				=>	'Hidden text',
-/*RUS*/'Hidden count text'			=>	'Нужно %s или больше сообщений, чтобы увидеть этот текст.',
+/*BGN*/'Hidden text guest'			=>	'Трабва да %1$s или да се %2$s за да видите скрития текст',
+'Hidden show text'			=>	'Show hidden text',
+'Hidden text'				=>	'Hidden text',
+/*BGN*/'Hidden count text'			=>	'Нуждаете се от %s или повече съобщения, за да видите този текст',
 
-// Stuff for the navigator (top of every page)
+// Конструкции меню (вверху каждой страницы)
 'Index'						=>	'Index',
 'User list'					=>	'User list',
 'Rules'						=>  'Rules',
@@ -136,45 +158,32 @@ $lang_common = array(
 'Profile'					=>	'Profile',
 'Logout'					=>	'Logout',
 'Logged in as'				=>	'Logged in as %s.',
-'Admin'						=>	'Administration',
+'Admin'						=>	'Admin CP',
 'Last visit'				=>	'Last visit %s',
 'Mark all as read'			=>	'Mark all topics as read',
-/*RUS*/'Login nag'					=>	'Пожалуйста, %s или %s.',
-/*RUS*/'Login nag 2'				=>	'зайдите',
-/*RUS*/'Login nag 3'				=>	'зарегистрируйтесь',
+'Login nag'					=>	'Please <a href="%s">login</a> or <a href="%s">register</a>.',
 'New reports'				=>	'New reports',
-/*RUS*/'Private messages'			=>	'PM',
+'Private messages'			=>	'Private messages',
 
-// Alerts
-'New alerts'				=>	'New Alerts',
-'Maintenance alert'			=>	'<strong>WARNING! Maintenance mode enabled.</strong> This board is currently in maintenance mode. <em>DO NOT</em> logout, if you do you will not be able to login again.',
-'Updates'					=>	'PunBB updates:',
-'Updates failed'			=>	'The latest attempt at checking for updates against the punbb.informer.com updates service failed. This probably just means that the service is temporarily overloaded or out of order. However, if this alert does not disappear within a day or two, you should disable the automatic check for updates and check for updates manually in the future.',
-'Updates version n hf'		=>	'A newer version of PunBB, version %s, is available for download at <a href="http://punbb.informer.com/">punbb.informer.com</a>. Furthermore, one or more hotfixes are available for install on the <a href="%s">Manage hotfixes</a> tab of the admin interface.',
-/*RUS*/'Dev version'				=>	'Вы используете Dev-версию и не будите получать уведомления об критических исправлениях.',
-'Updates version'			=>	'A newer version of PunBB, version %s, is available for download at <a href="http://punbb.informer.com/">punbb.informer.com</a>.',
-'Updates hf'				=>	'One or more hotfixes are available for install on the <a href="%s">Manage hotfixes</a> tab of the admin interface.',
-'Database mismatch'			=>	'Database version mismatch',
-'Database mismatch alert'	=>	'Your PunBB database is meant to be used in conjunction with a newer version of the PunBB code. This mismatch can lead to your forum not working properly. It is suggested that you upgrade your forum to the newest version of PunBB.',
-/*RUS*/'Storage mismatch'			=>	'Несоответствие подситемы базы данных:',
-/*RUS*/'Storage mismatch alert'	=>	'Одна или несколько таблиц базы данных используют %1$s хотя настроены на использование %2$s. Вы можете запустить <a href="%3$s">этот скрипт</a>, чтобы преоброзавать базу данных, для корректной работы.',
-/*RUS*/'New user notification'		=>	'Внимание — Новая регистрация',
-/*RUS*/'Banned email notification'	=>	'Внимание — Обнаружен заблокированый e-mail',
-/*RUS*/'Duplicate email notification'	=>	'Внимание — Обнаружены однинаковые e-mail\'ы',
+// Предупреждения
+'New alerts'				=>	'Warning!',
+'New user notification'		=>	'Warning — New registration',
+/*BGN*/'Banned email notification'	=>	'Warning — Обнаружен заблокированый e-mail',
+/*BGN*/'Duplicate email notification'	=>	'Warning — Обнаружены однинаковые e-mail\'ы',
 
-// Stuff for Jump Menu
+// Конструкции для меню переходов
 'Go'						=>	'Go',		// submit button in forum jump
 'Jump to'					=>	'Jump to forum:',
 
-// For extern.php RSS feed
+// Для extern.php RSS feed
 'RSS description'			=>	'The most recent topics at %s.',
 'RSS description topic'		=>	'The most recent posts in %s.',
 'RSS reply'					=>	'Re: ',	// The topic subject will be appended to this string (to signify a reply)
 
-// Accessibility
+// Доступность
 'Skip to content'			=>	'Skip to forum content',
 
-// Debug information
+// Отладочная онформация
 'Querytime'					=>	'Generated in %1$s seconds, %2$s queries executed',
 'Debug table'				=>	'Debug information',
 'Debug summary'				=>	'Database query performance information',

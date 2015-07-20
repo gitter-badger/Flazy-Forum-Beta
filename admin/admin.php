@@ -255,10 +255,11 @@ ob_start();
             </div>
             <div class="box-body">
              <h5><?php echo $lang_admin_index['Operating system'] ?>: <small><?php echo PHP_OS ?></small></h5>
-			 <h5>PHP: <small><?php echo PHP_VERSION ?></small> — <a href="<?php echo forum_link('admin/admin.php') ?>?action=phpinfo"><?php echo $lang_admin_index['Show info'] ?></a></h5>
+			 <h5>PHP: <small><?php echo PHP_VERSION ?></small> — <a href=""  class="btn btn-sm btn-primary" data-toggle="modal" data-target="#phpinfo"><?php echo $lang_admin_index['Show info'] ?></a></h5>
 			 <h5><?php echo $lang_admin_index['Accelerator'] ?>: <small><?php echo $php_accelerator ?></small></h5>
             </div><!-- /.box-body -->
           </div><!-- /.box -->	
+
 <?php ($hook = get_hook('ain_pre_database')) ? eval($hook) : null; ?>
           <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
             <div class="box-header with-border">
@@ -280,6 +281,44 @@ ob_start();
 <?php endif; ($hook = get_hook('ain_items_end')) ? eval($hook) : null; ?>
 		</div>
 	</div>
+	<div class="example-modal">
+            <div class="modal" id="phpinfo">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                  </div>
+                  <div class="modal-body">
+                   <?php
+ob_start();
+phpinfo();
+$phpinfo = ob_get_clean();
+
+# Body-Content rausholen
+$phpinfo = preg_replace('#^.*<body>(.*)</body>.*$#s', '$1', $phpinfo);
+# XHTML-Fehler korrigieren
+$phpinfo = str_replace('module_Zend Optimizer', 'module_Zend_Optimizer', $phpinfo);
+# <font> durch <span> ersetzen
+$phpinfo = str_replace('<font', '<span', $phpinfo);
+$phpinfo = str_replace('</font>', '</span>', $phpinfo);
+#Table
+$phpinfo = str_replace( 'border="0" cellpadding="3"', 'class="table" style="table-layout: fixed;word-wrap: break-word;"', $phpinfo );
+$phpinfo = str_replace('<tr class="h"><th>', '<thead><tr><th>', $phpinfo);
+$phpinfo = str_replace('</th></tr>', '</th></tr></thead><tbody>', $phpinfo);
+$phpinfo = str_replace('</table>', '</tbody></table>', $phpinfo);
+# Schlüsselwörter grün oder rot einfärben
+$phpinfo = preg_replace('#>(on|enabled|active)#i', '><span class="text-success">$1</span>', $phpinfo);
+$phpinfo = preg_replace('#>(off|disabled)#i', '><span class="text-error">$1</span>', $phpinfo);
+
+echo '<div id="phpinfo">';
+echo $phpinfo;
+echo '</div>';
+?>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+          </div>
 <?php
 
 ($hook = get_hook('ain_end')) ? eval($hook) : null;
