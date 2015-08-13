@@ -7,7 +7,6 @@
  * @package Flazy
  */
 
-
 if (!defined('FORUM_ROOT'))
 	define('FORUM_ROOT', './');
 require FORUM_ROOT.'include/common.php';
@@ -130,7 +129,7 @@ if (isset($query))
 	generate_search_crumbs($action);
 
 	// Generate paging links
-	$forum_page['page_post']['paging'] = '<div class="pagination">'. $forum_page['items_info'].' • <span class="pages">'.$lang_common['Pages'].'</span> '.paginate($forum_page['num_pages'], $forum_page['page'], $url_type, $lang_common['Paging separator'], $search_id).'</div>';
+	$forum_page['page_post']['paging'] = '<div class="pagination">'. $forum_page['items_info'].' • <span class="pages">'.$lang_common['Pages'].' </span> '.paginate($forum_page['num_pages'], $forum_page['page'], $url_type, $lang_common['Paging separator'], $search_id).'</div>';
 
 	// Get topic/forum tracking data
 	if (!$forum_user['is_guest'])
@@ -317,7 +316,7 @@ if (isset($query))
 		<div class="postbody">
 			<div class="post-entry">
 				<div class="entry-content">
-					<?php echo $forum_page['message'] ?>
+					dasda<?php echo $forum_page['message'] ?>
 				</div>
 <?php ($hook = get_hook('se_results_posts_row_new_post_entry_data')) ? eval($hook) : null; ?>
 			</div>
@@ -429,7 +428,7 @@ if (isset($query))
 											<dl class="icon <?php echo implode($forum_page['item_status']) ?> <?php echo ($forum_page['item_count'] % 2 != 0) ? 'forum_read' : 'forum_read' ?><?php echo ($forum_page['item_count'] == 1) ? '' : '' ?>">
 												<dt>
 													<div class="list-inner">
-														
+
 														<?php echo implode("\n\t\t\t\t", $forum_page['item_body']['subject'])."\n" ?>
 													</div>
 												</dt>
@@ -496,7 +495,7 @@ $forum_page['frm-sorts'] = array(
 // Setup breadcrumbs
 $forum_page['crumbs'] = array(
 	array($forum_config['o_board_title'], forum_link($forum_url['index'])),
-	array($lang_common['Search'], forum_link($forum_url['search'])) 
+	array($lang_common['Search'], forum_link($forum_url['search']))
 );
 
 // Setup form
@@ -564,7 +563,7 @@ ob_start();
 					<input  id="fld<?php echo $forum_page['fld_count'] ?>" type="search" class="inputbox" name="author" size="25" maxlength="25" title="<?php echo $lang_search['Author search'] ?>">
 				</dd>
 			</dl>
-							
+
 
 				<dl>
 					<dt>
@@ -575,8 +574,8 @@ ob_start();
 <?php ($hook = get_hook('se_pre_forum_checklist')) ? eval($hook) : null; ?>
 			<dd>
 				<select name="fid[]" id="search_forum" multiple="multiple" size="8" title="Search in forums">
-			
-	
+
+
 <?php
 
 // Get the list of categories and forums
@@ -619,11 +618,11 @@ while ($cur_forum = $forum_db->fetch_assoc($result))
 
 ?>
 			</select>
-		</dd>							
+		</dd>
 
 				</dl>
 				</fieldset>
-<?php ($hook = get_hook('se_pre_forum_fieldset_end')) ? eval($hook) : null; ?>	
+<?php ($hook = get_hook('se_pre_forum_fieldset_end')) ? eval($hook) : null; ?>
 				</div>
 			</div>
 <?php ($hook = get_hook('se_forum_fieldset_end')) ? eval($hook) : null; ?>
@@ -641,7 +640,7 @@ while ($cur_forum = $forum_db->fetch_assoc($result))
 <?php ($hook = get_hook('se_pre_display_choices')) ? eval($hook) : null; ?>
 				<dd>
 						<label for="show_results1">
-							
+
 							<input type="radio" id="fld<?php echo ++$forum_page['fld_count'] ?>" name="show_as" value="topics" checked="checked"/>
 							<?php echo $lang_search['Show as topics'] ?>
 						</label>
@@ -672,7 +671,7 @@ while ($cur_forum = $forum_db->fetch_assoc($result))
 			<input type="radio" id="fld<?php echo ++$forum_page['fld_count'] ?>" name="sort_dir" value="DESC" >
 			<?php echo $lang_search['Descending'] ?></label>
 		<?php ($hook = get_hook('se_pre_sort_order_fieldset_end')) ? eval($hook) : null; ?>
-		
+
 	</dd>
 </dl>
 

@@ -9,6 +9,7 @@ $lang_search = array(
 'Search flood'				=>	'At least %s seconds have to pass between searches. Please wait a while and try searching again.',
 'Search legend'				=>	'Search criteria',
 'Results legend'			=>	'Search results',
+'Search info'				=>	'Используйте поиск по ключевым словам, имени автора или по обоим параметрам сразу.',
 'Keywords info'				=>	'You may search for a single keyword or for multiple keywords separated by spaces.',
 'Refine info'				=>	'You may use <strong>AND</strong>, <strong>OR</strong> and <strong>NOT</strong> to refine your searches by keyword.',
 'Wildcard info'				=>	'Use the wildcard character <strong>*</strong> for partial keyword or username matches.',

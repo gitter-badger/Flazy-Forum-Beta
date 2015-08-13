@@ -368,7 +368,7 @@ ul.linklist.bulletin > li.no-bulletin:before {
 }
 .dropdown-contents > li > a {
   padding-right: 30px;
-  
+
 }
 .dropdown-nonscroll > li > a {
   padding-right: 20px;
@@ -635,7 +635,7 @@ fieldset.fields1 dl.pmlist dd.recipients {
   display: block;
   font-size: 1em;
   font-weight: normal;
- /*line-height: 31px;*/ 
+ /*line-height: 31px;*/
   height: 33px;
   width: 33px;
   text-align: left;
@@ -2394,7 +2394,7 @@ textarea#message {
 }
 
 #bbcode span {
-    background: url(../img/style/b_bb.png);
+    background: url(../../../resources/old_editor/images/b_bb.png);
 }
 
 #bbcode li img {
@@ -2479,6 +2479,9 @@ textarea#message {
 
 #bt-speller span {
     background-position: -302px 0;
+}
+.content span.bbu {
+    text-decoration: underline;
 }
 /* Input field styles
 ---------------------------------------- */
@@ -2847,7 +2850,7 @@ ul.linklist.bulletin > li.font-icon:before {
   position: absolute;
   margin: 0;
   right: 0;
-  top: 0;
+  top: 10;
 }
 .posts-buttons li {
   float: left;
@@ -4245,7 +4248,7 @@ body {
   background-image: url(../images/bg.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: bottom; 
+    background-position: bottom;
 }
 h1 {
   color: #FFFFFF;
@@ -4316,7 +4319,7 @@ hr {
 }
 .forabg,
 .forumbg {
-  background-color: #477bb8;
+  background-color: #3c699c;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 .panel {
@@ -4629,7 +4632,7 @@ p.post-notice a {
 Colours and backgrounds for links.css
 -------------------------------------------------------------- */
 a {
-  color: #3c699c;
+  color: #2CB98B;
 }
 a:hover {
   color: #3c3c3c;

@@ -25,6 +25,8 @@ $forum_page['copyright'] = sprintf($lang_common['Powered by'], '<a href="http://
 
 	<div class="pull-right hidden-xs">
 		<?php echo 'Version:'.($forum_config['o_show_version'] ? ' '.$forum_config['o_cur_version'] : '')?>
+		<br>
+		Design: <a href="https://almsaeedstudio.com">AlmsaeedStudio</a>
 	</div>
 	<strong>Copyright © 2014-2015 <?php echo $forum_page['copyright']; ?>.</strong> All rights reserved.
 

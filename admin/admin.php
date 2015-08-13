@@ -52,13 +52,13 @@ else if ($action == 'update')
 	redirect(forum_link('admin/admin.php'), $lang_admin_common['Redirect']);
 }
 
-/*
+
 // Generate check for updates text block
 if ($forum_user['g_id'] == FORUM_ADMIN)
 {
 	if ($forum_config['o_maintenance'])
 		$forum_page['alert']['maintenance'] = '<p id="maint-alert" class="warn">'.sprintf($lang_admin_index['Maintenance alert'], forum_link('admin/settings.php?section=maintenance')).'</p>';
-
+ /*
 	if ($forum_config['o_check_for_updates'])
 	{
 		if ($forum_updates['fail'])
@@ -103,8 +103,8 @@ if ($forum_user['g_id'] == FORUM_ADMIN)
 			$hotfixes[] = urlencode($forum_db->result($result, $i));
 
 		$updates = '<a href="'.forum_link('admin/admin.php?action=update').'">'.$lang_admin_index['Check for updates'].'</a>';
-	}
-}*/
+	}*/
+}
 
 
 // Get the server load averages (if possible)
@@ -230,7 +230,7 @@ ob_start();
             <div class="box-body">
               Flazy -<?php echo $forum_config['o_cur_version'] ?>
             </div><!-- /.box-body -->
-          </div><!-- /.box -->	
+          </div><!-- /.box -->
 <?php ($hook = get_hook('ain_pre_server_load')) ? eval($hook) : null; ?>
           <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
             <div class="box-header with-border">
@@ -243,7 +243,7 @@ ob_start();
             <div class="box-body">
              <?php echo $server_load ?> (<?php echo $num_online.' '.$lang_admin_index['users online']?>)
             </div><!-- /.box-body -->
-          </div><!-- /.box -->	
+          </div><!-- /.box -->
 <?php ($hook = get_hook('ain_pre_environment')) ? eval($hook) : null; if ($forum_user['g_id'] == FORUM_ADMIN): ?>
           <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
             <div class="box-header with-border">
@@ -258,7 +258,7 @@ ob_start();
 			 <h5>PHP: <small><?php echo PHP_VERSION ?></small> — <a href=""  class="btn btn-sm btn-primary" data-toggle="modal" data-target="#phpinfo"><?php echo $lang_admin_index['Show info'] ?></a></h5>
 			 <h5><?php echo $lang_admin_index['Accelerator'] ?>: <small><?php echo $php_accelerator ?></small></h5>
             </div><!-- /.box-body -->
-          </div><!-- /.box -->	
+          </div><!-- /.box -->
 
 <?php ($hook = get_hook('ain_pre_database')) ? eval($hook) : null; ?>
           <div class="box ic<?php echo ++$forum_page['item_count'] ?>">
@@ -270,14 +270,14 @@ ob_start();
               </div>
             </div>
             <div class="box-body">
-            	
+
              	<h5><?php echo implode(' ', $forum_db->get_version()) ?></h5>
 <?php if (isset($total_records) && isset($total_size)): ?>
 						<h5><?php echo $lang_admin_index['Rows'] ?>: <small><?php echo forum_number_format($total_records) ?></small></h5>
 						<h5><?php echo $lang_admin_index['Size'] ?>: <small><?php echo $total_size ?></small></h5>
 <?php endif; ?>
             </div><!-- /.box-body -->
-          </div><!-- /.box -->	
+          </div><!-- /.box -->
 <?php endif; ($hook = get_hook('ain_items_end')) ? eval($hook) : null; ?>
 		</div>
 	</div>

@@ -1493,12 +1493,12 @@ if ($forum_user['id'] != $id &&
 
 	if ($user['sex'] == 1)
 	{
-		$sex_pic = ' <img src="'.$base_url.'/style/'.$forum_user['style'].'/images/male.png" width="16" height="16" alt="'.$lang_profile['Male'].'"/>';
+		$sex_pic = ' <i class="fa fa-mars"></i>';
 		$sex = $lang_profile['Male'];
 	}
 	else if ($user['sex'] == 2)
 	{
-		$sex_pic = ' <img src="'.$base_url.'/style/'.$forum_user['style'].'/images/female.png" width="16" height="16" alt="'.$lang_profile['Female'].'"/>';
+		$sex_pic = ' <i class="fa fa-venus"></i>';
 		$sex = $lang_profile['Female'];
 	}
 
@@ -1510,42 +1510,44 @@ if ($forum_user['id'] != $id &&
 		$forum_page['avatar_markup'] = generate_avatar_markup($id, $user['avatar'], $user['email']);
 
 		if (!empty($forum_page['avatar_markup']))
-			$forum_page['user_ident']['avatar'] = '<li class="useravatar">'.$forum_page['avatar_markup'].'</li>';
+			$forum_page['user_ident']['avatar'] = '<dt class="profile-avatar"'.$forum_page['avatar_markup'].'</dt>';
 	}
 
 	// Setup user information
 	$forum_page['user_info'] = array();
 
-	if ($user['realname'] !='')
-		$forum_page['user_info']['realname'] = '<li><span>'.$lang_profile['Realname'].': <strong class="fn">'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['realname']) : $user['realname']).'</strong></span></li>';
+		if ($user['realname'] !='')
+			$forum_page['user_info']['realname'] = '<dt class="realname">'.$lang_profile['Realname'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['realname']) : $user['realname']).'</dd>';
 
-	if ($user['sex'] != '0')
-		$forum_page['user_info']['sex'] = '<li><span>'.$lang_profile['Sex'].': <strong class="fn">'.$sex.'</strong></span></li>';
+		if ($user['sex'] != '0')
+			$forum_page['user_info']['sex'] = '<dt class="sex">'.$lang_profile['Sex'].': </dt><dd>'.$sex.'</dd>';
 
-	if ($user['location'] !='')
-		$forum_page['user_info']['location'] = '<li><span>'.$lang_profile['From'].': <strong> '.forum_htmlencode(($forum_config['o_censoring'] == '1') ? censor_words($user['location']) : $user['location']).'</strong></span></li>';
+		if ($user['location'] != '')
+			$forum_page['user_info']['location'] = '<dt class="location">'.$lang_profile['From'].': </dt><dd> '.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['location']) : $user['location']).'</dd>';
 
-	if ($user['country'] != '')
-		$forum_page['user_info']['country'] = '<li><span>'.$lang_profile['Country'].': <strong>'.$lang_country[$user['country']].'</strong> <img src="'.$base_url.'/img/flags/'.$user['country'].'.gif" alt="'.$lang_country[$user['country']].'"/></span></li>';
-	$forum_page['user_info']['username'] = '<dt class="username'.(($user['realname'] =='') ? ' fn nickname' :  ' nickname').'"><strong>'.forum_htmlencode($user['username']).'</strong>'.(($user['sex'] != '0') ? $sex_pic :  '').'</dt>';
-	$forum_page['user_info']['usertitle'] = '<li class="usertitle"><span>'.get_title($user).'</span></li>';
-	$forum_page['user_info']['registered'] = '<li><span>'.$lang_profile['Registered'].': <strong> '.format_time($user['registered'], 1).'</strong></span></li>';
-	$forum_page['user_info']['lastpost'] = '<li><span>'.$lang_profile['Last post'].': <strong> '.format_time($user['last_post']).'</strong></span></li>';
-	$forum_page['user_info']['lastvisit'] = '<li><span>'.$lang_profile['Last visit'].': <strong> '.format_time($user['last_visit']).'</strong></span></li>';
+		if ($user['country'] != '')
+			$forum_page['user_info']['country'] = '<dt class="country">'.$lang_profile['Country'].': </dt><dd>'.$lang_country[$user['country']].' <img style="margin-bottom: -9px; margin-left: 5px; " src="'.$base_url.'/resources/flags/'.$user['country'].'.png" alt="'.$lang_country[$user['country']].'"/></dd>';
+		
+		$forum_page['user_info']['username'] = '<dt class="username'.(($user['realname'] =='') ? ' fn nickname' :  ' nickname').'">'.$lang_profile['Username'].'</dt><dd>'.forum_htmlencode($user['username']).(($user['sex'] != '0') ? $sex_pic :  '').'</dd>';
+
+		$forum_page['user_info']['usertitle'] = '<dt class="usertitle">'.$lang_profile['Title'].'</dt><dd>'.get_title($user).'</dd>';
+		$forum_page['user_info']['registered'] = '<dt class="registered">'.$lang_profile['Registered'].': </dt><dd> '.format_time($user['registered'], 1).'</dd>';
+		$forum_page['user_info']['lastpost'] = '<dt class="lastpost">'.$lang_profile['Last post'].': </dt><dd> '.format_time($user['last_post']).'</dd>';
+		$forum_page['user_info']['lastvisit'] = '<dt class="lastvisit">'.$lang_profile['Last visit'].': </dt><dd> '.format_time($user['last_visit']).'</dd>';
 
 	$num_posts_day = $user['num_posts'] > 0 ? substr($user['num_posts']/(floor((time()-$user['registered'])/84600) + (((time()-$user['registered'])%84600)?1:0)), 0, 5) : 0;
 
 	if ($forum_config['o_show_post_count'] || $forum_user['is_admmod'])
-		$forum_page['user_info']['posts'] = '<li><span>'.$lang_profile['Posts'].': <strong>'.forum_number_format($user['num_posts']).'</strong> <strong>'.($user['num_posts'] > 0 ? sprintf($lang_profile['Posts in day'], $num_posts_day) : '').'</strong></span></li>';
+		$forum_page['user_info']['posts'] = '<dt class="">'.$lang_profile['Posts'].': </dt><dd>'.forum_number_format($user['num_posts']).($user['num_posts'] > 0 ? sprintf($lang_profile['Posts in day'], $num_posts_day) : '').'</dd>';
 
 	// Setup user address
 	$forum_page['user_contact'] = array();
 
 	if ($user['email_setting'] == '0' && !$forum_user['is_guest'] && $forum_user['g_send_email'])
-		$forum_page['user_contact']['email'] = '<li><span class="prof email">'.$lang_profile['E-mail'].': <a href="mailto:'.forum_htmlencode($user['email']).'" class="email">'.forum_htmlencode(($forum_config['o_censoring'] == '1' ? censor_words($user['email']) : $user['email'])).'</a></span></li>';
+		$forum_page['user_contact']['email'] = '<dt class="email">'.$lang_profile['E-mail'].': </dt><dd><a href="mailto:'.forum_htmlencode($user['email']).'" class="email">'.forum_htmlencode(($forum_config['o_censoring'] == '1' ? censor_words($user['email']) : $user['email'])).'</a></dd>';
 
 	if ($user['email_setting'] != '2' && !$forum_user['is_guest'] && $forum_user['g_send_email'])
-		$forum_page['user_contact']['forum-mail'] = '<li><span class="prof email">'.$lang_profile['E-mail'].': <a href="'.forum_link($forum_url['email'], $id).'">'.$lang_profile['Send forum e-mail'].'</a></span></li>';
+		$forum_page['user_contact']['forum-mail'] = '<dt class="forum-mail">'.$lang_profile['E-mail'].': </dt><dd><a href="'.forum_link($forum_url['email'], $id).'">'.$lang_profile['Send forum e-mail'].'</a></dd>';
 
 	if (!$forum_user['is_guest'] && $forum_user['id'] != $user['id'])
 		$forum_page['user_contact']['pm']= '<li><span class="prof pm"><a class="contact" href="'.forum_link($forum_url['pm_post'], $id).'">'.$lang_profile['Send PM'].'</a></span></li>';
@@ -1555,40 +1557,41 @@ if ($forum_user['id'] != $id &&
 		if ($forum_config['o_censoring'])
 			$user['url'] = censor_words($user['url']);
 
-		$forum_page['user_contact']['website'] = '<li><span class="prof website">'.$lang_profile['Website'].': <a href="'.forum_link('click.php').'?'.forum_htmlencode($user['url']).'" class="external url" rel="me" onclick="window.open(this.href); return false">'.forum_htmlencode($user['url']).'</a></span></li>';
+		$forum_page['user_contact']['website'] = '<dt class="website">'.$lang_profile['Website'].': </dt><dd><a href="'.forum_link('click.php').'?'.forum_htmlencode($user['url']).'" class="external url" rel="me" onclick="window.open(this.href); return false">'.forum_htmlencode($user['url']).'</a></dd>';
 	}
 
-	if ($user['jabber'] != '')
-		$forum_page['user_contact']['jabber'] = '<li><span class="prof jabber">'.$lang_profile['Jabber'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['jabber']) : $user['jabber']).'</strong></span></li>';
-	if ($user['icq'] != '')
-		$forum_page['user_contact']['icq'] = '<li><span class="prof icq">'.$lang_profile['ICQ'].': <strong><a href="'.forum_link('click.php').'?http://icq.com/people/'.forum_htmlencode($user['icq']).'" class="external url" rel="me" onclick="window.open(this.href); return false">'.forum_htmlencode($user['icq']).'</a></strong></span></li>';
-	if ($user['msn'] != '')
-		$forum_page['user_contact']['msn'] = '<li><span class="prof msn">'.$lang_profile['MSN'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['msn']) : $user['msn']).'</strong></span></li>';
-	if ($user['aim'] != '')
-		$forum_page['user_contact']['aim'] = '<li><span class="prof" aim">'.$lang_profile['AOL IM'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['aim']) : $user['aim']).'</strong></span></li>';
-	if ($user['yahoo'] != '')
-		$forum_page['user_contact']['yahoo'] = '<li><span class="prof yahoo">'.$lang_profile['Yahoo'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['yahoo']) : $user['yahoo']).'</strong></span></li>';
-	if ($user['skype'] != '')
-		$forum_page['user_contact']['skype'] = '<li><span class="prof skype">'.$lang_profile['Skype'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['skype']) : $user['skype']).'</strong></span></li>';
-	if ($user['magent'] != '')
-		$forum_page['user_contact']['magent'] = '<li><span class="prof magent">'.$lang_profile['Mail Agent'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['magent']) : $user['magent']).'</strong></span></li>';
-	if ($user['vkontakte'] != '')
-		$forum_page['user_contact']['vkontakte'] = '<li><span class="prof vkontakte"><a href="'.forum_link('click.php').'?http://vkontakte.ru/'.forum_htmlencode($user['vkontakte']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Vkontakte'].'</a></span></li>';
-	if ($user['classmates'] != '')
-		$forum_page['user_contact']['classmates'] = '<li><span class="prof classmates"><a href="'.forum_link('click.php').'?'.forum_htmlencode($user['classmates']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Сlassmates'].'</a></span></li>';
-	if ($user['mirtesen'] != '')
-		$forum_page['user_contact']['mirtesen'] = '<li><span class="prof mirtesen"><a href="'.forum_link('click.php').'?http://mirtesen.ru/people/'.forum_htmlencode($user['mirtesen']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Mirtesen'].'</a></span></li>';
-	if ($user['moikrug'] != '')
-		$forum_page['user_contact']['moikrug'] = '<li><span class="prof moikrug"><a href="'.forum_link('click.php').'?http://'.forum_htmlencode($user['moikrug']).'.moikrug.ru/" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Moikrug'].'</a></span></li>';
-	if ($user['facebook'] != '')
-	{
-		$facebook_url = preg_match('([0-9])', $user['facebook'], $matches) ? 'profile.php?id=' : '';
-		$forum_page['user_contact']['facebook'] = '<li><span class="prof facebook"><a href="'.forum_link('click.php').'?http://facebook.com/'.$facebook_url.forum_htmlencode($user['facebook']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Facebook'].'</a></span></li>';
-	}
-	if ($user['twitter'] != '')
-		$forum_page['user_contact']['twitter'] = '<li><span class="prof twitter"><a href="'.forum_link('click.php').'?http://twitter.com/'.forum_htmlencode($user['twitter']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Twitter'].'</a></span></li>';
-	if ($user['lastfm'] != '')
-		$forum_page['user_contact']['lastfm'] = '<li><span class="prof lastfm"><a href="'.forum_link('click.php').'?http://last.fm/user/'.forum_htmlencode($user['lastfm']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Last.fm'].'</a></span></li>';
+		if ($user['jabber'] != '')
+			$forum_page['user_contact']['jabber'] = '<dt class="jabber">'.$lang_profile['Jabber'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['jabber']) : $user['jabber']).'</dd>';
+		if ($user['icq'] != '')
+			$forum_page['user_contact']['icq'] = '<dt class="icq">'.$lang_profile['ICQ'].': </dt><dd><a href="'.forum_link('click.php').'?http://icq.com/people/'.forum_htmlencode($user['icq']).'" class="external url" rel="me" onclick="window.open(this.href); return false">'.forum_htmlencode($user['icq']).'</a></dd>';
+		if ($user['msn'] != '')
+			$forum_page['user_contact']['msn'] = '<dt class="msn">'.$lang_profile['MSN'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['msn']) : $user['msn']).'</dd>';
+		if ($user['aim'] != '')
+			$forum_page['user_contact']['aim'] = '<dt class="aim">'.$lang_profile['AOL IM'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['aim']) : $user['aim']).'</dd>';
+		if ($user['yahoo'] != '')
+			$forum_page['user_contact']['yahoo'] = '<dt class="yahoo">'.$lang_profile['Yahoo'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['yahoo']) : $user['yahoo']).'</dd>';
+		if ($user['skype'] != '')
+			$forum_page['user_contact']['skype'] = '<dt class="skype">'.$lang_profile['Skype'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['skype']) : $user['skype']).'</dd>';
+		if ($user['magent'] != '')
+			$forum_page['user_contact']['magent'] = '<dt class="magent">'.$lang_profile['Mail Agent'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['magent']) : $user['magent']).'</dd>';
+		if ($user['vkontakte'] != '')
+			$forum_page['user_contact']['vkontakte'] = '<dt class="vkontakte">'.$lang_profile['Vkontakte'].'</dt><dd><a href="'.forum_link('click.php').'?http://vkontakte.ru/'.forum_htmlencode($user['vkontakte']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
+		if ($user['classmates'] != '')
+			$forum_page['user_contact']['classmates'] = '<dt class="classmates">'.$lang_profile['Сlassmates'].'</dt><dd><a href="'.forum_link('click.php').'?'.forum_htmlencode($user['classmates']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
+		if ($user['mirtesen'] != '')
+			$forum_page['user_contact']['mirtesen'] = '<dt class="mirtesen">'.$lang_profile['Mirtesen'].'</dt><dd><a href="'.forum_link('click.php').'?http://mirtesen.ru/people/'.forum_htmlencode($user['mirtesen']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
+		if ($user['moikrug'] != '')
+			$forum_page['user_contact']['moikrug'] = '<dt class="moikrug">'.$lang_profile['Moikrug'].'</dt><dd><a href="'.forum_link('click.php').'?http://'.forum_htmlencode($user['moikrug']).'.moikrug.ru/" onclick="window.open(this.href); return false" rel="nofollow"></a></span></dd></dt>';
+		if ($user['facebook'] != '')
+		{
+			$facebook_url = preg_match('([0-9])', $user['facebook'], $matches) ? 'profile.php?id=' : '';
+			$forum_page['user_contact']['facebook'] = '<dt class="facebook">'.$lang_profile['Facebook'].'</dt><dd><a href="'.forum_link('click.php').'?http://facebook.com/'.$facebook_url.forum_htmlencode($user['facebook']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
+		}
+		if ($user['twitter'] != '')
+			$forum_page['user_contact']['twitter'] = '<dt class="twitter">'.$lang_profile['Twitter'].'</dt><dd><a href="'.forum_link('click.php').'?http://twitter.com/'.forum_htmlencode($user['twitter']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
+		if ($user['lastfm'] != '')
+			$forum_page['user_contact']['lastfm'] = '<dt class="lastfm">'.$lang_profile['Last.fm'].'</dt><dd><a href="'.forum_link('click.php').'?http://last.fm/user/'.forum_htmlencode($user['lastfm']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
+
 
 	// Setup signature demo
 	if ($forum_config['o_signatures'] && isset($parsed_signature))
@@ -1598,7 +1601,7 @@ if ($forum_user['id'] != $id &&
 	if ($forum_user['g_search'])
 	{
 		$forum_page['user_activity'] = array();
-		$forum_page['user_activity']['search_posts'] = '<span'.(empty($forum_page['user_activity']) ? ' class="first-item"' : '').'><a href="'.forum_link($forum_url['search_user_posts'], $id).'">'.sprintf($lang_profile['View user posts'], forum_htmlencode($user['username'])).'</a></span>';
+		$forum_page['user_activity']['search_posts'] = '<span><a href="'.forum_link($forum_url['search_user_posts'], $id).'">'.sprintf($lang_profile['View user posts'], forum_htmlencode($user['username'])).'</a></span>';
 		$forum_page['user_activity']['search_topics'] = '<span'.(empty($forum_page['user_activity']) ? ' class="first-item"' : '').'><a href="'.forum_link($forum_url['search_user_topics'], $id).'">'.sprintf($lang_profile['View user topics'], forum_htmlencode($user['username'])).'</a></span>';
 	}
 
@@ -1623,45 +1626,49 @@ if ($forum_user['id'] != $id &&
 
 ?>
 
-	<div class="main-dscontent main-frm">
 <?php ($hook = get_hook('pf_view_details_pre_user_info')) ? eval($hook) : null; ?>
-		<div class="profile ct-group data-group vcard">
+	<div class="panel bg1">
 <?php ($hook = get_hook('pf_view_details_pre_user_ident_info')) ? eval($hook) : null; ?>
-			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box data-box">
-					<ul class="user-ident ct-legend">
-						<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_ident']) ?>
-					</ul>
-					<ul class="data-list">
-						<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_info'])."\n" ?>
-					</ul>
-				</div>
+		<div class="inner">
+			<div class="set<?php echo ++$forum_page['item_count'] ?>">
+				<dl class="left-box">
+					<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_ident']) ?>
+				</dl>
+				<dl class="left-box details profile-details">
+					<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_info'])."\n" ?>
+				</dl>
 			</div>
+		</div>
+	</div>
+	<div class="panel bg2">
+		<div class="inner">
+			<div class="column1">
 <?php ($hook = get_hook('pf_view_details_pre_user_contact_info')) ? eval($hook) : null; ?>
-<?php if (!empty($forum_page['user_contact'])): ?>			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box data-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_profile['Contact info'] ?></span></h3>
-					<ul class="data-list">
+<?php if (!empty($forum_page['user_contact'])): ?>			
+				<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
+					<h3><?php echo $lang_profile['Contact info'] ?></h3>
+					<dl class="details">
 						<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_contact'])."\n" ?>
-					</ul>
+					</dl>
 				</div>
 			</div>
+		<div class="column2">
 <?php ($hook = get_hook('pf_view_details_pre_user_activity_info')) ? eval($hook) : null; ?>
-<?php endif; if (!empty($forum_page['user_activity'])): ?>			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box data-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_profile['Posts and topics'] ?></span></h3>
-					<p class="options"><?php echo implode(' ', $forum_page['user_activity']) ?></p>
-				</div>
+<?php endif; if (!empty($forum_page['user_activity'])): ?>			
+			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
+					<h3><?php echo $lang_profile['Posts and topics'] ?></h3>
+					<?php echo implode(' ', $forum_page['user_activity']) ?>
 			</div>
 <?php ($hook = get_hook('pf_view_details_pre_user_sig_info')) ? eval($hook) : null; ?>
-<?php endif; if (isset($forum_page['sig_demo'])): ?>			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-				<div class="ct-box data-box">
-					<h3 class="ct-legend hn"><span><?php echo $lang_profile['Current signature'] ?></span></h3>
-					<div class="sig-demo"><?php echo $forum_page['sig_demo']."\n" ?></div>
-				</div>
+<?php endif; if (isset($forum_page['sig_demo'])): ?>			
+			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
+					<h3><?php echo $lang_profile['Current signature'] ?></h3>
+					<?php echo $forum_page['sig_demo']."\n" ?>
 			</div>
-<?php endif; ?>		</div>
+		</div>
+<?php endif; ?>		
 <?php ($hook = get_hook('pf_view_details_user_info_end')) ? eval($hook) : null; ?>
+		</div>
 	</div>
 <?php
 
@@ -1689,21 +1696,21 @@ else
 
 	// Setup navigation menu
 	$forum_page['main_menu'] = array();
-	$forum_page['main_menu']['about'] = '<li class="first-item'.(($section == 'about')  ? ' active' : '').'"><a href="'.forum_link($forum_url['profile'], array($id, 'about')).'#brd-crumbs-top"><span>'.$lang_profile['Section about'].'</span></a></li>';
-	$forum_page['main_menu']['identity'] = '<li'.(($section == 'identity')  ? ' class="active"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'identity')).'#brd-crumbs-top"><span>'.$lang_profile['Section identity'].'</span></a></li>';
-	$forum_page['main_menu']['settings'] = '<li'.(($section == 'settings') ? ' class="active"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'settings')).'#brd-crumbs-top"><span>'.$lang_profile['Section settings'].'</span></a></li>';
+	$forum_page['main_menu']['about'] = '<li class="first-item'.(($section == 'about')  ? ' tab activetab' : '').'"><a href="'.forum_link($forum_url['profile'], array($id, 'about')).'#brd-crumbs-top"><span>'.$lang_profile['Section about'].'</span></a></li>';
+	$forum_page['main_menu']['identity'] = '<li'.(($section == 'identity')  ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'identity')).'#brd-crumbs-top"><span>'.$lang_profile['Section identity'].'</span></a></li>';
+	$forum_page['main_menu']['settings'] = '<li'.(($section == 'settings') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'settings')).'#brd-crumbs-top"><span>'.$lang_profile['Section settings'].'</span></a></li>';
 
 	if ($forum_config['o_signatures'])
-		$forum_page['main_menu']['signature'] = '<li'.(($section == 'signature') ? ' class="active"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'signature')).'#brd-crumbs-top"><span>'.$lang_profile['Section signature'].'</span></a></li>';
+		$forum_page['main_menu']['signature'] = '<li'.(($section == 'signature') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'signature')).'#brd-crumbs-top"><span>'.$lang_profile['Section signature'].'</span></a></li>';
 
 	if ($forum_config['o_avatars'])
-		$forum_page['main_menu']['avatar'] = '<li'.(($section == 'avatar') ? ' class="active"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'avatar')).'#brd-crumbs-top"><span>'.$lang_profile['Section avatar'].'</span></a></li>';
+		$forum_page['main_menu']['avatar'] = '<li'.(($section == 'avatar') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'avatar')).'#brd-crumbs-top"><span>'.$lang_profile['Section avatar'].'</span></a></li>';
 
 	if ($forum_user['id'] == $id)
-		$forum_page['main_menu']['pm'] = '<li'.(($section == 'pm') ? ' class="active"' : '').'><a href="'.forum_link($forum_url['pm'], 'inbox').'#brd-crumbs-top"><span>'.$lang_profile['Private messages'].'</span></a></li>';
+		$forum_page['main_menu']['pm'] = '<li'.(($section == 'pm') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['pm'], 'inbox').'#brd-crumbs-top"><span>'.$lang_profile['Private messages'].'</span></a></li>';
 
 	if ($forum_user['g_id'] == FORUM_ADMIN || ($forum_user['g_moderator'] == '1' && $forum_user['g_mod_ban_users'] && !$forum_page['own_profile']))
-		$forum_page['main_menu']['admin'] = '<li'.(($section == 'admin') ? ' class="active"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'admin')).'#brd-crumbs-top"><span>'.$lang_profile['Section admin'].'</span></a></li>';
+		$forum_page['main_menu']['admin'] = '<li'.(($section == 'admin') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'admin')).'#brd-crumbs-top"><span>'.$lang_profile['Section admin'].'</span></a></li>';
 
 	($hook = get_hook('pf_change_details_modify_main_menu')) ? eval($hook) : null;
 	// End navigation menu
@@ -1728,12 +1735,12 @@ else
 
 		if ($user['sex'] == 1)
 		{
-			$sex_pic = ' <img src="'.$base_url.'/style/'.$forum_user['style'].'/images/male.png" width="16" height="16" alt="'.$lang_profile['Male'].'"/>';
-			$sex = $lang_profile['Male'];
-		}
-		else if ($user['sex'] == 2)
-		{
-			$sex_pic = ' <img src="'.$base_url.'/style/'.$forum_user['style'].'/images/female.png" width="16" height="16" alt="'.$lang_profile['Female'].'"/>';
+		$sex_pic = ' <i class="fa fa-mars" ></i>';
+		$sex = $lang_profile['Male'];
+	}
+	else if ($user['sex'] == 2)
+	{
+		$sex_pic = ' <i class="fa fa-venus" ></i>';
 			$sex = $lang_profile['Female'];
 		}
 
@@ -1757,50 +1764,51 @@ else
 		$forum_page['user_info'] = array();
 
 		if ($user['realname'] !='')
-			$forum_page['user_info']['realname'] = '<li><span>'.$lang_profile['Realname'].': <strong class="fn">'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['realname']) : $user['realname']).'</strong></span></li>';
+			$forum_page['user_info']['realname'] = '<dt class="realname">'.$lang_profile['Realname'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['realname']) : $user['realname']).'</dd>';
 
 		if ($user['sex'] != '0')
-			$forum_page['user_info']['sex'] = '<li><span>'.$lang_profile['Sex'].': <strong class="fn">'.$sex.'</strong></span></li>';
+			$forum_page['user_info']['sex'] = '<dt class="sex">'.$lang_profile['Sex'].': </dt><dd>'.$sex.'</dd>';
 
 		if ($user['location'] != '')
-			$forum_page['user_info']['location'] = '<li><span>'.$lang_profile['From'].': <strong> '.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['location']) : $user['location']).'</strong></span></li>';
+			$forum_page['user_info']['location'] = '<dt class="location">'.$lang_profile['From'].': </dt><dd> '.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['location']) : $user['location']).'</dd>';
 
 		if ($user['country'] != '')
-			$forum_page['user_info']['country'] = '<dt><span>'.$lang_profile['Country'].': <strong>'.$lang_country[$user['country']].'</strong> <img src="'.$base_url.'resources/flags/'.$user['country'].'.gif" alt="'.$lang_country[$user['country']].'"/></span></dt>';
-		$forum_page['user_info']['username'] = '<dt class="username'.(($user['realname'] =='') ? ' fn nickname' :  ' nickname').'">'.$lang_profile['Username'].'<dd><strong>'.forum_htmlencode($user['username']).'</strong></dd>'.(($user['sex'] != '0') ? $sex_pic :  '').'</dt>';
+			$forum_page['user_info']['country'] = '<dt class="country">'.$lang_profile['Country'].': </dt><dd>'.$lang_country[$user['country']].' <img style="margin-bottom: -9px; margin-left: 5px; " src="'.$base_url.'/resources/flags/'.$user['country'].'.png" alt="'.$lang_country[$user['country']].'"/></dd>';
+		
+		$forum_page['user_info']['username'] = '<dt class="username'.(($user['realname'] =='') ? ' fn nickname' :  ' nickname').'">'.$lang_profile['Username'].'</dt><dd>'.forum_htmlencode($user['username']).(($user['sex'] != '0') ? $sex_pic :  '').'</dd>';
 
-		$forum_page['user_info']['usertitle'] = '<dt class="usertitle">'.$lang_profile['Title'].'<dd><span>'.get_title($user).'</span></dd></dt>';
-		$forum_page['user_info']['registered'] = '<dt class="registered"><span>'.$lang_profile['Registered'].': <dd><strong> '.format_time($user['registered'], 1).'</strong></span></dd></dt>';
-		$forum_page['user_info']['lastpost'] = '<dt class="lastpost"><span>'.$lang_profile['Last post'].': <dd><strong> '.format_time($user['last_post']).'</strong></span></dd></dt>';
-		$forum_page['user_info']['lastvisit'] = '<dt class="lastvisit"><span>'.$lang_profile['Last visit'].': <dd><strong> '.format_time($user['last_visit']).'</strong></span></dd></dt>';
+		$forum_page['user_info']['usertitle'] = '<dt class="usertitle">'.$lang_profile['Title'].'</dt><dd>'.get_title($user).'</dd>';
+		$forum_page['user_info']['registered'] = '<dt class="registered">'.$lang_profile['Registered'].': </dt><dd> '.format_time($user['registered'], 1).'</dd>';
+		$forum_page['user_info']['lastpost'] = '<dt class="lastpost">'.$lang_profile['Last post'].': </dt><dd> '.format_time($user['last_post']).'</dd>';
+		$forum_page['user_info']['lastvisit'] = '<dt class="lastvisit">'.$lang_profile['Last visit'].': </dt><dd> '.format_time($user['last_visit']).'</dd>';
 
 		$num_posts_day = $user['num_posts'] > 0 ? substr($user['num_posts']/(floor((time()-$user['registered'])/84600) + (((time()-$user['registered'])%84600)?1:0)), 0, 5) : 0;
 
  		if ($forum_config['o_show_post_count'] || $forum_user['is_admmod'])
-			$forum_page['user_info']['posts'] = '<dt class="userposts"><span>'.$lang_profile['Posts'].': <strong><br><dd>'.forum_number_format($user['num_posts']).'</strong> <strong>'.($user['num_posts'] > 0 ? sprintf($lang_profile['Posts in day'], $num_posts_day) : '').'</strong></span></dd></dt>';
+			$forum_page['user_info']['posts'] = '<dt class="userposts">'.$lang_profile['Posts'].': </dt><dd>'.forum_number_format($user['num_posts']) . ($user['num_posts'] > 0 ? sprintf($lang_profile['Posts in day'], $num_posts_day) : '').'</dd>';
 		else
-			$forum_page['user_private']['posts'] = '<dt class="userprivateposts"><span>'.$lang_profile['Posts'].': <strong><br><dd>'.forum_number_format($user['num_posts']).'</strong> <strong>'.($user['num_posts'] > 0 ? sprintf($lang_profile['Posts in day'], $num_posts_day) : '').'</strong></span></dd></dt>';
+			$forum_page['user_private']['posts'] = '<dt class="userprivateposts">'.$lang_profile['Posts'].': </dt><dd>'.forum_number_format($user['num_posts']) . ($user['num_posts'] > 0 ? sprintf($lang_profile['Posts in day'], $num_posts_day) : '').'</dd>';
 
 
 
 		if ($forum_user['is_admmod'] && $user['admin_note'] != '')
-			$forum_page['user_private']['note'] = '<li><span>'.$lang_profile['Note'].': <strong>'.forum_htmlencode($user['admin_note']).'</strong></span></li>';
+			$forum_page['user_private']['note'] = '<dt class="note">'.$lang_profile['Note'].': </dt><dd>'.forum_htmlencode($user['admin_note']).'</dd>';
 
 		// Setup user address
 		$forum_page['user_contact'] = array();
 
 		if (($user['email_setting'] == '0' && !$forum_user['is_guest']) && $forum_user['g_send_email'])
-			$forum_page['user_contact']['email'] = '<dt><span>'.$lang_profile['E-mail'].': <a href="mailto:'.forum_htmlencode($user['email']).'" class="email">'.forum_htmlencode(($forum_config['o_censoring'] ? censor_words($user['email']) : $user['email'])).'</a></span></dt>';
+			$forum_page['user_contact']['email'] = '<dt class="email">'.$lang_profile['E-mail'].': </dt><dd><a href="mailto:'.forum_htmlencode($user['email']).'" class="email">'.forum_htmlencode(($forum_config['o_censoring'] ? censor_words($user['email']) : $user['email'])).'</a></dd>';
 		else if ($forum_page['own_profile'] || $forum_user['is_admmod'])
-				$forum_page['user_private']['email'] = '<li><span class="prof email">'.$lang_profile['E-mail'].': <a href="mailto:'.forum_htmlencode($user['email']).'" class="email-i">'.forum_htmlencode(($forum_config['o_censoring'] ? censor_words($user['email']) : $user['email'])).'</a></span></li>';
+				$forum_page['user_private']['email'] = '<dt class="email">'.$lang_profile['E-mail'].': </dt><dd><a href="mailto:'.forum_htmlencode($user['email']).'" class="email-i">'.forum_htmlencode(($forum_config['o_censoring'] ? censor_words($user['email']) : $user['email'])).'</a></dd>';
 
 		if ($user['email_setting'] != '2')
-			$forum_page['user_contact']['forum-mail'] = '<li><span class="prof email">'.$lang_profile['E-mail'].': <a href="'.forum_link($forum_url['email'], $id).'">'.$lang_profile['Send forum e-mail'].'</a></span></li>';
+			$forum_page['user_contact']['forum-mail'] = '<dt class="forum-mail">'.$lang_profile['E-mail'].': </dt><dd><a href="'.forum_link($forum_url['email'], $id).'">'.$lang_profile['Send forum e-mail'].'</a></dd>';
 		else if ($forum_user['id'] == $id || ($forum_user['is_admmod'] && $user['email_setting'] == '2'))
-			$forum_page['user_private']['forum-mail'] = '<li><span class="prof email">'.$lang_profile['E-mail'].': <a href="'.forum_link($forum_url['email'], $id).'">'.$lang_profile['Send forum e-mail'].'</a></span></li>';
+			$forum_page['user_private']['forum-mail'] = '<dt class="forum-mail">'.$lang_profile['E-mail'].': </dt><dd><a href="'.forum_link($forum_url['email'], $id).'">'.$lang_profile['Send forum e-mail'].'</a></dd>';
 
 		if (!$forum_user['is_guest'] && $forum_user['id'] != $user['id'])
-			$forum_page['user_contact']['pm']= '<li><span class="prof pm"><a class="contact" href="'.forum_link($forum_url['pm_post'], $id).'">'.$lang_profile['Send PM'].'</a></span></li>';
+			$forum_page['user_contact']['pm']= '<dt class="pm">'.$lang_profile['Send PM'].'</dt><dd><a class="contact" href="'.forum_link($forum_url['pm_post'], $id).'"></a></dd>';
 
 		if ($user['url'] != '')
 		{
@@ -1809,45 +1817,45 @@ else
 			if ($forum_config['o_censoring'])
 				$user['url'] = censor_words($user['url']);
 
-			$forum_page['url'] = '<a href="'.forum_link('click.php').'?'.$user['url'].'" class="external url" rel="me" onclick="window.open(this.href); return false">'.$user['url'].'</a>';
-			$forum_page['user_contact']['website'] = '<li><span class="prof website">'.$lang_profile['Website'].': '.$forum_page['url'].'</span></li>';
+			$forum_page['url'] = '<a href="'.forum_link('click.php').'?'.$user['url'].'" class="external url" rel="me" onclick="window.open(this.href); return false">'.$user['url'].'</a></dd>';
+			$forum_page['user_contact']['website'] = '<dt class="website">'.$lang_profile['Website'].': </dt><dd>'.$forum_page['url'].'</dd>';
 		}
 
 		if ($forum_user['is_admmod'])
-			$forum_page['user_private']['ip']= '<li><span class="prof ip">'.$lang_profile['IP'].': <a href="'.forum_link($forum_url['get_host'], forum_htmlencode($user['registration_ip'])).'">'.forum_htmlencode($user['registration_ip']).'</a> <a href="'.forum_link('click.php').'?http://www.ripe.net/whois?form_type=simple&amp;full_query_string=&amp;searchtext='.forum_htmlencode($user['registration_ip']).'&amp;do_search=Search" onclick="window.open(this.href); return false">Whois</a></span></li>';
+			$forum_page['user_private']['ip']= '<dt class="ip">'.$lang_profile['IP'].': </dt><dd><a href="'.forum_link($forum_url['get_host'], forum_htmlencode($user['registration_ip'])).'">'.forum_htmlencode($user['registration_ip']).'</a> <a href="'.forum_link('click.php').'?http://www.ripe.net/whois?form_type=simple&amp;full_query_string=&amp;searchtext='.forum_htmlencode($user['registration_ip']).'&amp;do_search=Search" onclick="window.open(this.href); return false">Whois</a></dd>';
 
 		// Setup user messaging
 		if ($user['jabber'] != '')
-			$forum_page['user_contact']['jabber'] = '<li><span class="prof jabber">'.$lang_profile['Jabber'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['jabber']) : $user['jabber']).'</strong></span></li>';
+			$forum_page['user_contact']['jabber'] = '<dt class="jabber">'.$lang_profile['Jabber'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['jabber']) : $user['jabber']).'</dd>';
 		if ($user['icq'] != '')
-			$forum_page['user_contact']['icq'] = '<li><span class="prof icq">'.$lang_profile['ICQ'].': <strong><a href="'.forum_link('click.php').'?http://icq.com/people/'.forum_htmlencode($user['icq']).'" class="external url" rel="me" onclick="window.open(this.href); return false">'.forum_htmlencode($user['icq']).'</a></strong></span></li>';
+			$forum_page['user_contact']['icq'] = '<dt class="icq">'.$lang_profile['ICQ'].': </dt><dd><a href="'.forum_link('click.php').'?http://icq.com/people/'.forum_htmlencode($user['icq']).'" class="external url" rel="me" onclick="window.open(this.href); return false">'.forum_htmlencode($user['icq']).'</a></dd>';
 		if ($user['msn'] != '')
-			$forum_page['user_contact']['msn'] = '<li><span class="prof msn">'.$lang_profile['MSN'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['msn']) : $user['msn']).'</strong></span></li>';
+			$forum_page['user_contact']['msn'] = '<dt class="msn">'.$lang_profile['MSN'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['msn']) : $user['msn']).'</dd>';
 		if ($user['aim'] != '')
-			$forum_page['user_contact']['aim'] = '<li><span class="prof aim">'.$lang_profile['AOL IM'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['aim']) : $user['aim']).'</strong></span></li>';
+			$forum_page['user_contact']['aim'] = '<dt class="aim">'.$lang_profile['AOL IM'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['aim']) : $user['aim']).'</dd>';
 		if ($user['yahoo'] != '')
-			$forum_page['user_contact']['yahoo'] = '<li><span class="prof yahoo">'.$lang_profile['Yahoo'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['yahoo']) : $user['yahoo']).'</strong></span></li>';
+			$forum_page['user_contact']['yahoo'] = '<dt class="yahoo">'.$lang_profile['Yahoo'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['yahoo']) : $user['yahoo']).'</dd>';
 		if ($user['skype'] != '')
-			$forum_page['user_contact']['skype'] = '<li><span class="prof skype">'.$lang_profile['Skype'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['skype']) : $user['skype']).'</strong></span></li>';
+			$forum_page['user_contact']['skype'] = '<dt class="skype">'.$lang_profile['Skype'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['skype']) : $user['skype']).'</dd>';
 		if ($user['magent'] != '')
-			$forum_page['user_contact']['magent'] = '<li><span class="prof magent">'.$lang_profile['Mail Agent'].': <strong>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['magent']) : $user['magent']).'</strong></span></li>';
+			$forum_page['user_contact']['magent'] = '<dt class="magent">'.$lang_profile['Mail Agent'].': </dt><dd>'.forum_htmlencode(($forum_config['o_censoring']) ? censor_words($user['magent']) : $user['magent']).'</dd>';
 		if ($user['vkontakte'] != '')
-			$forum_page['user_contact']['vkontakte'] = '<li><span class="prof vkontakte"><a href="'.forum_link('click.php').'?http://vkontakte.ru/'.forum_htmlencode($user['vkontakte']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Vkontakte'].'</a></span></li>';
+			$forum_page['user_contact']['vkontakte'] = '<dt class="vkontakte">'.$lang_profile['Vkontakte'].'</dt><dd><a href="'.forum_link('click.php').'?http://vkontakte.ru/'.forum_htmlencode($user['vkontakte']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
 		if ($user['classmates'] != '')
-			$forum_page['user_contact']['classmates'] = '<li><span class="prof classmates"><a href="'.forum_link('click.php').'?'.forum_htmlencode($user['classmates']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Сlassmates'].'</a></span></li>';
+			$forum_page['user_contact']['classmates'] = '<dt class="classmates">'.$lang_profile['Сlassmates'].'</dt><dd><a href="'.forum_link('click.php').'?'.forum_htmlencode($user['classmates']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
 		if ($user['mirtesen'] != '')
-			$forum_page['user_contact']['mirtesen'] = '<li><span class="prof mirtesen"><a href="'.forum_link('click.php').'?http://mirtesen.ru/people/'.forum_htmlencode($user['mirtesen']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Mirtesen'].'</a></span></li>';
+			$forum_page['user_contact']['mirtesen'] = '<dt class="mirtesen">'.$lang_profile['Mirtesen'].'</dt><dd><a href="'.forum_link('click.php').'?http://mirtesen.ru/people/'.forum_htmlencode($user['mirtesen']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
 		if ($user['moikrug'] != '')
-			$forum_page['user_contact']['moikrug'] = '<li><span class="prof moikrug"><a href="'.forum_link('click.php').'?http://'.forum_htmlencode($user['moikrug']).'.moikrug.ru/" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Moikrug'].'</a></span></li>';
+			$forum_page['user_contact']['moikrug'] = '<dt class="moikrug">'.$lang_profile['Moikrug'].'</dt><dd><a href="'.forum_link('click.php').'?http://'.forum_htmlencode($user['moikrug']).'.moikrug.ru/" onclick="window.open(this.href); return false" rel="nofollow"></a></span></dd></dt>';
 		if ($user['facebook'] != '')
 		{
 			$facebook_url = preg_match('([0-9])', $user['facebook'], $matches) ? 'profile.php?id=' : '';
-			$forum_page['user_contact']['facebook'] = '<li><span class="prof facebook"><a href="'.forum_link('click.php').'?http://facebook.com/'.$facebook_url.forum_htmlencode($user['facebook']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Facebook'].'</a></span></li>';
+			$forum_page['user_contact']['facebook'] = '<dt class="facebook">'.$lang_profile['Facebook'].'</dt><dd><a href="'.forum_link('click.php').'?http://facebook.com/'.$facebook_url.forum_htmlencode($user['facebook']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
 		}
 		if ($user['twitter'] != '')
-			$forum_page['user_contact']['twitter'] = '<li><span class="prof twitter"><a href="'.forum_link('click.php').'?http://twitter.com/'.forum_htmlencode($user['twitter']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Twitter'].'</a></span></li>';
+			$forum_page['user_contact']['twitter'] = '<dt class="twitter">'.$lang_profile['Twitter'].'</dt><dd><a href="'.forum_link('click.php').'?http://twitter.com/'.forum_htmlencode($user['twitter']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
 		if ($user['lastfm'] != '')
-			$forum_page['user_contact']['lastfm'] = '<li><span class="prof lastfm"><a href="'.forum_link('click.php').'?http://last.fm/user/'.forum_htmlencode($user['lastfm']).'" onclick="window.open(this.href); return false" rel="nofollow">'.$lang_profile['Last.fm'].'</a></span></li>';
+			$forum_page['user_contact']['lastfm'] = '<dt class="lastfm">'.$lang_profile['Last.fm'].'</dt><dd><a href="'.forum_link('click.php').'?http://last.fm/user/'.forum_htmlencode($user['lastfm']).'" onclick="window.open(this.href); return false" rel="nofollow"></a></dd>';
 
 		// Setup signature demo
 		if ($forum_config['o_signatures'] && isset($parsed_signature))
@@ -1887,19 +1895,17 @@ else
 
 ?>
 
-	<div class="panel bg1 online inner">
-		<p class="content-options options"><?php echo implode(' ', $forum_page['user_options']) ?></p>
+	<div class="panel bg1 online ">
+		<div class="inner">
+			<p class="content-options options"><?php echo implode(' ', $forum_page['user_options']) ?></p>
 <?php ($hook = get_hook('pf_change_details_about_pre_user_info')) ? eval($hook) : null; ?>
-		<div class="profile ct-group data-group vcard">
 <?php ($hook = get_hook('pf_change_details_about_pre_user_ident_info')) ? eval($hook) : null; ?>
-			<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-			<dl class="left-box">
-				<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_ident']) ?>
-			</dl>
-			<dl class="left-box details profile-details">
-				<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_info'])."\n" ?>
-			</dl>
-			</div>
+				<dl class="left-box <?php echo ++$forum_page['item_count'] ?>">
+					<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_ident']) ?>
+				</dl>
+				<dl class="left-box details profile-details">
+					<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_info'])."\n" ?>
+				</dl>
 		</div>
 	</div>
 	<div class="panel bg2">
@@ -1907,40 +1913,34 @@ else
 			<div class="column1">
 				<?php ($hook = get_hook('pf_change_details_about_pre_user_contact_info')) ? eval($hook) : null; ?>
 				<?php if (!empty($forum_page['user_contact'])): ?>
-					<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-								<div class="ct-box data-box">
-									<h3 class="ct-legend hn"><span><?php echo $lang_profile['Contact info'] ?></span></h3>
-									<ul class="data-box">
-										<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_contact'])."\n" ?>
-									</ul>
-								</div>
-							</div>
+				<div class=" set<?php echo ++$forum_page['item_count'] ?>">
+					<h3><?php echo $lang_profile['Contact info'] ?></h3>
+					<dl class="details">
+						<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_contact'])."\n" ?>
+					</dl>
+				</div>
+			</div>
+			<div class="column2">
 				<?php endif; ($hook = get_hook('pf_change_details_about_pre_user_activity_info')) ? eval($hook) : null; ?>
 				<?php if (!empty($forum_page['user_activity'])): ?>
-					<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-								<div class="ct-box data-box">
-									<h4 class="ct-legend hn"><span><?php echo $lang_profile['Posts and topics'] ?></span></h4>
-									<p class="options"><?php echo implode(' ', $forum_page['user_activity']) ?></p>
-								</div>
+					<div class="column1 set<?php echo ++$forum_page['item_count'] ?>">
+									<h3><?php echo $lang_profile['Posts and topics'] ?></h3>
+									<?php echo implode(' ', $forum_page['user_activity']) ?>
 							</div>
 				<?php endif; ($hook = get_hook('pf_change_details_about_pre_user_sig_info')) ? eval($hook) : null; ?>
 				<?php if (isset($forum_page['sig_demo'])): ?>
-					<div class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-								<div class="ct-box data-box">
-									<h4 class="ct-legend hn"><span><?php echo $lang_profile['Current signature'] ?></span></h4>
+							<div class="column1 set<?php echo ++$forum_page['item_count'] ?>">
+									<h3><?php echo $lang_profile['Current signature'] ?></h3>
 									<div class="sig-demo"><?php echo $forum_page['sig_demo'] ?></div>
-								</div>
 							</div>
 				<?php endif; ?>
 				<?php ($hook = get_hook('pf_change_details_about_pre_user_private_info')) ? eval($hook) : null; ?>
 				<?php if (!empty($forum_page['user_private'])): ?>
-						<div id="private-profile" class="ct-set data-set set<?php echo ++$forum_page['item_count'] ?>">
-								<div class="ct-box data-box">
-									<h3 class="ct-legend hn"><span><?php echo $lang_profile['Private info'] ?></span></h3>
-									<ul class="data-list">
+						<div class="column2 set<?php echo ++$forum_page['item_count'] ?>">
+									<h3 ><?php echo $lang_profile['Private info'] ?></h3>
+									<dl class="details">
 										<?php echo implode("\n\t\t\t\t\t\t", $forum_page['user_private'])."\n" ?>
-									</ul>
-								</div>
+									</dl>
 							</div>
 			</div>
 <?php endif; ?>

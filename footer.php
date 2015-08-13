@@ -20,13 +20,7 @@ ob_start();
 $forum_page['copyright'] = sprintf($lang_common['Powered by'], '<a href="http://flazy.us/">Flazy Forum Software ©</a>'.($forum_config['o_show_version'] ? ' '.$forum_config['o_cur_version'] : ''));
 
 ($hook = get_hook('ft_about_pre_copyright')) ? eval($hook) : null;
-
-?>
-					
-						<?php echo $forum_page['copyright']; ?>
-							
-<?php
-
+	echo $forum_page['copyright'];
 ($hook = get_hook('ft_about_pre_quickjump')) ? eval($hook) : null;
 
 // Display the "Jump to" drop list

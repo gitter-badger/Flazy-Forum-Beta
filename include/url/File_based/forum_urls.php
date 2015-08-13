@@ -85,6 +85,5 @@ $forum_url = array(
 'moderate_topic'		=>	'moderate$1-$2.html',
 'reputation'			=>	'user$1-$2.html',
 'reputation_change'		=>	'user$1-post$2-$3.html',
-);
 
-?>
+);

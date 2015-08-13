@@ -377,7 +377,7 @@ $main_elements['<forum_main_pagepost_top>'] = (!empty($forum_page['page_post']))
 $main_elements['<forum_main_pagepost_end>'] = (!empty($forum_page['page_post'])) ? "\n\t" . implode("\n\t", $forum_page['page_post']) . "\n" : '';
 
 // Main section menu e.g. profile menu
-$main_elements['<forum_main_menu>'] = (!empty($forum_page['main_menu'])) ? '<div class="main-menu gen-content">' . "\n\t" . '<ul>' . "\n\t\t" . implode("\n\t\t", $forum_page['main_menu']) . "\n\t" . '</ul>' . "\n" . '</div>' : '';
+$main_elements['<forum_main_menu>'] = (!empty($forum_page['main_menu'])) ?  implode("\n\t\t", $forum_page['main_menu']) . "\n\t"  : '';
 
 // Main section menu e.g. profile menu
 if (substr(FORUM_PAGE, 0, 5) == 'admin' && FORUM_PAGE_TYPE != 'paged') {

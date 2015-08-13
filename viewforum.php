@@ -154,7 +154,9 @@ $forum_page['page_post']['paging'] = '<div class="pagination"><span>'.$lang_comm
 if ($forum_user['may_post'])
 	$forum_page['page_post']['posting'] = '<div class="buttons"><a class="button font-icon"  href="'.forum_link($forum_url['new_topic'], $id).'"><i class="fa fa-pencil"></i>'.$lang_forum['Post topic'].'</a></div>';
 else if ($forum_user['is_guest'])
-	$forum_page['page_post']['posting'] = '<p class="posting">'.sprintf($lang_forum['Login to post'], '<a href="'.forum_link($forum_url['login']).'">'.$lang_common['login'].'</a>', '<a href="'.forum_link($forum_url['register']).'">'.$lang_common['register'].'</a>').'</p>';
+	$forum_page['page_post']['posting'] = '<div class="stat-block online-list"><p>'.sprintf($lang_forum['Login to post'],
+	'<a href="'.forum_link($forum_url['login']).'">'.$lang_common['login'].'</a>',
+	'<a href="'.forum_link($forum_url['register']).'">'.$lang_common['register'].'</a>').'</p></div>';
 else
 	$forum_page['page_post']['posting'] = '<p class="posting">'.$lang_forum['No permission'].'</p>';
 
@@ -395,7 +397,7 @@ else
 	($hook = get_hook('vf_no_results_row_pre_display')) ? eval($hook) : null;
 
 ?>
-	
+
 	<div class="forumbg">
 		<div class="inner">
 			<ul class="topiclist">
@@ -407,10 +409,10 @@ else
 							</div>
 						</dt>
 					</dl>
-					
+
 				</li>
 			</ul>
-			
+
 			<ul class="topiclist topics">
 				<li class="row bg2">
 					<dl>

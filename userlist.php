@@ -109,8 +109,8 @@ $forum_page['form_action'] = $base_url.'/userlist.php';
 
 // Setup breadcrumbs
 $forum_page['crumbs'] = array(
-	array($forum_config['o_board_title'], forum_link($forum_url['index'])), 
-	array($lang_common['User list'], forum_link($forum_url['users'])) 
+	array($forum_config['o_board_title'], forum_link($forum_url['index'])),
+	array($lang_common['User list'], forum_link($forum_url['users']))
 );
 
 $forum_page['frm-info'] = array(
@@ -142,28 +142,28 @@ ob_start();
 		</div>
 		<div class="action-bar top">
 			<div class="member-search panel">
-				
+
 		<div class="search-box">
 		<form id="forum-search" method="get" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>">
 
 <?php ($hook = get_hook('ul_search_fieldset_start')) ? eval($hook) : null; ?>
 			<fieldset>
 <?php ($hook = get_hook('ul_pre_username')) ? eval($hook) : null; if ($forum_user['g_search_users']): ?>
-					
-						
+
+
 	<input  class="inputbox search" type="search" id="search<?php echo $forum_page['fld_count'] ?>" name="username" value="<?php echo forum_htmlencode($forum_page['username']) ?>" size="35" maxlength="25" />
 	<button class="button" type="submit" name="search" value="<?php echo $lang_ul['Submit user search'] ?>" >
 		<i class="fa fa-search"></i>
 	</button>
-				
-					
+
+
 <?php endif; ?>
 
 			</fieldset>
 <?php ($hook = get_hook('ul_search_fieldset_end')) ? eval($hook) : null; ?>
-			
+
 		</form>
-		</div></div>	
+		</div></div>
 	</div>
 <?php
 
@@ -265,10 +265,10 @@ else
 							</div>
 						</dt>
 					</dl>
-					
+
 				</li>
 			</ul>
-			
+
 			<ul class="topiclist topics">
 				<li class="row bg2">
 					<dl>
@@ -289,7 +289,7 @@ else
 ?>
 	</div>
 </div>
-	
+
 <?php
 
 ($hook = get_hook('ul_end')) ? eval($hook) : null;

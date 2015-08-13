@@ -7,7 +7,7 @@
 /** Pack. is used in userlist.php */
 $lang_ul = array(
 
-'Users'					=>	'Members',
+'Users'					=>	'Members ',
 'Users found'			=>	'Users found matching your criteria',
 'No users found'		=>	'No users were found matching your criteria',
 'User search head'		=>	'Search for users by username or by predefined criteria',

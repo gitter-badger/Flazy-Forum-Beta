@@ -35,8 +35,8 @@ $rewrite_rules = array(
 '/^user[\/_-]?([0-9]+)[\/_-]?(reputation|positive)(\.html?|\/)?$/i'		=> 'reputation.php?section=$2&id=$1',
 '/^user[\/_-]?([0-9]+)[\/_-]?(reputation|positive)[\/_-]p(age)?[\/_-]?([0-9]+)(\.html?|\/)?$/i'		=> 'reputation.php?section=$2&id=$1&p=$3',
 '/^user[\/_-]?([0-9]+)[\/_-]post[\/_-]?([0-9]+)[\/_-](positive|negative)(\.html?|\/)?$/i'		=> 'reputation.php?id=$1&pid=$2&method=$3',
-'/^user[\/_-]?([0-9]+)(\.html?|\/)?$/i'		=> 'profile.php?id=$1',
-'/^user[\/_-]?([0-9]+)[\/_-]?([a-z]+)(\.html?|\/)?$/i'		=> 'profile.php?section=$2&id=$1',
+'/^profile[\/_-]?([0-9]+)(\.html?|\/)?$/i'		=> 'profile.php?id=$1',
+'/^profile[\/_-]?([0-9]+)[\/_-]?([a-z]+)(\.html?|\/)?$/i'		=> 'profile.php?section=$2&id=$1',
 
 '/^pm[\/_-]?([a-z]+)(\.html?|\/)?$/i'	=> 'pm.php?section=$1',
 '/^pm[\/_-]?([a-z]+)[\/_-]?(p|page\/)([0-9]+)(\.html?|\/)?$/i'	=> 'pm.php?section=$1&p=$2',

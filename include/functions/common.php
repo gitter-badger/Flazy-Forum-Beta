@@ -422,18 +422,10 @@ function generate_navlinks_admins()
 	$return = ($hook = get_hook('fn_generate_navlinks_start')) ? eval($hook) : null;
 	if ($return != null)
 		return $return;
-	// Index should always be displayed
-	$links['index'] = '<li id="navindex" class="nav'.((FORUM_PAGE == 'index') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['index']).'"><span>'.$lang_common['Index'].'</span></a></li>';
-	if ($forum_user['g_read_board'] && $forum_user['g_view_users'])
-		$links['userlist'] = '<li id="navuserlist" class="nav'.((FORUM_PAGE == 'userlist') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['users']).'"><span>'.$lang_common['User list'].'</span></a></li>';
-	if ($forum_config['o_rules'] && (!$forum_user['is_guest'] || $forum_user['g_read_board'] || $forum_config['o_regs_allow']))
-		$links['rules'] = '<li id="navrules" class="nav'.((FORUM_PAGE == 'rules') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['rules']).'"><span>'.$lang_common['Rules'].'</span></a></li>';
 	if ($forum_user['is_guest'])
 	{
 		if ($forum_user['g_read_board'] && $forum_user['g_search'])
-			$links['search'] = '<li id="navsearch" class="nav'.((FORUM_PAGE == 'search') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['search']).'"><span>'.$lang_common['Search'].'</span></a></li>';
-		$links['register'] = '<li id="navregister" class="nav'.((FORUM_PAGE == 'register') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['register']).'"><span>'.$lang_common['Register'].'</span></a></li>';
-		$links['login'] = '<li id="navlogin" class="nav'.((FORUM_PAGE == 'login') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['login']).'"><span>'.$lang_common['Login'].'</span></a></li>';
+		echo "No permissions";
 	}
 	else
 	{
@@ -453,7 +445,6 @@ function generate_navlinks_admins()
 			if ($forum_config['o_pm_show_global_link'])
 				$links['pm'] = '<li id="navpm" class="nav'.((FORUM_PAGE == 'profile-pm') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['pm'], 'inbox').'"><span>'.$lang_common['Private messages'].'</span></a></li>';
 			$links['logout'] = '<li id="navlogout" class="nav"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'"><span>'.$lang_common['Logout'].'</span></a></li>';
-			$links['admin'] = '<li id="navadmin" class="nav'.((substr(FORUM_PAGE, 0, 5) == 'admin') ? ' isactive' : '').'"><a href="'.forum_link('admin/admin.php').'"><span>'.$lang_common['Admin'].'</span></a></li>';
 		}
 	}
 	// Are there any additional navlinks we should insert into the array before imploding it?
@@ -484,7 +475,7 @@ if ($forum_user['is_guest'])
 		$links['login'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['login']).'" accesskey="x" role="menuitem"><i class="fa fa-sign-in"></i>'.$lang_common['Login'].'</a></li>';
 	}
 	else
-	
+
 		if (!$forum_user['is_admmod'])
 		{
 			if ($forum_user['g_read_board'] && $forum_user['g_search'])
@@ -507,7 +498,7 @@ if ($forum_user['is_guest'])
 			$links['logout'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'" accesskey="x" role="menuitem"><i class="fa fa-sign-out"></i>'.$lang_common['Logout'].'</a></li>';
 			$links['admin'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link('admin/admin.php').'" accesskey="x" role="menuitem"><i class="fa fa-lock"></i>'.$lang_common['Admin'].'</a></li>';
 		}
-	
+
 
 		($hook = get_hook('fn_generate_navlinks_end')) ? eval($hook) : null;
 
@@ -533,7 +524,7 @@ function generate_navlinks()
 	if ($forum_config['o_rules'] && (!$forum_user['is_guest'] || $forum_user['g_read_board'] || $forum_config['o_regs_allow']))
 		$links['rules'] = '<li data-skip-responsive="true" class="site-menu font-icon"><a href="'.forum_link($forum_url['rules']).'"><i class="fa fa-book"></i>'.$lang_common['Rules'].'</a></li>';
 
-	
+
 
 	// Are there any additional navlinks we should insert into the array before imploding it?
 	if ($forum_config['o_additional_navlinks'] != '' && preg_match_all('#([0-9]+)\s*=\s*(.*?)\n#s', $forum_config['o_additional_navlinks']."\n", $extra_links))
@@ -1067,7 +1058,7 @@ function validate_search_word($word)
 {
 	global $forum_user;
 	static $stopwords;
-	
+
 	$return = ($hook = get_hook('fn_validate_search_word_start')) ? eval($hook) : null;
 	if ($return != null)
 		return $return;
@@ -1278,7 +1269,7 @@ function cookie_login(&$forum_user)
 		$security = false;
 		if ($forum_user['security_ip'] && substr(get_remote_address(), 0, strlen($forum_user['security_ip'])) != $forum_user['security_ip'])
 			$security = true;
-		
+
 		// We now validate the cookie hash
 		if ($cookie['expire_hash'] !== sha1($forum_user['salt'].$forum_user['password'].forum_hash(intval($cookie['expiration_time']), $forum_user['salt'])) || $user_agent || $security)
 			set_default_user();
@@ -1446,13 +1437,13 @@ function set_default_user()
 				'VALUES'	=> '1, \''.$forum_db->escape($remote_addr).'\', '.$forum_user['logged'].', \''.$forum_user['csrf_token'].'\'',
 				'UNIQUE'	=> 'user_id=1 AND ident=\''.$forum_db->escape($remote_addr).'\''
 			);
-	
+
 			if ($forum_user['prev_url'] != null)
 			{
 				$query['REPLACE'] .= ', prev_url';
 				$query['VALUES'] .= ', \''.$forum_db->escape($forum_user['prev_url']).'\'';
 			}
-	
+
 			($hook = get_hook('fn_set_default_user_qr_add_online_guest_user')) ? eval($hook) : null;
 			$forum_db->query_build($query) or error(__FILE__, __LINE__);
 		}
@@ -1463,11 +1454,11 @@ function set_default_user()
 				'SET'		=> 'logged='.time(),
 				'WHERE'		=> 'ident=\''.$forum_db->escape($remote_addr).'\''
 			);
-	
+
 			$current_url = get_current_url(255);
 			if ($current_url != null)
 				$query['SET'] .= ', prev_url=\''.$forum_db->escape($current_url).'\'';
-	
+
 			($hook = get_hook('fn_set_default_user_qr_update_online_guest_user')) ? eval($hook) : null;
 			$forum_db->query_build($query) or error(__FILE__, __LINE__);
 		}
@@ -1717,7 +1708,7 @@ function forum_online()
 	if ($cur_page == 'viewforum.php' || $cur_page == 'viewtopic.php' || $cur_page == 'profile.php' || $cur_page == 'post.php' || $cur_page == 'edit.php' || $cur_page == 'reputation.php')
 	{
 		if (isset($_GET['id']))
-			$cur_page_id = intval($_GET['id']); 
+			$cur_page_id = intval($_GET['id']);
 		else if (isset($_GET['pid']))
 		{
 			$query = array(
@@ -2196,11 +2187,11 @@ function redirect($destination_url, $message)
 	ob_start();
 
 ?>
-<div id="brd-main" class="main basic">
+<div class="chunk">
 	<div class="main-head">
 		<h1 class="hn"><span><?php echo $message ?></span></h1>
 	</div>
-	<div class="main-content main-message">
+	<div class="alert alert-info">
 		<p><?php printf($lang_common['Forwarding info'], $forum_config['o_redirect_delay'], intval($forum_config['o_redirect_delay']) == 1 ? $lang_common['second'] : $lang_common['seconds']) ?><span> <a href="<?php echo $destination_url ?>"><?php echo $lang_common['Click redirect'] ?></a></span></p>
 	</div>
 
@@ -2340,7 +2331,7 @@ a {
 			if (isset($file) && isset($line))
 				echo '<p><strong>flazy:~$</strong><span> &#8594; Info:</span> Error on line  '.$line.' in <em>'.$file.'</em></p>'."\n";
 
-			$db_error = isset($GLOBALS['forum_db']) ?  $GLOBALS['forum_db']->error() : array(); 
+			$db_error = isset($GLOBALS['forum_db']) ?  $GLOBALS['forum_db']->error() : array();
 			if (!empty($db_error['error_msg']))
 			{
 				echo '<p><strong>flazy:~$</strong><span> &#8594; База данных сообщила:</span> '.forum_htmlencode($db_error['error_msg']).(($db_error['error_no']) ? ' (Errno: '.$db_error['error_no'].')' : '').'.</p>'."\n";

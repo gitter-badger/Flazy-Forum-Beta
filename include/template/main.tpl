@@ -59,14 +59,18 @@
 		<ul id="breadcrumbs" role="menubar">
 			<li class="breadcrumbs rightside">
 				<forum_crumbs_top>
+				
 			</li>
 		</ul>
+		<ul id="subhead-tabs">
+			<forum_main_menu>
+		<ul>
 	</div>
 </div>
 
 <div id="wrap-body">
 	<div class="chunk">
-		<forum_main_menu>
+		
 		<div class="action-bar top">
 			<forum_main_pagepost_top>
 		</div>		

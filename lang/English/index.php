@@ -4,7 +4,7 @@
 $lang_index = array(
 
 'Moderated by'				=>  'Moderated by %s',
-'Link to'					=>	'Link to %s',	// As in "Link to http://punbb.informer.com/"
+'Link to'					=>	'Link to %s',
 'Category subtitle'			=>	'%1$s in this category with details of %2$s',
 'Forums'					=>	'Forums',
 'Topics'					=>	'Topics',
@@ -18,7 +18,7 @@ $lang_index = array(
 'No topic info'				=>	'No topic information',
 'No post info'				=>	'No post information',
 'No lastpost info'			=>	'No last post information',
-'Forum is empty'			=>	'This forum is empty',
+'Forum is empty'			=>	'This forum is empty. ',
 'First post nag'			=>	'Be the first to post',
 'Last poster'				=>	'by %s',
 'Empty board'				=>	'Board is empty',
@@ -29,10 +29,10 @@ $lang_index = array(
 /*RUS*/'No users'					=>	'Никого нет',
 /*RUS*/'All users none'			=>	'гость и участник',
 /*RUS*/'All users single'			=>	'гостя и участника',
-/*RUS*/'All users plural'			=>	'гостей и участников',
-/*RUS*/'Users none'				=>	'участник',
-/*RUS*/'Users single'				=>	'участника',
-/*RUS*/'Users plural'				=>	'участников',
+'All users plural'			=>	'guest and users',
+'Users none'				=>	'user',
+'Users single'				=>	'users',
+'Users plural'				=>	'users',
 'Currently online'			=>	'<strong><a href="%s">Currently online:</a></strong> ( %s )',
 'Online today'				=>	'<strong><a href="%s">Currently online today:</a></strong> ( %s )',
 /*RUS*/'last visit'				=>	'Последний визит',
