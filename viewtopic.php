@@ -805,22 +805,12 @@ foreach ($posts_info as $cur_post)
 
 			$forum_page['author_ident']['usertitle'] = '<dd class="profile-rank">'.get_title($cur_post).'</dd>';
 
-			if ($cur_post['sex'] == '1')
-				$forum_page['picture']['sex'] = '<dd class="profile-sex">' .$lang_topic['Sex']. '<i class="fa fa-mars title="'.$lang_topic['Sex'].' - '.$lang_topic['Male'].'""></i></dd>';
-			else if ($cur_post['sex'] == '2')
-				$forum_page['picture']['sex'] = '<dd class="profile-sex">' .$lang_topic['Sex'].'<i class="fa fa-venus" title="'.$lang_topic['Sex'].' - '.$lang_topic['Female'].'"></i></dd>';
-
 			if ($cur_post['country'] != '')
 				$forum_page['picture']['country'] = '<dd class="profile-country">' .$lang_topic['Country']. '<img class="popup" src="'.$base_url.'/resources/flags/'.$cur_post['country'].'.png" title="'.$lang_topic['Country'].' - '.$lang_country[$cur_post['country']].'" alt=""/></dd>';
 
 			if (!empty($forum_page['picture']))
 				$forum_page['author_ident']['picture'] = '<dd class="profile-posts">'.implode(' ', $forum_page['picture']).'</dd>';
 
-
-			if ($cur_post['is_online'] == $cur_post['poster_id'])
-				$forum_page['author_ident']['status'] = '<dd class="profile-posts">'.$lang_topic['Online'].'</dd>';
-			else
-				$forum_page['author_ident']['status'] = '<dd class="profile-posts">'.$lang_topic['Offline'].'</dd>';
 		}
 		else
 		{
