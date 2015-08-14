@@ -1077,14 +1077,6 @@ foreach ($posts_info as $cur_post)
 									<div class="content">
 										<?php echo implode("\n\t\t\t\t\t\t", $forum_page['message'])."\n" ?>
 									</div>
-<?php if (!empty($forum_page['author_socials'])): ?>
-			<div class="socials">
-				<ul class="share-buttons">
-					<?php echo implode("\n\t\t\t\t\t", $forum_page['author_socials'])."\n" ?>
-				</ul>
-
-			</div>
-<?php endif; ?>
 <?php ($hook = get_hook('vt_row_new_post_entry_data')) ? eval($hook) : null; ?>
 								</div>
 
