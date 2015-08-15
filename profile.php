@@ -1705,6 +1705,7 @@ else
 
 	if ($forum_config['o_avatars'])
 		$forum_page['main_menu']['avatar'] = '<li'.(($section == 'avatar') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['profile'], array($id, 'avatar')).'#brd-crumbs-top"><span>'.$lang_profile['Section avatar'].'</span></a></li>';
+	
 
 	if ($forum_user['id'] == $id)
 		$forum_page['main_menu']['pm'] = '<li'.(($section == 'pm') ? ' class="tab activetab"' : '').'><a href="'.forum_link($forum_url['pm'], 'inbox').'#brd-crumbs-top"><span>'.$lang_profile['Private messages'].'</span></a></li>';
@@ -1735,12 +1736,12 @@ else
 
 		if ($user['sex'] == 1)
 		{
-		$sex_pic = ' <i class="fa fa-mars" ></i>';
+		$sex_pic = '';
 		$sex = $lang_profile['Male'];
 	}
 	else if ($user['sex'] == 2)
 	{
-		$sex_pic = ' <i class="fa fa-venus" ></i>';
+		$sex_pic = '';
 			$sex = $lang_profile['Female'];
 		}
 
@@ -1897,7 +1898,6 @@ else
 
 	<div class="panel bg1 online ">
 		<div class="inner">
-			<p class="content-options options"><?php echo implode(' ', $forum_page['user_options']) ?></p>
 <?php ($hook = get_hook('pf_change_details_about_pre_user_info')) ? eval($hook) : null; ?>
 <?php ($hook = get_hook('pf_change_details_about_pre_user_ident_info')) ? eval($hook) : null; ?>
 				<dl class="left-box <?php echo ++$forum_page['item_count'] ?>">
