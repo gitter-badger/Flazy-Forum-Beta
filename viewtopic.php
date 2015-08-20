@@ -412,28 +412,14 @@ if ($forum_page['num_pages'] > 1)
 if (!$pid)
 	define('FORUM_ALLOW_INDEX', 1);
 
-$forum_js->file(array('jquery', 'tooltip'));
-$forum_js->code('$(document).ready( function() {
-	$(\'.hide-head\').toggle(
-		function() {
-		$(this).children().text(\''.$lang_common['Hidden text'].'\');
-			$(this).next().show(\'slow\');
 
-		},
-		function() {
-			$(this).children().text(\''.$lang_common['Hidden show text'].'\');
-			$(this).next().hide(\'slow\');
-		}
-	);
-	$(\'.p .posting img, .popup\').tooltip({ track: true, delay: 0, showURL: false, showBody: " - ", fade: 250 });
-	$(\'#block\').click($.tooltip.block);
-});');
 
 if ($action == 'print')
 	define('FORUM_PRINT', 1);
 define('FORUM_PAGE', 'viewtopic');
 require FORUM_ROOT.'header.php';
-
+	$forum_js->file('jquery');
+	$forum_js->file('tinymce');
 // START SUBST - <forum_main>
 ob_start();
 
@@ -724,7 +710,7 @@ while ($row = $forum_db->fetch_row($result))
 
 // Retrieve the posts (and their respective poster/online status)
 $query = array(
-	'SELECT'	=> 'u.email, u.title, u.avatar, u.skype, u.sex, u.country, u.signature, u.email_setting, u.num_posts, u.admin_note, u.user_agent, u.reputation_plus, u.reputation_minus, u.rep_enable, p.id, p.poster AS username, p.poster_id, p.poster_ip, p.poster_email, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by, g.g_id, g.g_user_title, o.user_id AS is_online',
+	'SELECT'	=> 'u.email, u.title, u.avatar, u.skype, u.country, u.signature, u.email_setting, u.num_posts, u.admin_note, u.user_agent, u.reputation_plus, u.reputation_minus, u.rep_enable, p.id, p.poster AS username, p.poster_id, p.poster_ip, p.poster_email, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by, g.g_id, g.g_user_title, o.user_id AS is_online',
 	'FROM'		=> 'posts AS p',
 	'JOINS'		=> array(
 		array(
@@ -810,6 +796,7 @@ foreach ($posts_info as $cur_post)
 
 			if (!empty($forum_page['picture']))
 				$forum_page['author_ident']['picture'] = '<dd class="profile-posts">'.implode(' ', $forum_page['picture']).'</dd>';
+
 
 		}
 		else
@@ -1076,10 +1063,11 @@ foreach ($posts_info as $cur_post)
 		</div>
 	</div>
 <?php
-
+	
 	if ($forum_page['item_count'] == $forum_config['o_topicbox'] && !defined('FORUM_DISABLE_HTML'))
 	{
 ?>
+
 
 		<div class="post">
 			<div class="post-entry">
@@ -1186,9 +1174,10 @@ if ($forum_config['o_smilies'])
 						<input type="text" name="subject" id="subject" size="45" maxlength="124" tabindex="2" value="Re: Welcome" class="inputbox autowidth">
 					</dd>
 				</dl>
+			
 				<div id="message-box">
-					<?php require FORUM_ROOT.'bb.php'; ?>
-					<textarea style="height: 9em;" name="req_message"  rows="7" cols="76" tabindex="3" class="inputbox"></textarea>
+				
+					<textarea id="text" style="height: 9em;" name="req_message"  rows="7" cols="76" tabindex="3" class="inputbox"></textarea>
 				</div>
 
 <?php ($hook = get_hook('vt_quickpost_pre_fieldset_end')) ? eval($hook) : null; ?>

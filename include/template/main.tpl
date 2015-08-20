@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <forum_head>
 <forum_js>
+<forum_css>
 </head>
 
 <body id="flazy" class="notouch section-index ltr hasjs ">

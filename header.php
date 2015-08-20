@@ -70,7 +70,7 @@ else
 if (strpos(FORUM_PAGE, 'profile') === 0)
 	$forum_head['microid'] = '<meta name="microid" content="mailto+http:sha1:' . sha1(sha1('mailto:' . $user['email']) . sha1(forum_link($forum_url['user'], $id))) . '" />';
 
-$forum_head['compatible'] = '<meta name="viewport" content="width=device-width" />';
+$forum_head['compatible'] = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
 
 $forum_head['title'] = '<title>' . generate_crumbs(true) . '</title>';
 $forum_head['favicon'] = '<link rel="shortcut icon" type="image/x-icon" href="' . $base_url . '/style/' . $forum_user['style'] . '/favicon.ico" />';
@@ -234,7 +234,7 @@ $gen_elements['<forum_desc>'] = ($forum_config['o_board_desc'] != '') ? '<p id="
 $gen_elements['<forum_topnavlinks>'] = '<ul class="site-nav" role="menubar">' . "\n\t\t" . generate_topnavlinks() . "\n\t" . '</ul>';
 
 // Admin Navigation
-$gen_elements['<forum_navlinks_admins>'] =  generate_topnavlinks();
+$gen_elements['<forum_navlinks_admins>'] =  generate_navlinks_admins();
 
 
 // Main Navigation

@@ -154,6 +154,7 @@ $lang_common = array(
 'register'					=>	'register',
 'Login'						=>  'Login',
 'login'						=>	'login',
+'To website' => 'To site',
 'Not logged in'				=>  'You are not logged in.',
 'Profile'					=>	'Profile',
 'Logout'					=>	'Logout',

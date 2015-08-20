@@ -425,26 +425,23 @@ function generate_navlinks_admins()
 	if ($forum_user['is_guest'])
 	{
 		if ($forum_user['g_read_board'] && $forum_user['g_search'])
-		echo "No permissions";
+
+		$links['register'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['register']).'" accesskey="x" role="menuitem"><i class="fa fa-user-plus"></i>'.$lang_common['Register'].'</a></li>';
+		$links['login'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['login']).'" accesskey="x" role="menuitem"><i class="fa fa-sign-in"></i>'.$lang_common['Login'].'</a></li>';
 	}
 	else
 	{
 		if (!$forum_user['is_admmod'])
 		{
 			if ($forum_user['g_read_board'] && $forum_user['g_search'])
-				$links['search'] = '<li id="navsearch" class="nav'.((FORUM_PAGE == 'search') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['search']).'"><span>'.$lang_common['Search'].'</span></a></li>';
-			$links['profile'] = '<li id="navprofile" class="nav'.((substr(FORUM_PAGE, 0, 7) == 'profile') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'"><span>'.$lang_common['Profile'].'</span></a></li>';
-			if ($forum_config['o_pm_show_global_link'])
-				$links['pm'] = '<li id="navpm" class="nav'.((FORUM_PAGE == 'profile-pm') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['pm'], 'inbox').'"><span>'.$lang_common['Private messages'].'</span></a></li>';
+			$links['profil'] = '<li id="navprofile" class="nav'.((substr(FORUM_PAGE, 0, 7) == 'profile') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'"><span>'.$lang_common['Profile'].'</span></a></li>';
 			$links['logout'] = '<li id="navlogout" class="nav"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'"><span>'.$lang_common['Logout'].'</span></a></li>';
 		}
 		else
 		{
-			$links['search'] = '<li id="navsearch" class="nav'.((FORUM_PAGE == 'search') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['search']).'"><span>'.$lang_common['Search'].'</span></a></li>';
-			$links['profile'] = '<li id="navprofile" class="nav'.((substr(FORUM_PAGE, 0, 7) == 'profile') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'"><span>'.$lang_common['Profile'].'</span></a></li>';
-			if ($forum_config['o_pm_show_global_link'])
-				$links['pm'] = '<li id="navpm" class="nav'.((FORUM_PAGE == 'profile-pm') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['pm'], 'inbox').'"><span>'.$lang_common['Private messages'].'</span></a></li>';
-			$links['logout'] = '<li id="navlogout" class="nav"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'"><span>'.$lang_common['Logout'].'</span></a></li>';
+			$links['towebsite'] = '<li id="nav_website" class="nav"><a href="'.forum_link($forum_url['index']).'"><span>'.$lang_common['To website'].'</span></a></li>';
+			$links['profil'] = '<li id="nav_profile" class="nav'.((substr(FORUM_PAGE, 0, 7) == 'profile') ? ' isactive' : '').'"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'"><span>'.$lang_common['Profile'].'</span></a></li>';
+			$links['logout'] = '<li id="nav_logout" class="nav"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'"><span>'.$lang_common['Logout'].'</span></a></li>';
 		}
 	}
 	// Are there any additional navlinks we should insert into the array before imploding it?
@@ -457,7 +454,7 @@ function generate_navlinks_admins()
 	}
 	($hook = get_hook('fn_generate_navlinks_end')) ? eval($hook) : null;
 	return implode("\n\t\t", $links);
-}
+	}
 
  function generate_topnavlinks()
 {
@@ -489,15 +486,15 @@ if ($forum_user['is_guest'])
 		}
 		else
 		{
+$links['logout'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'" accesskey="x" role="menuitem"><i class="fa fa-sign-out"></i>'.$lang_common['Logout'].'</a></li>';
 
 			$links['profile'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['user'], $forum_user['id']).'" accesskey="x" role="menuitem"><i class="fa fa-user"></i>'.$lang_common['Profile'].'</a></li>';
 
 			if ($forum_config['o_pm_show_global_link'])
 				$links['pm'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['pm'], 'inbox').'" accesskey="x" role="menuitem"><i class="fa fa-power-off"></i>'.$lang_common['Private messages'].'</a></li>';
 
-			$links['logout'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link($forum_url['logout'], array($forum_user['id'], generate_form_token('logout'.$forum_user['id']))).'" accesskey="x" role="menuitem"><i class="fa fa-sign-out"></i>'.$lang_common['Logout'].'</a></li>';
-			$links['admin'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link('admin/admin.php').'" accesskey="x" role="menuitem"><i class="fa fa-lock"></i>'.$lang_common['Admin'].'</a></li>';
-		}
+			$links['admin'] = '<li class="font-icon rightside"  data-skip-responsive="true"><a href="'.forum_link('admin/admin.php').'" accesskey="x" role="menuitem"><i class="fa fa-lock"></i>'.$lang_common['Admin'].'</a></li>';		
+}
 
 
 		($hook = get_hook('fn_generate_navlinks_end')) ? eval($hook) : null;
@@ -602,7 +599,7 @@ function paginate($num_pages, $cur_page, $link, $separator, $args = null)
 			if ($current < 1 || $current > $num_pages)
 				continue;
 			else if ($current != $cur_page || $link_to_all)
-				$pages[] = '<a'.(empty($pages) ? ' class="first-item"' : '').' href="'.forum_sublink($link, $forum_url['page'], $current, $args).'">'.forum_number_format($current).'</a>';
+				$pages[] = '<li><a'.(empty($pages) ? ' class="first-item"' : '').' href="'.forum_sublink($link, $forum_url['page'], $current, $args).'">'.forum_number_format($current).'</a></li>';
 			else
 				$pages[] = '<strong'.(empty($pages) ? ' class="first-item"' : '').'>'.forum_number_format($current).'</strong>';
 
@@ -1856,21 +1853,17 @@ function get_tracked_topics()
 function generate_crumbs($reverse)
 {
 	global $lang_common, $forum_url, $forum_config, $forum_page;
-
 	$return = ($hook = get_hook('fn_generate_crumbs_start')) ? eval($hook) : null;
 	if ($return != null)
 		return $return;
-
 	if (empty($forum_page['crumbs']))
 		$forum_page['crumbs'][0] = forum_htmlencode($forum_config['o_board_title']).$lang_common['Title separator'].forum_htmlencode($forum_config['o_board_desc']);
-
 	$crumbs = '';
 	$num_crumbs = count($forum_page['crumbs']);
-
 	if ($reverse)
 	{
 		for ($i = ($num_crumbs - 1); $i >= 0; --$i)
-			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? '': '');
+			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? $lang_common['Title separator'] : '');
 	}
 	else
 		for ($i = 0; $i < $num_crumbs; ++$i)
@@ -1889,21 +1882,17 @@ function generate_crumbs($reverse)
 function generate_crumbs_admin($reverse)
 {
 	global $lang_common, $forum_url, $forum_config, $forum_page;
-
 	$return = ($hook = get_hook('fn_generate_crumbs_start')) ? eval($hook) : null;
 	if ($return != null)
 		return $return;
-
 	if (empty($forum_page['crumbs']))
 		$forum_page['crumbs'][0] = forum_htmlencode($forum_config['o_board_title']).$lang_common['Title separator'].forum_htmlencode($forum_config['o_board_desc']);
-
 	$crumbs = '';
 	$num_crumbs = count($forum_page['crumbs']);
-
 	if ($reverse)
 	{
 		for ($i = ($num_crumbs - 1); $i >= 0; --$i)
-			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? '': '');
+			$crumbs .= (is_array($forum_page['crumbs'][$i]) ? forum_htmlencode($forum_page['crumbs'][$i][0]) : forum_htmlencode($forum_page['crumbs'][$i])).((isset($forum_page['page']) && $i == ($num_crumbs - 1)) ? ' ('.$lang_common['Page'].' '.forum_number_format($forum_page['page']).')' : '').($i > 0 ? $lang_common['Title separator'] : '');
 	}
 	else
 		for ($i = 0; $i < $num_crumbs; ++$i)

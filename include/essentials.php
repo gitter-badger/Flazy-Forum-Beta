@@ -50,9 +50,9 @@ if (file_exists($config))
 if (!defined('FORUM'))
 	error('Файл \'config.php\' не существует или поврежден. Пожалуйста, запустите <a href="'.FORUM_ROOT.'admin/install.php">install.php</a>, чтобы установить Flazy.');
 
-// Загрузить скрипт с классами
+// Loading js and css script
 require FORUM_ROOT.'include/class/common.php';
-
+require FORUM_ROOT.'include/class/css_get.php';
 // Block prefetch requests
 if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')
 {

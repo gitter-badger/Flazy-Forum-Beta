@@ -483,20 +483,8 @@ ob_start();
 
 // If preview selected and there are no errors
 if (isset($_POST['preview']) && empty($errors))
-{
-	$forum_js->file('jquery');
-	$forum_js->code('$(document).ready( function() {
-		$(\'.hide-head\').toggle(
-			function() {
-			$(this).children().text(\''.$lang_common['Hidden text'].'\');
-				$(this).next().show("slow");
-			},
-			function() {
-				$(this).children().text(\''.$lang_common['Hidden show text'].'\');
-				$(this).next().hide("slow");
-			}
-		);
-	})');
+{	
+
 
 	if (!defined('FORUM_PARSER_LOADED'))
 		require FORUM_ROOT.'include/parser.php';
@@ -508,35 +496,32 @@ if (isset($_POST['preview']) && empty($errors))
 	$forum_page['post_ident']['num'] = '<span class="post-num">#</span>';
 	$forum_page['post_ident']['byline'] = '<span class="post-byline">'.sprintf((($tid) ? $lang_post['Reply byline'] : $lang_post['Topic byline']), '<strong>'.forum_htmlencode($forum_user['username']).'</strong>').'</span>';
 	$forum_page['post_ident']['link'] = '<span class="post-link">'.format_time(time()).'</span>';
-
 	($hook = get_hook('po_preview_pre_display')) ? eval($hook) : null;
 
 ?>
-	<div class="main-subhead">
-		<h2 class="hn"><span><?php echo $tid ? $lang_post['Preview reply'] : $lang_post['Preview new topic']; ?></span></h2>
-	</div>
-	<div id="post-preview" class="main-content main-frm">
-		<div class="post singlepost">
-			<div class="posthead">
-				<h3 class="hn"><?php echo implode(' ', $forum_page['post_ident']) ?></h3>
+<div class="post bg2" id="preview">
+	<div class="inner">
+		<div class="postbody">
+			<h3><?php echo implode(' ', $forum_page['post_ident']) ?></h3>
 <?php ($hook = get_hook('po_preview_new_post_head_option')) ? eval($hook) : null; ?>
+			<div class="content">
+				<?php echo $forum_page['preview_message']."\n" ?>
 			</div>
-			<div class="postbody">
-				<div class="post-entry">
-					<div class="entry-content">
-						<?php echo $forum_page['preview_message']."\n" ?>
-					</div>
 <?php ($hook = get_hook('po_preview_new_post_entry_data')) ? eval($hook) : null; ?>
-				</div>
-			</div>
 		</div>
 	</div>
+</div>
 <?php
 
 }
+	$forum_js->file('jquery');
+	$forum_js->file('tinymce');
 
 ?>
-	<div  class="chunk ">
+
+<div class="panel" id="postingbox">
+	<div class="inner">
+		<h3><?php echo $tid ? $lang_post['Preview reply'] : $lang_post['Preview new topic']; ?></h3>
 <?php
 
 	if (!empty($forum_page['text_options']))
@@ -608,27 +593,28 @@ if ($forum_user['is_guest'])
 ($hook = get_hook('po_pre_req_info_fieldset')) ? eval($hook) : null;
 
 ?>
-			<fieldset class="frm-group group<?php echo ++$forum_page['group_count'] ?>">
-				<legend class="group-legend"><strong><?php echo $lang_common['Required information'] ?></strong></legend>
+		<fieldset class="fields<?php echo ++$forum_page['group_count'] ?>">
 <?php
-
 if ($fid)
 {
 	($hook = get_hook('po_pre_req_subject')) ? eval($hook) : null;
-
 ?>
-				<div class="sf-set set<?php echo ++$forum_page['item_count'] ?>">
-					<div class="sf-box text required longtext">
-						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span><?php echo $lang_post['Topic subject'] ?> <?php if ($forum_config['p_force_guest_email']) echo '<em>'.$lang_common['Required'].'</em>' ?></span></label><br />
-						<span class="fld-input"><input id="fld<?php echo $forum_page['fld_count'] ?>" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo forum_htmlencode($subject); ?>" size="80" maxlength="70" /></span>
-					</div>
-				</div>
-				<div class="sf-set set<?php echo ++$forum_page['item_count'] ?>">
-					<div class="sf-box text longtext">
-						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span><?php echo $lang_post['Topic description'] ?><em></em></span></label>
-						<span class="fld-input"><input id="fld<?php echo $forum_page['fld_count'] ?>" type="text" name="description" value="<?php if (isset($_POST['description'])) echo forum_htmlencode($description); ?>" size="80" maxlength="100" /></span>
-					</div>
-				</div>
+			<dl style="clear: left;" class="ic<?php echo ++$forum_page['item_count'] ?>">
+				<dt>
+					<label for="<?php echo ++$forum_page['fld_count'] ?>"><?php echo $lang_post['Topic subject'] ?> <?php if ($forum_config['p_force_guest_email']) echo '<em>'.$lang_common['Required'].'</em>' ?></label>
+				</dt>
+				<dd>
+					<input id="fld<?php echo $forum_page['fld_count'] ?>" type="text" name="req_subject" value="<?php if (isset($_POST['req_subject'])) echo forum_htmlencode($subject); ?>" size="80" maxlength="70"  class="inputbox autowidth">
+				</dd>
+			</dl>
+			<dl style="clear: left;" class="ic<?php echo ++$forum_page['item_count'] ?>">
+				<dt>
+					<label for="<?php echo ++$forum_page['fld_count'] ?>"><?php echo $lang_post['Topic description'] ?></label>
+				</dt>
+				<dd>
+					<input id="fld<?php echo $forum_page['fld_count'] ?>" type="text" name="description" value="<?php if (isset($_POST['description'])) echo forum_htmlencode($description); ?>" size="80" maxlength="100" class="inputbox autowidth">
+				</dd>
+			</dl>
 <?php
 
 }
@@ -636,13 +622,15 @@ if ($fid)
 ($hook = get_hook('po_pre_post_contents')) ? eval($hook) : null;
 
 ?>
-				<div class="txt-set set<?php echo ++$forum_page['item_count'] ?>">
-					<div class="txt-box textarea required">
-						<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span><?php echo $lang_post['Write message'] ?> <?php if ($forum_config['p_force_guest_email']) echo '<em>'.$lang_common['Required'].'</em>' ?></span></label><br />
-<?php require FORUM_ROOT.'bb.php'; ?>
-						<div class="txt-input"><span class="fld-input"><textarea id="text" name="req_message" rows="14" cols="95"><?php echo isset($_POST['req_message']) ? forum_htmlencode($message) : (isset($forum_page['quote']) ? forum_htmlencode($forum_page['quote']) : '') ?></textarea></span></div>
-					</div>
+			<div class="message-box ic<?php echo ++$forum_page['item_count'] ?>">
+					<label for="fld<?php echo ++$forum_page['fld_count'] ?>"><span><?php echo $lang_post['Write message'] ?> <?php if ($forum_config['p_force_guest_email']) echo '<em>'.$lang_common['Required'].'</em>' ?></span></label><br />
+				<div class="txt-input">
+					<span class="fld-input">
+						
+						<textarea class="inputbox"  id="req_message" name="" rows="14" cols="95"><?php echo isset($_POST['req_message']) ? forum_htmlencode($message) : (isset($forum_page['quote']) ? forum_htmlencode($forum_page['quote']) : '') ?></textarea>
+					</span>
 				</div>
+			</div>
 <?php
 
 $forum_page['checkboxes'] = array();
@@ -709,6 +697,7 @@ if ($fid && ($forum_user['g_poll_add'] || $forum_user['g_id'] == FORUM_ADMIN))
 			</div>
 		</form>
 	</div>
+</div>
 <?php
 
 

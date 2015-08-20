@@ -409,6 +409,65 @@ ul.linklist.bulletin > li.no-bulletin:before {
 .dropdown-page-jump .page-jump-form > .inputbox {
   padding: 0 0 0 7px;
 }
+/* Site menu items in dropdown container - hide them in desktop view, show them in mobile view */
+.dropdown-contents > .site-menu {
+  display: none;
+}
+#site-menu > li {
+  display: block;
+  float: left;
+  margin: 0 20px 0 0;
+  position: relative;
+}
+#site-menu > li > a {
+  display: inline-block;
+  line-height: 90px;
+  padding: 0 10px;
+  transition: box-shadow 0.1s ease-in-out;
+}
+/* Dropdown menu */
+#site-menu > li:hover > ul {
+  left: 0;
+  opacity: 1;
+}
+#site-menu > li > ul {
+  top: 90px;
+  left: -999px;
+  display: block;
+  position: absolute;
+  background: #FFF;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  max-height: 300px;
+  min-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px 0;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out, left 0s ease-in-out 0.1s;
+  border-top: 1px solid #477BB8;
+}
+#site-menu > li > ul > li {
+  float: none !important;
+  font-size: 12px !important;
+  line-height: 27px !important;
+  list-style: outside none none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  white-space: nowrap;
+}
+#site-menu > li > ul > li > a {
+  display: inline-block;
+  line-height: 1.5;
+  padding: 7.5px 20px;
+  transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
+  width: 100%;
+  color: #3C3C3C;
+}
+#site-menu > li > ul > li > a:hover {
+  background-color: #F5F5F5;
+}
 /* Table styles
 ----------------------------------------*/
 table {
@@ -2263,10 +2322,9 @@ fieldset.submit-buttons input {
 ----------------------------------------*/
 /* Buttons used in the editor */
 #format-buttons {
-  border-style: solid;
-  border-width: 1px 1px 0;
-  margin: 0 250px 0 0;
-  width: auto;
+    border-style: solid;
+    border-width: 1px;
+    width: 685px;
 }
 #format-buttons input,
 #format-buttons select {
@@ -2483,6 +2541,31 @@ textarea#message {
 .content span.bbu {
     text-decoration: underline;
 }
+/* BBCode
+ ----------------------------------------*/
+
+.bbcode{
+border:1px solid #e3e3e3; -webkit-border-radius: 0px; -moz-border-radius: 0px;border-radius: 0px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 5px 5px 5px 5px; text-decoration:none; display:inline-block; color: #000000;
+ background-color: #FFFFFF; background-image: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#dfdddd));
+ background-image: -webkit-linear-gradient(top, #FFFFFF, #dfdddd);
+ background-image: -moz-linear-gradient(top, #FFFFFF, #dfdddd);
+ background-image: -ms-linear-gradient(top, #FFFFFF, #dfdddd);
+ background-image: -o-linear-gradient(top, #FFFFFF, #dfdddd);
+ background-image: linear-gradient(to bottom, #FFFFFF, #dfdddd);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#FFFFFF, endColorstr=#dfdddd);
+}
+
+.bbcode:hover{
+ border:1px solid #DEDEDE;
+ background-color: #e6e6e6; background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#c6c3c3));
+ background-image: -webkit-linear-gradient(top, #e6e6e6, #c6c3c3);
+ background-image: -moz-linear-gradient(top, #e6e6e6, #c6c3c3);
+ background-image: -ms-linear-gradient(top, #e6e6e6, #c6c3c3);
+ background-image: -o-linear-gradient(top, #e6e6e6, #c6c3c3);
+ background-image: linear-gradient(to bottom, #e6e6e6, #c6c3c3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#e6e6e6, endColorstr=#c6c3c3);
+}
+/* Buttons
+_----------------------------------------*/
+
 /* Input field styles
 ---------------------------------------- */
 .inputbox {
@@ -2902,8 +2985,8 @@ span.imageset {
 .site-logo {
   background-image: url("../images/logo.png") ;
   background-repeat: no-repeat;
-  height: 78px;
-  width: 180px;
+  height: 50px;
+  width: 45px;
 }
 .imageset.forum_link {
   background-image: url("../images/forum_link.svg");
@@ -3249,6 +3332,9 @@ span.imageset {
   font-size: 1.1em;
 }
 #cp-main {
+  margin-top: 20px;
+}
+#cp-main-pm {
   margin-left: 270px;
   margin-top: 20px;
 }
@@ -4632,7 +4718,7 @@ p.post-notice a {
 Colours and backgrounds for links.css
 -------------------------------------------------------------- */
 a {
-  color: #2CB98B;
+  color: #3C699C;
 }
 a:hover {
   color: #3c3c3c;

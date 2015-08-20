@@ -7,13 +7,12 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL версии 2 или выше
  * @package Flazy
  */
-
-
+($hook = get_hook('cls_fl_js_helper_start')) ? eval($hook) : null;
 $js = array(
-	'jquery'		=> 'http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js',
-	'tooltip'		=> $base_url.'/style/default/js/jquery.tooltip.js',
-	'pstrength'		=> $base_url.'/style/default/js/jquery.pstrength.js',
-	'cookies'		=> $base_url.'/style/default/js/jquery.cookie.js',
+	'jquery'		=> 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js',
+	'bbcode' 		=> $base_url.'/resources/editor/wysibb/jquery.wysibb.js',
+	'bbcode-show' 	=> $base_url.'/resources/editor/wysibb/preset.js',
+	'tinymce' 		=> $base_url.'/resources/editor/tinymce/tinymce.min.js',
 );
 
 ($hook = get_hook('cls_fl_pre_class_js_helper')) ? eval($hook) : null;
@@ -24,6 +23,8 @@ $js = array(
  * @author Copyright (C) 2009 hcs
  * @modified Copyright (C) 2008 Flazy.ru
  */
+
+
 class forum_js
 {
 	var $file = array();

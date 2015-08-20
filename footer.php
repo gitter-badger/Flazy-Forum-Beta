@@ -43,14 +43,14 @@ if (defined('FORUM_DEBUG') || defined('FORUM_SHOW_QUERIES'))
 	// Display debug info (if enabled/defined)
 	if (defined('FORUM_DEBUG'))
 	{
-		/* Для dev версии
-		$mem_usage = memory_get_usage(false); // true размер страницы false под переменные
+		
+		$mem_usage = memory_get_usage(true); // true размер страницы false под переменные
 		if ($mem_usage < 1024)
 			$memory_usage =  $mem_usage.' байт';
 		elseif ($mem_usage < 1048576)
 			$memory_usage = round($mem_usage/1024,2).' кб';
 		else
-			$memory_usage = round($mem_usage/1048576,2).' мб';*/
+			$memory_usage = round($mem_usage/1048576,2).' мб';
 
 		// Calculate script generation time
 		$time_diff = sprintf('%.3f', get_microtime() - $forum_start);
@@ -75,7 +75,7 @@ if (defined('FORUM_DEBUG') || defined('FORUM_SHOW_QUERIES'))
 
 ($hook = get_hook('ft_forum_debug_end')) ? eval($hook) : null;
 
-
+$gen_elements['<forum_css>'] = (isset($forum_css)) ? $forum_css->out() : '';
 $gen_elements['<forum_js>'] = (isset($forum_js)) ? $forum_js->out() : '';
 $gen_elements['<forum_ga>'] = (!empty($forum_config['o_google_analytics'])) ? "<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create','".$forum_config['o_google_analytics']."', 'auto'); ga('send', 'pageview');</script>" : '';
 $gen_elements['<forum_html_bottom>'] = ($forum_config['o_html_bottom'] && !defined('FORUM_DISABLE_HTML')) ? $forum_config['o_html_bottom_message'] : '';

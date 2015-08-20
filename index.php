@@ -9,7 +9,7 @@
 
 
 if (!defined('FORUM_ROOT'))
-	define('FORUM_ROOT', './');
+	define('FORUM_ROOT', '');
 require FORUM_ROOT.'include/common.php';
 
 ($hook = get_hook('in_start')) ? eval($hook) : null;
@@ -65,23 +65,6 @@ if (!$forum_user['is_guest'])
 	$forum_page['main_options']['markread'] = '<span><a class="mark-all-read" href="'.forum_link($forum_url['mark_read'], generate_form_token('markread'.$forum_user['id'])).'">'.$lang_common['Mark all as read'].'</a></span>';
 
 ($hook = get_hook('in_pre_header_load')) ? eval($hook) : null;
-
-$forum_js->file(array('jquery','tooltip', 'cookies'));
-$forum_js->code('$(document).ready(function() {
-	$(\'a.toggle\').show();
-	$(\'.info-lastpost a, #brd-today a\').tooltip({ track: true, delay: 0, showURL: false, showBody: " - ", fade: 250 });
-	$(\'#block\').click($.tooltip.block);
-});
-function toggle(id)
-{
-	$(\'#category\'+id).toggle(500);
-	$(\'#toggle\'+id).toggleClass(\'hide\');
-	if($.cookie(\'#category\'+id))
-		$.cookie(\'#category\'+id, null);
-	else
-		$.cookie(\'#category\'+id, \'hide\', {expires: 365});
-	return false;
-}');
 
 define('FORUM_ALLOW_INDEX', 1);
 define('FORUM_PAGE', 'index');

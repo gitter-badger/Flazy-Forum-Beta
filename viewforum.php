@@ -265,10 +265,10 @@ if (count($topics_info) > 0)
 
 		if ($cur_topic['moved_to'] != null)
 		{
-			$forum_page['item_title_status']['moved'] = '<em class="moved">'.$lang_forum['Moved'].'</em>';
+			$forum_page['item_title_status']['moved'] = $lang_forum['Moved'];
 			$forum_page['item_status']['moved'] = 'moved';
 
-			$forum_page['item_title']['status'] = '<span class="item-status">'.sprintf($lang_forum['Item status'], implode(', ', $forum_page['item_title_status'])).'</span>';
+			$forum_page['item_title']['status'] = sprintf($lang_forum['Item status'], implode(', ', $forum_page['item_title_status']));
 
 			$forum_page['item_title']['link'] = '<strong><a href="'.forum_link($forum_url['topic'], array($cur_topic['moved_to'], sef_friendly($cur_topic['subject']))).'">'.forum_htmlencode($cur_topic['subject']).'</a></strong>';
 
@@ -297,24 +297,24 @@ if (count($topics_info) > 0)
 
 			if ($cur_topic['sticky'])
 			{
-				$forum_page['item_title_status']['sticky'] = '<em class="sticky">'.$lang_forum['Sticky'].'</em>';
+				$forum_page['item_title_status']['sticky'] = '';
 				$forum_page['item_status']['sticky'] = 'icon sticky_read  ';
 			}
 			else if ($cur_topic['closed'])
 			{
-				$forum_page['item_title_status']['closed'] = '<em class="closed">'.$lang_forum['Closed'].'</em>';
+				$forum_page['item_title_status']['closed'] = $lang_forum['Closed'];
 				$forum_page['item_status']['closed'] = 'icon forum_read_locked';
 			}
 			else if ($cur_topic['question'] != '')
 			{
-				$forum_page['item_title_status']['poll'] = '<em class="poll">'.$lang_forum['Poll'].'</em>';
+				$forum_page['item_title_status']['poll'] = $lang_forum['Poll'];
 				$forum_page['item_status']['poll'] = 'icon ';
 			}
 
 			($hook = get_hook('vf_topic_loop_normal_topic_pre_item_title_status_merge')) ? eval($hook) : null;
 
 			if (!empty($forum_page['item_title_status']))
-				$forum_page['item_title']['status'] = '<span class="item-status">'.sprintf($lang_forum['Item status'], implode(', ', $forum_page['item_title_status'])).'</span>';
+				$forum_page['item_title']['status'] = sprintf($lang_forum['Item status'], implode(', ', $forum_page['item_title_status']));
 
 			$topic_desc = array();
 			if ($cur_topic['description'] != '')
@@ -322,7 +322,7 @@ if (count($topics_info) > 0)
 			if ($cur_topic['question'] != '')
 				$topic_desc['question'] = $lang_common['Title separator'].forum_htmlencode(forum_htmlencode($cur_topic['question']));
 
-			$forum_page['item_title']['link'] = '<a href="'.forum_link($forum_url['topic'], array($cur_topic['id'], sef_friendly($cur_topic['subject']))).'"'.(!empty($topic_desc) ? ' title="'.$lang_forum['Description'].implode('', $topic_desc).'"' : '').'>'.forum_htmlencode($cur_topic['subject']).'</a><br>';
+			$forum_page['item_title']['link'] = '<a href="'.forum_link($forum_url['topic'], array($cur_topic['id'], sef_friendly($cur_topic['subject']))).'"'.(!empty($topic_desc) ? ' class="topictitle" title="'.$lang_forum['Description'].implode('', $topic_desc).'"' : '').'>'.forum_htmlencode($cur_topic['subject']).'</a><br>';
 
 			($hook = get_hook('vf_topic_loop_normal_topic_pre_item_title_merge')) ? eval($hook) : null;
 
@@ -332,7 +332,7 @@ if (count($topics_info) > 0)
 			$forum_page['item_pages'] = ceil(($cur_topic['num_replies'] + 1) / $forum_user['disp_posts']);
 
 			if ($forum_page['item_pages'] > 1)
-				$forum_page['item_nav']['pages'] = '<span class="pages">'.$lang_forum['Pages'].'&#160;</span>'.paginate($forum_page['item_pages'], -1, $forum_url['topic'], $lang_common['Page separator'], array($cur_topic['id'], sef_friendly($cur_topic['subject'])));
+				$forum_page['item_nav']['pages'] = paginate($forum_page['item_pages'], -1, $forum_url['topic'], $lang_common['Page separator'], array($cur_topic['id'], sef_friendly($cur_topic['subject'])));
 
 			// Does this topic contain posts we haven't read? If so, tag it accordingly.
 			if (!$forum_user['is_guest'] && $cur_topic['last_post'] > $forum_user['last_visit'] && (!isset($tracked_topics['topics'][$cur_topic['id']]) || $tracked_topics['topics'][$cur_topic['id']] < $cur_topic['last_post']) && (!isset($tracked_topics['forums'][$id]) || $tracked_topics['forums'][$id] < $cur_topic['last_post']))
@@ -344,7 +344,7 @@ if (count($topics_info) > 0)
 			($hook = get_hook('vf_topic_loop_normal_topic_pre_item_nav_merge')) ? eval($hook) : null;
 
 			if (!empty($forum_page['item_nav']))
-				$forum_page['item_title']['nav'] = '<span class="item-nav">'.sprintf($lang_forum['Topic navigation'], implode('&#160;&#160;', $forum_page['item_nav'])).'</span>';
+				$forum_page['item_title']['nav'] = '<div class="pagination"><ul>'.implode( $forum_page['item_nav']).'</ul></div>';
 
 			$forum_page['item_body']['subject']['title'] = implode(' ', $forum_page['item_title']);
 
@@ -372,7 +372,7 @@ if (count($topics_info) > 0)
 		<ul class="topiclist topics">
 				<li class="row bg2">
 					<dl class="<?php echo implode(' ', $forum_page['item_status']) ?> <?php echo ($forum_page['item_count'] % 2 != 0) ? 'odd' : 'even' ?><?php echo ($forum_page['item_count'] == 1) ? ' row1' : '' ?>">
-						<dt>
+						<dt title="<?php echo $forum_page['item_title']['status']; ?>">
 							<div class="list-inner">
 								<?php echo implode("\n\t\t\t\t", $forum_page['item_body']['subject'])."\n" ?>
 							</div>
