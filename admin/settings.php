@@ -487,14 +487,22 @@ if (!$section || $section == 'setup')
 				<div class="form-group ic<?php echo ++$forum_page['item_count'] ?>">
 					<label class="col-md-4 control-label" for="fld<?php echo ++$forum_page['fld_count'] ?>"><?php echo $lang_admin_settings['Board title label'] ?></label>
 					<div class="col-md-4">
-						<input id="fld<?php echo $forum_page['fld_count'] ?>" name="form[board_title]" size="50" maxlength="255" value="<?php echo forum_htmlencode($forum_config['o_board_title']) ?>" class="form-control input-md">
+						<input id="fld<?php echo $forum_page['fld_count'] ?>" name="form[board_title]" size="50" maxlength="70" value="<?php echo forum_htmlencode($forum_config['o_board_title']) ?>" class="form-control input-md">
 					</div>
 				</div>
 <?php ($hook = get_hook('aop_setup_pre_board_descrip')) ? eval($hook) : null; ?>
 				<div class="form-group ic<?php echo ++$forum_page['item_count'] ?>">
 					<label class="col-md-4 control-label" for="fld<?php echo ++$forum_page['fld_count'] ?>"><?php echo $lang_admin_settings['Board description label'] ?></label>
 					<div class="col-md-4">
-						<input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[board_desc]" size="50" maxlength="255" value="<?php echo forum_htmlencode($forum_config['o_board_desc']) ?>" class="form-control input-md">
+						<input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[board_desc]" size="50" maxlength="160" value="<?php echo forum_htmlencode($forum_config['o_board_desc']) ?>" class="form-control input-md">
+					</div>
+				</div>
+<?php ($hook = get_hook('aop_setup_pre_board_keywords')) ? eval($hook) : null; ?>
+				<div class="form-group ic<?php echo ++$forum_page['item_count'] ?>">
+					<label class="col-md-4 control-label" for="fld<?php echo ++$forum_page['fld_count'] ?>"><?php echo $lang_admin_settings['Board keywords label'] ?></label>
+					<div class="col-md-4">
+						<input type="text" id="fld<?php echo $forum_page['fld_count'] ?>" name="form[board_keywords]" size="50" maxlength="255" value="<?php echo forum_htmlencode($forum_config['o_board_keywords']) ?>" class="form-control input-md">
+						<span class="help-block"><?php echo $lang_admin_settings['Board keywords help'] ?></span>
 					</div>
 				</div>
 <?php ($hook = get_hook('aop_setup_pre_default_style')) ? eval($hook) : null; ?>

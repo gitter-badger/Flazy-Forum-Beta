@@ -72,7 +72,10 @@ require FORUM_ROOT.'header.php';
 
 // START SUBST - <forum_main>
 ob_start();
-
+?>
+					<div id="forumlist">
+						<div id="forumlist-inner">
+<?php
 ($hook = get_hook('in_main_output_start')) ? eval($hook) : null;
 
 // Print the categories and forums
@@ -111,7 +114,7 @@ while ($cur_forum = $forum_db->fetch_assoc($result))
 	if ($cur_forum['cid'] != $forum_page['cur_category']) // A new category since last iteration?
 	{
 		if ($forum_page['cur_category'] != 0)
-			echo "\t\t".'</div>'."\n\t\t".'</div>'."\n\t".'</div>'."\n\n";
+			echo "\t\t".'</div>'."\n\t\t".'</div>'."\n\t".''."\n\n";
 
 		$forum_page['item_count'] = 1;
 
@@ -122,8 +125,7 @@ while ($cur_forum = $forum_db->fetch_assoc($result))
 		($hook = get_hook('in_forum_pre_cat_head')) ? eval($hook) : null;
 
 ?>
-					<div id="forumlist">
-						<div id="forumlist-inner">
+
 							<div class="forabg">
 								<div class="inner">
 									<ul class="topiclist">
@@ -251,7 +253,6 @@ while ($cur_forum = $forum_db->fetch_assoc($result))
 											<dl class="icon <?php echo implode($forum_page['item_status']) ?> <?php echo ($forum_page['item_count'] % 2 != 0) ? 'forum_read' : 'forum_read' ?><?php echo ($forum_page['item_count'] == 1) ? '' : '' ?>">
 												<dt>
 													<div class="list-inner">
-														
 														<?php echo implode("\n\t\t\t\t", $forum_page['item_body']['subject'])."\n" ?>
 													</div>
 												</dt>
@@ -494,7 +495,6 @@ if ($forum_config['o_statistic'])
 	<?php echo implode($lang_index['Online stats separator'], $forum_page['stat']) ?>
 <?php ($hook = get_hook('in_fl_pre_stat_list')) ? eval($hook) : null; ?>
 </p>
-</div>
 </div>
 </div>
 <?php

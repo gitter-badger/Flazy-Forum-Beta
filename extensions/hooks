@@ -1515,6 +1515,7 @@
  aop_setup_pre_personal_fieldset
  aop_setup_pre_board_title
  aop_setup_pre_board_descrip
+ aop_setup_pre_board_keywords
  aop_setup_pre_default_style
  aop_fl_setup_pre_forced_style
  aop_setup_pre_user_style

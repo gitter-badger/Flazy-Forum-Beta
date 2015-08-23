@@ -149,7 +149,7 @@ unset($topics_id);
 
 
 // Generate paging/posting links
-$forum_page['page_post']['paging'] = '<div class="pagination"><span>'.$lang_common['Pages'].'</span> '.paginate($forum_page['num_pages'], $forum_page['page'], $forum_url['forum'], $lang_common['Paging separator'], array($id, sef_friendly($cur_forum['forum_name']))).'</div>';
+$forum_page['page_post']['paging'] = '<div class="pagination">'.$lang_common['Pages'].paginate($forum_page['num_pages'], $forum_page['page'], $forum_url['forum'], $lang_common['Paging separator'], array($id, sef_friendly($cur_forum['forum_name']))).'</div>';
 
 if ($forum_user['may_post'])
 	$forum_page['page_post']['posting'] = '<div class="buttons"><a class="button font-icon"  href="'.forum_link($forum_url['new_topic'], $id).'"><i class="fa fa-pencil"></i>'.$lang_forum['Post topic'].'</a></div>';

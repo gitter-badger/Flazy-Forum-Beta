@@ -12,8 +12,8 @@
 
 
 define('FORUM_VERSION', '0.0.1');
-define('FORUM_DB_REVISION', '1');
-define('MIN_PHP_VERSION', '4.3.0');
+define('FORUM_DB_REVISION', '1.3');
+define('MIN_PHP_VERSION', '5.2.0');
 define('MIN_MYSQL_VERSION', '4.1.2');
 
 define('FORUM_ROOT', '../');
@@ -487,6 +487,13 @@ foreach ($languages as $temp)
 </div>
 
 <div class="form-group">
+  <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Board keywords'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
+  <div class="col-md-4">
+  <input <input id="fld12" type="text" name="board_keywords" size="35" maxlength="255" class="form-control input-md">
+  </div>
+</div>
+
+<div class="form-group">
   <label class="col-md-4 control-label" for="textinput"><?php echo $lang_install['Base URL'] ?> <em><?php echo $lang_install['Required'] ?></em></label>  
   <div class="col-md-4">
   <input id="fld13" type="text" name="req_base_url" value="<?php echo $absolute_url ?>" size="35" maxlength="100" class="form-control input-md">
@@ -610,6 +617,8 @@ else
 		$board_title = 'Flazy installation complete';
 	if ($board_descrip == '')
 		$board_descrip = 'Flazys.';
+	if($board_keywords == '')
+		$board_keywords = 'Flazy, keywords, test';
 
 	if (utf8_strlen($base_url) == 0)
 		error($lang_install['Missing base url']);
@@ -810,6 +819,10 @@ else
 				'default'		=> '\'\''
 			),
 			'description'	=> array(
+				'datatype'		=> 'TEXT',
+				'allow_null'	=> true
+			),
+			'keywords'	=> array(
 				'datatype'		=> 'TEXT',
 				'allow_null'	=> true
 			),
@@ -1592,6 +1605,11 @@ else
 				'default'		=> '\'\''
 			),
 			'description'	=> array(
+				'datatype'		=> 'VARCHAR(255)',
+				'allow_null'	=> true,
+				'default'		=> '\'\''
+			),
+			'keywords'	=> array(
 				'datatype'		=> 'VARCHAR(255)',
 				'allow_null'	=> true,
 				'default'		=> '\'\''

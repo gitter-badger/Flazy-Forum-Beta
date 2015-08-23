@@ -682,7 +682,7 @@ fieldset.fields1 dl.pmlist dd.recipients {
   margin-left: 20px;
 }
 .pagination > ul > li {
-  display: inline-block !important;
+  display: table-cell !important;
   padding: 0;
   font-size: 100%;
   line-height: normal;
@@ -694,10 +694,10 @@ fieldset.fields1 dl.pmlist dd.recipients {
   display: block;
   font-size: 1em;
   font-weight: normal;
- /*line-height: 31px;*/
+  line-height: 31px;
   height: 33px;
   width: 33px;
-  text-align: left;
+  text-align: center;
   text-decoration: none;
   transition: background-color 0.1s ease-in-out, border-color 0.1s ease-in-out, color 0.1s ease-in-out;
 }
@@ -711,26 +711,49 @@ fieldset.fields1 dl.pmlist dd.recipients {
 .pagination li.page-jump a {
   width: auto;
 }
-.pagination li.next a {
-  background-position: -50px 2px;
+.pagination li a {
+  background-color: #477bb8;
+  border-color: #477bb8;
+  color: #f5f5f5;
 }
-.pagination li.previous a {
-  background-position: -30px 2px;
+.pagination li.active span {
+  background-color: #3c3c3c;
+  border-color: #3c3c3c;
+  color: #e2e2e2;
 }
-.pagination li.page-jump a:hover,
+.pagination li a:hover,
 .pagination .dropdown-visible a.dropdown-trigger,
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
-  background-position: 0 -18px;
+  background-color: #3c699c;
+  border-color: #3c699c;
+  color: #ffffff;
 }
-.pagination li.next a:hover {
-  background-position: -50px -18px;
+.pagination li a:active,
+.pagination li span:focus {
+  background-color: #3c3c3c;
+  border-color: #3c3c3c;
+  color: #e2e2e2;
 }
-.pagination li.previous a:hover {
-  background-position: -30px -18px;
+.row .pagination li a {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #3c3c3c;
 }
+.row:hover .pagination li a {
+  background-color: #477bb8;
+  color: #f5f5f5;
+}
+.row:hover .pagination li a:hover {
+  background-color: #3c699c;
+  color: #ffffff;
+}
+.row:hover .pagination li a:active {
+  background-color: #3c3c3c;
+  color: #e2e2e2;
+}
+
 /* Pagination in viewforum for multipage topics */
 .row .pagination {
-  display: inline-block;
+  display: inline-block !important;
   float: right;
   font-size: 0.8462em;
   margin: -1px 0 0;
@@ -2326,12 +2349,8 @@ fieldset.submit-buttons input {
     border-width: 1px;
     width: 685px;
 }
-#format-buttons input,
-#format-buttons select {
-  display: inline-block;
-  line-height: 31px;
+#format-buttons li {
   height: 33px;
-  padding: 0 15px;
   vertical-align: middle;
   transition: background-color 0.1s ease-in-out;
 }
@@ -2366,7 +2385,7 @@ textarea#message {
     padding: 0 1em;
 }
 
-#bbcode li {
+#format-buttons li {
     background-repeat: no-repeat;
     cursor: pointer !important;
     float: left;
@@ -2451,11 +2470,11 @@ textarea#message {
     width: 100%;
 }
 
-#bbcode span {
-    background: url(../../../resources/old_editor/images/b_bb.png);
+#format-buttons span {
+    background: url(../../../resources/editor/images/b_bb.png);
 }
 
-#bbcode li img {
+#format-buttons li img {
     height: 16px;
 }
 
@@ -4496,114 +4515,7 @@ dl.details dd {
 .sep {
   color: #1198D9;
 }
-/* Pagination
----------------------------------------- */
-.pagination {
-    display: inline-block;
-    padding-left: 0;
-    margin: 21px 0;
-    border-radius: 4px;
-}
 
-.pagination > li {
-    display: inline;
-}
-
-.pagination > li > a,
-.pagination > li > span {
-    position: relative;
-    float: left;
-    padding: 10px 15px;
-    line-height: 1.42857143;
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #18bc9c;
-    border: 1px solid transparent;
-    margin-left: -1px;
-}
-
-.pagination > li:first-child > a,
-.pagination > li:first-child > span {
-    margin-left: 0;
-    border-bottom-left-radius: 4px;
-    border-top-left-radius: 4px;
-}
-
-.pagination > li:last-child > a,
-.pagination > li:last-child > span {
-    border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.pagination > li > a:hover,
-.pagination > li > span:hover,
-.pagination > li > a:focus,
-.pagination > li > span:focus {
-    color: #ffffff;
-    background-color: #0f7864;
-    border-color: transparent;
-}
-
-.pagination > .active > a,
-.pagination > .active > span,
-.pagination > .active > a:hover,
-.pagination > .active > span:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus {
-    z-index: 2;
-    color: #ffffff;
-    background-color: #0f7864;
-    border-color: transparent;
-    cursor: default;
-}
-
-.pagination > .disabled > span,
-.pagination > .disabled > span:hover,
-.pagination > .disabled > span:focus,
-.pagination > .disabled > a,
-.pagination > .disabled > a:hover,
-.pagination > .disabled > a:focus {
-    color: #ecf0f1;
-    background-color: #3be6c4;
-    border-color: transparent;
-    cursor: not-allowed;
-}
-
-.pagination-lg > li > a,
-.pagination-lg > li > span {
-    padding: 18px 27px;
-    font-size: 19px;
-}
-
-.pagination-lg > li:first-child > a,
-.pagination-lg > li:first-child > span {
-    border-bottom-left-radius: 6px;
-    border-top-left-radius: 6px;
-}
-
-.pagination-lg > li:last-child > a,
-.pagination-lg > li:last-child > span {
-    border-bottom-right-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-.pagination-sm > li > a,
-.pagination-sm > li > span {
-    padding: 6px 9px;
-    font-size: 13px;
-}
-
-.pagination-sm > li:first-child > a,
-.pagination-sm > li:first-child > span {
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-}
-
-.pagination-sm > li:last-child > a,
-.pagination-sm > li:last-child > span {
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
-}
 .nav {
     margin-bottom: 0;
     padding-left: 0;
@@ -5468,6 +5380,12 @@ fieldset.quick-login input.inputbox {
 }
 #message-box textarea {
   color: #333333;
+}
+.bbm{
+    margin-right: 1120;
+    margin-left: auto;
+    margin-top: 320px;
+    font-family: -webkit-pictograph;
 }
 /* Input field styles
 ---------------------------------------- */

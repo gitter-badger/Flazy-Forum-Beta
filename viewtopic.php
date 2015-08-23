@@ -318,8 +318,8 @@ if (!$pid)
 // Navigation links for header and page numbering for title/meta description
 if ($forum_page['page'] < $forum_page['num_pages'])
 {
-	$forum_page['nav']['last'] = '<link rel="last" href="'.forum_sublink($forum_url['topic'], $forum_url['page'], $forum_page['num_pages'], array($id, sef_friendly($cur_topic['subject']))).'" title="'.$lang_common['Page'].' '.$forum_page['num_pages'].'" />';
-	$forum_page['nav']['next'] = '<link rel="next" href="'.forum_sublink($forum_url['topic'], $forum_url['page'], ($forum_page['page'] + 1), array($id, sef_friendly($cur_topic['subject']))).'" title="'.$lang_common['Page'].' '.($forum_page['page'] + 1).'" />';
+	$forum_page['nav']['last'] = '<link rel="next" href="'.forum_sublink($forum_url['topic'], $forum_url['page'], $forum_page['num_pages'], array($id, sef_friendly($cur_topic['subject']))).'" title="'.$lang_common['Page'].' '.$forum_page['num_pages'].'" />';
+	$forum_page['nav']['next'] = '<link rel="prev" href="'.forum_sublink($forum_url['topic'], $forum_url['page'], ($forum_page['page'] + 1), array($id, sef_friendly($cur_topic['subject']))).'" title="'.$lang_common['Page'].' '.($forum_page['page'] + 1).'" />';
 }
 if ($forum_page['page'] > 1)
 {
@@ -337,7 +337,7 @@ if (!empty($cur_topic['description']))
 	$cur_topic['subject'] = $cur_topic['subject'].', '.$cur_topic['description'];
 
 // Generate paging and posting links
-$forum_page['page_post']['paging'] = '<div class="pagination"><span class="pages">'.$lang_common['Pages'].'</span> '.paginate($forum_page['num_pages'], $forum_page['page'], $forum_url[$page_url], $lang_common['Paging separator'], array($id, sef_friendly($cur_topic['subject']))).'</div>';
+$forum_page['page_post']['paging'] = '<div class="pagination"><ul>'.paginate($forum_page['num_pages'], $forum_page['page'], $forum_url[$page_url], $lang_common['Paging separator'], array($id, sef_friendly($cur_topic['subject']))).'</ul></div>';
 
 if ($forum_user['may_post'])
 	$forum_page['page_post']['posting'] = '<div class="buttons"><a class="button font-icon" href="'.forum_link($forum_url['new_reply'], $id).'"><i class="fa fa-reply"></i>'.$lang_topic['Post reply'].'</a></div>';
@@ -419,7 +419,6 @@ if ($action == 'print')
 define('FORUM_PAGE', 'viewtopic');
 require FORUM_ROOT.'header.php';
 	$forum_js->file('jquery');
-	$forum_js->file('tinymce');
 // START SUBST - <forum_main>
 ob_start();
 
@@ -795,14 +794,14 @@ foreach ($posts_info as $cur_post)
 				$forum_page['picture']['country'] = '<dd class="profile-country">' .$lang_topic['Country']. '<img class="popup" src="'.$base_url.'/resources/flags/'.$cur_post['country'].'.png" title="'.$lang_topic['Country'].' - '.$lang_country[$cur_post['country']].'" alt=""/></dd>';
 
 			if (!empty($forum_page['picture']))
-				$forum_page['author_ident']['picture'] = '<dd class="profile-posts">'.implode(' ', $forum_page['picture']).'</dd>';
+				$forum_page['author_ident']['picture'] = '<dd class="profile-picture">'.implode(' ', $forum_page['picture']).'</dd>';
 
 
 		}
 		else
 		{
-			$forum_page['author_ident']['username'] = '<dd class="profile-posts">'.forum_htmlencode($cur_post['username']).'</dd>';
-			$forum_page['author_ident']['usertitle'] = '<dd class="profile-posts">'.get_title($cur_post).'</dd>';
+			$forum_page['author_ident']['username'] = '<dd class="profile-username">'.forum_htmlencode($cur_post['username']).'</dd>';
+			$forum_page['author_ident']['usertitle'] = '<dd class="profile-usertitle">'.get_title($cur_post).'</dd>';
 		}
 
 	}
@@ -835,16 +834,16 @@ foreach ($posts_info as $cur_post)
 			}
 
 			if ($forum_config['o_show_post_count'] || $forum_user['is_admmod'])
-				$forum_page['author_info']['posts'] = '<span>'.$lang_topic['Posts info'].' <strong><a href="'.forum_link($forum_url['search_user_posts'], $cur_post['poster_id']).'">'.forum_number_format($cur_post['num_posts']).'</a></strong></span><br>';
+				$forum_page['author_info']['posts'] = '<dd class="profile-posts">'.$lang_topic['Posts info'].' <strong><a href="'.forum_link($forum_url['search_user_posts'], $cur_post['poster_id']).'">'.forum_number_format($cur_post['num_posts']).'</a></strong></dd>';
 
 			if ($forum_config['o_rep_enabled'] && $forum_user['rep_enable'] && $forum_user['rep_enable_adm'] && $forum_user['g_rep_enable'] && $cur_post['rep_enable'] && $cur_post['poster_id'] != 1)
 			{
 				if (!$forum_user['is_guest'] && $forum_user['username'] != $cur_post['username'])
 					$vote = '<a href="'.forum_link($forum_url['reputation_change'], array($cur_post['poster_id'], $cur_post['id'], 'positive')).'"><i class="fa fa-thumbs-up"></i></a>  <strong>'.forum_number_format($cur_post['reputation_plus'] - $cur_post['reputation_minus']).'</strong>  <a href="'.forum_link($forum_url['reputation_change'], array($cur_post['poster_id'], $cur_post['id'], 'negative')).'"><i class="fa fa-thumbs-down"></i></a><br>';
 				else
-					$vote = '<strong>'.forum_number_format($cur_post['reputation_plus'] - $cur_post['reputation_minus']).'</strong>';
+					$vote = '<strong><a href="'.forum_link($forum_url['reputation'], array($cur_post['poster_id'], 'reputation', )).'">'.forum_number_format($cur_post['reputation_plus'] - $cur_post['reputation_minus']).'</a></strong>';
 
-				$forum_page['author_info']['reputation'] = '<span><a href="'.forum_link($forum_url['reputation'], array($cur_post['poster_id'], 'reputation', )).'">'.$lang_topic['Reputation'].'</a>: '.$vote.'</span><br>';
+				$forum_page['author_info']['reputation'] = '<dd class="profile-reputation">'.$lang_topic['Reputation'].': '.$vote.'</dd>';
 			}
 
 			if ($forum_user['is_admmod'])
@@ -1027,78 +1026,61 @@ foreach ($posts_info as $cur_post)
 	}
 
 ?>
-<div id="p<?php echo $cur_topic['forum_id'] ?>" class="post has-profile bg2 <?php echo ($cur_post['is_online'] == $cur_post['poster_id']) ? ' online' : '' ?>">
-		<div id="p<?php echo $cur_post['id'] ?>" class="<?php echo implode(' ', $forum_page['item_status']) ?>">
-			<dl class="postprofile" id="profile2">
-
+<div id="p<?php echo $cur_topic['forum_id'] ?>" class="post has-profile bg<?php echo rand(1,3); ?> <?php echo ($cur_post['is_online'] == $cur_post['poster_id']) ? ' online' : '' ?>">
+	<div id="p<?php echo $cur_post['id'] ?>" class="<?php echo implode(' ', $forum_page['item_status']) ?>">
+		<dl class="postprofile" id="profile2">
 <?php echo implode("\n\t\t\t\t\t\t", $forum_page['author_ident'])."\n" ?>
 <?php echo implode("\n\t\t\t\t\t\t", $forum_page['author_info'])."\n" ?>
-</dl>
-
-
-
-<div class="postbody">
-								<div id="post_content2">
-
-									<h3 class="first"><a href="#p<?php echo $cur_post['id'] ?>"><?php echo $forum_page['item_subject'] ?></a></h3>
+		</dl>
+		<div class="postbody">
+			<div id="post_content2">
+					<h3 class="first"><a href="#p<?php echo $cur_post['id'] ?>"><?php echo $forum_page['item_subject'] ?></a></h3>
 <?php if (!empty($forum_page['post_options'])): ?>
-			<ul class="posts-buttons">
+				<ul class="posts-buttons">
 					<?php echo implode("\n\t\t\t\t\t", $forum_page['post_options'])."\n" ?>
-			</ul>
+				</ul>
 <?php endif; ?>
-
-									<p class="author">
-										<?php echo implode(' ', $forum_page['post_ident']) ?>
-									</p>
-
-									<div class="content">
-										<?php echo implode("\n\t\t\t\t\t\t", $forum_page['message'])."\n" ?>
-									</div>
+				<p class="author">
+<?php echo implode(' ', $forum_page['post_ident']) ?>
+				</p>
+				<div class="content">
+<?php echo implode("\n\t\t\t\t\t\t", $forum_page['message'])."\n" ?>
+				</div>
 <?php ($hook = get_hook('vt_row_new_post_entry_data')) ? eval($hook) : null; ?>
-								</div>
-
-							</div>
-
-
+			</div>
 		</div>
 	</div>
+</div>
+<hr class="divider">
 <?php
 	
 	if ($forum_page['item_count'] == $forum_config['o_topicbox'] && !defined('FORUM_DISABLE_HTML'))
 	{
 ?>
-
-
-		<div class="post">
-			<div class="post-entry">
-				<div class="entry-content">
-					<?php echo $forum_config['o_topicbox_message'] ?>
-				</div>
-			</div>
+<div class="post">
+	<div class="post-entry">
+		<div class="entry-content">
+<?php echo $forum_config['o_topicbox_message'] ?>
 		</div>
-
+	</div>
+</div>
 <?php
-
 	}
 }
-
 ?>
-
-	<form action="<?php echo forum_link('post.php'); ?>" method="post" id="qq">
-		<div class="hidden">
-			<input type="hidden" value="" id="post_msg" name="post_msg"/>
-			<input type="hidden" value="<?php echo forum_link($forum_url['quote'], array($id, $cur_post['id'])) ?>" id="quote_url" name="quote_url" />
-		</div>
-	</form>
-	<div class="main-foot">
+<form action="<?php echo forum_link('post.php'); ?>" method="post" id="qq">
+	<div class="hidden">
+		<input type="hidden" value="" id="post_msg" name="post_msg"/>
+		<input type="hidden" value="<?php echo forum_link($forum_url['quote'], array($id, $cur_post['id'])) ?>" id="quote_url" name="quote_url" />
+	</div>
+</form>
+<div class="main-foot">
 <?php
-
 	if (!empty($forum_page['main_foot_options']))
 		echo "\t\t".'<p class="options">'.implode(' ', $forum_page['main_foot_options']).'</p>'."\n";
-
 ?>
-		<h2 class="hn"><span><?php echo $forum_page['items_info'] ?></span></h2>
-	</div>
+	<h2 class="hn"><span><?php echo $forum_page['items_info'] ?></span></h2>
+</div>
 <?php
 
 ($hook = get_hook('vt_end')) ? eval($hook) : null;
@@ -1158,26 +1140,21 @@ if ($forum_config['o_smilies'])
 	<div id="req-msg" class="req-warn ct-box error-box">
 		<p class="important"><?php echo $lang_topic['Required warn'] ?></p>
 	</div>
-	<form onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}" class="frm-form" name="post" method="post" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>"<?php if (!empty($forum_page['form_attributes'])) echo ' '.implode(' ', $forum_page['form_attributes']) ?>>
+	<form class="frm-form" name="post" method="post" accept-charset="utf-8" action="<?php echo $forum_page['form_action'] ?>"<?php if (!empty($forum_page['form_attributes'])) echo ' '.implode(' ', $forum_page['form_attributes']) ?>>
 		<div class="hidden">
 			<?php echo implode("\n\t\t\t", $forum_page['hidden_fields'])."\n" ?>
 		</div>
 <?php ($hook = get_hook('vt_quickpost_pre_fieldset')) ? eval($hook) : null; ?>
 				<fieldset class="fields1">
 <?php ($hook = get_hook('vt_quickpost_pre_message_box')) ? eval($hook) : null; ?>
-
 					<dl style="clear: left;">
 					<dt>
 						<label for="subject"><?php echo $lang_common['Write message'] ?></label>
 					</dt>
-					<dd>
-						<input type="text" name="subject" id="subject" size="45" maxlength="124" tabindex="2" value="Re: Welcome" class="inputbox autowidth">
-					</dd>
 				</dl>
-			
+<?php require FORUM_ROOT.'resources/editor/reply_bb.php'; ?>
 				<div id="message-box">
-				
-					<textarea id="text" style="height: 9em;" name="req_message"  rows="7" cols="76" tabindex="3" class="inputbox"></textarea>
+					<textarea id="req_message" style="height: 9em;" name="req_message"  rows="7" cols="76" tabindex="3" class="inputbox"></textarea>
 				</div>
 
 <?php ($hook = get_hook('vt_quickpost_pre_fieldset_end')) ? eval($hook) : null; ?>

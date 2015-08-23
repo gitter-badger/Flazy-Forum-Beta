@@ -1,7 +1,7 @@
 <?php
  ($hook = get_hook('cls_fl_css_helper_start')) ? eval($hook) : null;
 $css = array(
-	'bbcode' 		=> $base_url.'/resources/editor/wysibb/theme/default/wbbtheme.css',
+	
 );
 ($hook = get_hook('cls_fl_pre_class_css_helper')) ? eval($hook) : null;
  class forum_css{

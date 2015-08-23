@@ -62,14 +62,13 @@ $tpl_main = str_replace('<forum_local>', 'xml:lang="' . $lang_common['lang_ident
 // START SUBST - <forum_head>
 // Is this a page that we want search index spiders to index?
 if (!defined('FORUM_ALLOW_INDEX'))
-	$forum_head['robots'] = '<meta name="ROBOTS" content="NOINDEX, FOLLOW" />';
+	$forum_head['robots'] = '<meta name="robots" content="NOINDEX, FOLLOW" />';
 else
 	$forum_head['descriptions'] = '<meta name="description" content="' . generate_crumbs(true) . '" />';
-
+	$forum_head['keywords'] = '<meta name="keywords" content="'.forum_htmlencode($forum_config['o_board_keywords']).'"/>';
 // Should we output a MicroID? http://microid.org/
 if (strpos(FORUM_PAGE, 'profile') === 0)
 	$forum_head['microid'] = '<meta name="microid" content="mailto+http:sha1:' . sha1(sha1('mailto:' . $user['email']) . sha1(forum_link($forum_url['user'], $id))) . '" />';
-
 $forum_head['compatible'] = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
 
 $forum_head['title'] = '<title>' . generate_crumbs(true) . '</title>';
@@ -79,17 +78,20 @@ $forum_head['favicon'] = '<link rel="shortcut icon" type="image/x-icon" href="' 
 if (FORUM_PAGE == 'index') {
 	$forum_head['rss'] = '<link rel="alternate" type="application/rss+xml" href="' . forum_link($forum_url['feed_index'], 'rss') . '" title="RSS" />';
 	$forum_head['atom'] = '<link rel="alternate" type="application/atom+xml" href="' . forum_link($forum_url['feed_index'], 'atom') . '" title="ATOM" />';
+	$forum_head['canonical'] = '<link rel="canonical" href="'.forum_link($forum_url['index']).'" />';
 } else if (FORUM_PAGE == 'viewforum') {
 	$forum_head['rss'] = '<link rel="alternate" type="application/rss+xml" href="' . forum_link($forum_url['feed_forum_topics'], array($id, $cur_forum['sort_by'] == '1' ? 'posted' : 'last_post', 'rss')) . '" title="RSS" />';
 	$forum_head['atom'] = '<link rel="alternate" type="application/atom+xml" href="' . forum_link($forum_url['feed_forum_topics'], array($id, $cur_forum['sort_by'] == '1' ? 'posted' : 'last_post', 'atom')) . '" title="ATOM" />';
+	$forum_head['canonical'] = '<link rel="canonical" href="'.forum_link($forum_url['forum'], $id).'" />';
 } else if (FORUM_PAGE == 'viewtopic') {
 	$forum_head['rss'] = '<link rel="alternate" type="application/rss+xml" href="' . forum_link($forum_url['feed_topic'], array('rss', $id)) . '" title="RSS" />';
 	$forum_head['atom'] = '<link rel="alternate" type="application/atom+xml" href="' . forum_link($forum_url['feed_topic'], array('atom', $id)) . '" title="ATOM" />';
+	$forum_head['canonical'] = '<link rel="canonical" href="'.forum_link($forum_url['topic'], $id).'" />';
 }
 
 // If there are more than two breadcrumbs, add the "up" link (second last)
 if (count($forum_page['crumbs']) > 2)
-	$forum_head['up'] = '<link rel="up" href="' . $forum_page['crumbs'][count($forum_page['crumbs']) - 2][1] . '" title="' . forum_htmlencode($forum_page['crumbs'][count($forum_page['crumbs']) - 2][0]) . '" />';
+	$forum_head['up'] = '<link rel="start" href="' . $forum_page['crumbs'][count($forum_page['crumbs']) - 2][1] . '" title="' . forum_htmlencode($forum_page['crumbs'][count($forum_page['crumbs']) - 2][0]) . '" />';
 
 // If there are other page navigation links (first, next, prev and last)
 if (!empty($forum_page['nav']))
@@ -159,7 +161,7 @@ if (FORUM_PAGE == 'index') {
 
 // If there are more than two breadcrumbs, add the "up" link (second last)
 if (count($forum_page['crumbs']) > 2)
-	$forum_head_admin['up'] = '<link rel="up" href="' . $forum_page['crumbs'][count($forum_page['crumbs']) - 2][1] . '" title="' . forum_htmlencode($forum_page['crumbs'][count($forum_page['crumbs']) - 2][0]) . '" />';
+	$forum_head_admin['up'] = '<link rel="start" href="' . $forum_page['crumbs'][count($forum_page['crumbs']) - 2][1] . '" title="' . forum_htmlencode($forum_page['crumbs'][count($forum_page['crumbs']) - 2][0]) . '" />';
 
 // If there are other page navigation links (first, next, prev and last)
 if (!empty($forum_page['nav']))

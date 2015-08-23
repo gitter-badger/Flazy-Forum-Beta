@@ -9,10 +9,7 @@
  */
 ($hook = get_hook('cls_fl_js_helper_start')) ? eval($hook) : null;
 $js = array(
-	'jquery'		=> 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js',
-	'bbcode' 		=> $base_url.'/resources/editor/wysibb/jquery.wysibb.js',
-	'bbcode-show' 	=> $base_url.'/resources/editor/wysibb/preset.js',
-	'tinymce' 		=> $base_url.'/resources/editor/tinymce/tinymce.min.js',
+	'jquery'		=> '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
 );
 
 ($hook = get_hook('cls_fl_pre_class_js_helper')) ? eval($hook) : null;

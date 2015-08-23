@@ -10,7 +10,6 @@
 
 <body id="flazy" class="notouch section-index ltr hasjs ">
 <forum_html_top>
-
 <div id="overall-wrap">
 			<div id="wrap-head">
 				<div id="site-nav" role="navigation">

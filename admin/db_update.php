@@ -11,7 +11,7 @@
 
 define('UPDATE_TO', '0.0.1');
 define('PRE_VERSION', '0.0.0');
-define('UPDATE_TO_DB_REVISION', '1');
+define('UPDATE_TO_DB_REVISION', '1.2');
 
 $version_history = array(
 	UPDATE_TO
@@ -280,8 +280,7 @@ require FORUM_ROOT.'style/'.$forum_user['style'].'/'.$forum_user['style'].'.php'
 				$forum_db->add_field('users', 'fasety_auth_mail', 'TINYINT(1)', false, '0');
 
 				$config = array(
-					'o_spam_username'		=> "'".$forum_config['o_spam_name']."'",
-					'o_gravatar'			=> "'G'",
+					'o_board_keywords'		=> "'Example, use, of, keywords'",
 				);
 
 				foreach ($config as $conf_name => $conf_value)
@@ -358,7 +357,6 @@ require FORUM_ROOT.'style/'.$forum_user['style'].'/'.$forum_user['style'].'.php'
 			'SET'		=> 'conf_value=\''.UPDATE_TO.'\'',
 			'WHERE'		=> 'conf_name=\'o_cur_version\''
 		);
-
 		$forum_db->query_build($query) or error(__FILE__, __LINE__);
 
 		// And the database revision number
@@ -384,7 +382,8 @@ require FORUM_ROOT.'style/'.$forum_user['style'].'/'.$forum_user['style'].'.php'
 			'SET'		=> 'conf_value=\''.$maintenance_message.'\'',
 			'WHERE'		=> 'conf_name=\'o_maintenance_message\''
 		);
-
+		
+$forum_db->query_build($query) or error(__FILE__, __LINE__);
 		$forum_db->query_build($query) or error(__FILE__, __LINE__);
 
 		// Empty the PHP cache
